@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions, ideas, open-ended discussion
+    url: https://github.com/roykollensvendsen/hypotheses/discussions
+    about: Use Discussions for anything that isn't a concrete bug, spec question, or hypothesis proposal.
+  - name: Security vulnerability
+    url: https://github.com/roykollensvendsen/hypotheses/security/advisories/new
+    about: Report privately via GitHub's security advisory flow. Do not open a public issue.

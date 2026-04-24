@@ -1,0 +1,54 @@
+name: Bug report
+description: Something in the CI, hooks, scripts, or (eventually) code misbehaves.
+title: "[bug] <one-line>"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for reproducible bugs. For security issues, use the
+        [private advisory flow](../security/advisories/new) instead.
+
+  - type: input
+    id: commit
+    attributes:
+      label: Commit / tag
+      description: The SHA or tag you're on.
+      placeholder: "main @ abcd1234"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What went wrong?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproducer
+      description: Minimal steps. Paste commands and their output.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS, Python version, anything else that might matter.
+      placeholder: |
+        OS: Ubuntu 24.04
+        Python: 3.12.7
+        uv: 0.5.x
+    validations:
+      required: true

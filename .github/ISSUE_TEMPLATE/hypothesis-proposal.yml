@@ -1,0 +1,89 @@
+name: Hypothesis proposal (sketch)
+description: Sketch a hypothesis before drafting the full spec. Discussion happens here; the formal spec lands in a PR once the sketch gets buy-in.
+title: "[H-proposal] <one-line title>"
+labels: ["hypothesis", "proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a hypothesis. Use this form to sketch a
+        falsifiable claim and get feedback before drafting the full
+        [preregistration spec](../../docs/spec/02-hypothesis-format.md).
+        A good sketch is short. Full hypothesis files land later as PRs.
+
+  - type: input
+    id: claim
+    attributes:
+      label: One-sentence falsifiable claim
+      description: Relational to a declared baseline. No hedging. Examples in `hypotheses/H-0001-*.md`.
+      placeholder: "Method X reaches target loss in fewer FLOPs than sparse_random baseline on CIFAR-10 MLP."
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why does the answer matter?
+      description: One short paragraph. What does this illuminate if true? If false?
+    validations:
+      required: true
+
+  - type: textarea
+    id: protocol-sketch
+    attributes:
+      label: Protocol sketch
+      description: |
+        Dataset, model family, key variables, hardware profile. Full protocol
+        fidelity comes in the spec PR; here just enough for a reader to decide
+        whether the experiment is tractable and on-scope.
+      placeholder: |
+        Dataset: CIFAR-10 (pinned revision TBD)
+        Model: 2-layer MLP
+        Variables: init_topology × edge_dynamics
+        Hardware: cpu-small
+    validations:
+      required: true
+
+  - type: textarea
+    id: baseline
+    attributes:
+      label: Baseline
+      description: What are you comparing against? Must be a point in the variable space, not a separate hypothesis.
+    validations:
+      required: true
+
+  - type: textarea
+    id: success
+    attributes:
+      label: What would count as support?
+      description: Sketch the success criterion as a relational threshold. Exact statistical test can wait for the spec PR.
+    validations:
+      required: true
+
+  - type: textarea
+    id: falsification
+    attributes:
+      label: What would count as refutation?
+      description: The mirror of success. A hypothesis without a refutation condition is not falsifiable.
+    validations:
+      required: true
+
+  - type: input
+    id: prior-work
+    attributes:
+      label: Prior work / related hypotheses
+      description: Links to papers, existing `hypotheses/H-*` files this builds on or contradicts. Optional but encouraged.
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched `hypotheses/` and no existing hypothesis makes the same claim.
+          required: true
+        - label: The claim is falsifiable — someone running the protocol could make it fail.
+          required: true
+        - label: The claim is relational to a declared baseline (not an absolute accuracy number).
+          required: true
+        - label: The experiment is runnable within a hardware profile from `docs/spec/08-experiment-runtime.md`.
+          required: true

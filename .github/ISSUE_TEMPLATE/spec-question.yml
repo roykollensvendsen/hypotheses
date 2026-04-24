@@ -1,0 +1,57 @@
+name: Spec question
+description: Ask about something unclear, contradictory, or apparently wrong in docs/spec/.
+title: "[spec] <one-line>"
+labels: ["spec", "question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for concrete, answerable questions about the spec.
+        Open-ended design discussion belongs in
+        [Discussions](https://github.com/roykollensvendsen/hypotheses/discussions).
+
+  - type: dropdown
+    id: doc
+    attributes:
+      label: Which spec document?
+      options:
+        - VISION.md
+        - docs/spec/00-overview.md
+        - docs/spec/01-glossary.md
+        - docs/spec/02-hypothesis-format.md
+        - docs/spec/03-architecture.md
+        - docs/spec/04-miner.md
+        - docs/spec/05-validator.md
+        - docs/spec/06-scoring.md
+        - docs/spec/07-incentive.md
+        - docs/spec/08-experiment-runtime.md
+        - docs/spec/09-protocol.md
+        - docs/spec/10-repo-layout.md
+        - docs/spec/11-roadmap.md
+        - docs/spec/12-implementation-constraints.md
+        - docs/spec/13-agent-integration.md
+        - docs/spec/14-cli.md
+        - docs/spec/15-ci-cd.md
+        - other
+    validations:
+      required: true
+
+  - type: input
+    id: section
+    attributes:
+      label: Section or line reference
+      description: "e.g. 06-scoring.md#components or line 42"
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What's unclear, contradictory, or apparently wrong?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context (optional)
+      description: What are you trying to do where the spec's current text blocks you?
