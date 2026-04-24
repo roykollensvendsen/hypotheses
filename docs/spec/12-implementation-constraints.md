@@ -151,7 +151,10 @@ Each step's tests pass before the next begins.
 13. `src/hypotheses/miner/`
 14. `src/hypotheses/validator/`
 15. `src/hypotheses/cli/`
-16. `src/hypotheses/oracle/` (base in Phase 1; sn42 adapter in Phase 2)
+16. `src/hypotheses/client/` (typed SDK wrapping miner + validator)
+17. `src/hypotheses/mcp/` (read-only tools in Phase 1; write tools in
+    Phase 2)
+18. `src/hypotheses/oracle/` (base in Phase 1; sn42 adapter in Phase 2)
 
 ## Per-module definition of done
 
@@ -236,6 +239,22 @@ Module-specific acceptance:
 ### `cli/`
 - Subcommands match 04-miner and 05-validator exactly.
 - CLI is a thin shim; no business logic here.
+
+### `client/`
+- Public typed SDK per 13-agent-integration.
+- `Client` (sync) and `AsyncClient` mirror each other method-for-method.
+- Models in `client/models.py` are the single source of truth for the
+  public Python surface; internal types are NOT re-exported.
+- Tests: a fake backend exercising every public method.
+
+### `mcp/`
+- Implements the tool surface in 13-agent-integration.
+- Read-only tools in Phase 1; write tools behind `--allow-writes` in
+  Phase 2.
+- Both stdio-MCP and HTTP-MCP transports from the same tool
+  implementations.
+- Tests: every tool invoked with a valid call and an invalid call;
+  write gating enforced in tests.
 
 ### `oracle/`
 - Base class: `query(task_ref, declared_answer) -> OracleVerdict`.

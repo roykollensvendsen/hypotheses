@@ -38,6 +38,11 @@ description: target directory structure for the full subnet codebase
 ├── hypotheses/                     # the registry
 │   ├── HYPOTHESIS_TEMPLATE.md
 │   └── H-NNNN-<slug>.md            # one per hypothesis
+├── agents/                         # starter llm-agent configurations
+│   ├── README.md
+│   ├── prompts/                    # system-prompt templates
+│   ├── examples/                   # runnable reference agents
+│   └── eval/
 ├── experiments/                    # executable code per hypothesis
 │   └── H-NNNN/
 │       ├── run.py                  # entrypoint
@@ -50,6 +55,15 @@ description: target directory structure for the full subnet codebase
 │       ├── cli/
 │       │   ├── miner.py            # hypo-miner
 │       │   └── validator.py        # hypo-validator
+│       ├── client/                 # public typed SDK (hypotheses.client)
+│       │   ├── __init__.py
+│       │   ├── sync.py             # Client
+│       │   ├── aio.py              # AsyncClient
+│       │   └── models.py           # pydantic models re-exported
+│       ├── mcp/                    # hypo-mcp server
+│       │   ├── server.py
+│       │   ├── tools.py            # tool surface per 13-agent-integration
+│       │   └── schema/             # per-tool argument schemas
 │       ├── spec/
 │       │   ├── schema/
 │       │   │   └── hypothesis.schema.json
@@ -110,6 +124,7 @@ are exported:
 [project.scripts]
 hypo-miner     = "hypotheses.cli.miner:main"
 hypo-validator = "hypotheses.cli.validator:main"
+hypo-mcp       = "hypotheses.mcp.server:main"
 ```
 
 Anything outside `src/` is consumed as data (the spec, the hypotheses

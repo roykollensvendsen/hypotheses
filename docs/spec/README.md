@@ -26,6 +26,8 @@ Read in order:
 12. [11 — Roadmap](11-roadmap.md) — phased plan to ship
 13. [12 — Implementation constraints](12-implementation-constraints.md) —
     rules for the autonomous implementing agent
+14. [13 — Agent integration](13-agent-integration.md) — MCP server,
+    typed SDK, and starter agents for LLM-driven miners
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](
