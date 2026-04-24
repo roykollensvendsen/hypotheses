@@ -5,8 +5,38 @@ description: validator pipeline, rerun policy, score commitment
 
 # 05 — Validator
 
-A validator is a Bittensor neuron that verifies miner submissions, reruns a
-sampled fraction, scores, and sets weights.
+A validator is a Bittensor neuron that verifies miner submissions, reruns
+a sampled fraction, scores, and sets weights.
+
+## Two layers: deterministic core and operator layer
+
+The validator splits cleanly into two layers:
+
+### Deterministic core (pure, agent-free)
+
+Everything that influences the score vector. Pure functions over
+artifacts: schema validation, signature verification, artifact
+integrity, sandboxed rerun, statistical tests, score composition, and
+weight-vector normalisation. Two validators running the same core
+against the same inputs MUST produce the same score vector (modulo
+validator-specific rerun sampling). **No LLM participates in this
+layer.** Replacing a deterministic score with an LLM's opinion is a
+spec violation.
+
+### Operator layer (agent-orchestrated)
+
+The process around scoring: monitoring the announcement stream,
+queueing work, deciding when to sleep / resume, triaging failed
+reruns, explaining score deltas to the operator, flagging anomalies
+(e.g. "five miners submitted identical manifests — possible copy-
+paste farm"), filing operator runbook actions. **This is where
+agents live.** An agent may decide *when* or *whether* to rerun a
+submission now or later, but it may not decide *what score* the
+submission receives.
+
+The interface between layers is typed: the core exposes pure functions
+the operator layer calls; the operator layer never reaches into the
+core to adjust a number.
 
 ## Pipeline
 

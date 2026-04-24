@@ -1,24 +1,47 @@
 ---
 name: agent integration
-description: mcp server, typed sdk, and starter agents for llm-driven miners
+description: agent-first operating mode — mcp server, typed sdk, and starter agents
 ---
 
 # 13 — Agent integration
 
-The subnet is designed to be run by humans, by autonomous LLM agents, or
-by anything in between. Agents are not a separate role in the incentive
-model — they operate as miners. What this document specifies is the
-integration surface that makes it easy to drop an agent in.
+**Agent-first is the default operating mode.** The three active subnet
+roles — developing, mining, and validating — are all designed to be
+driven by autonomous agents. Humans drop into the CLI as the escape
+hatch when necessary; they do not drive the subnet day-to-day. This
+document specifies the surface agents use.
 
 ## Why this matters
 
 - The founding frame of the subnet — generating and testing hypotheses
-  about ML — is a natural agent task. Making agent participation easy
-  is aligned with the subnet's purpose, not a side feature.
+  about ML — is a natural agent task. Making agent participation
+  primary is aligned with the subnet's purpose, not a side feature.
 - Humans running experiments by hand will not keep up with the pace of
   hypothesis generation the subnet incentivises.
 - Retrofitting a clean agent surface onto a CLI-first codebase is
   expensive; designing for it from day one is cheap.
+- Agent-primary operation forces the subnet's own code to be
+  well-specified: everything an operator can do, an agent can do, via
+  a typed interface.
+
+## Role × surface matrix
+
+Every role is reachable through every surface. In the default
+operating mode the agent surface is used; the CLI is for humans on the
+escape-hatch path.
+
+| role       | primary (agent) | escape hatch (human) | judgment model |
+|------------|-----------------|----------------------|----------------|
+| Develop    | Claude / Cursor reading the spec, writing code, opening PRs | manual git commits, text editor | LLM judgment with human review |
+| Mine       | MCP tools + starter agent under `agents/examples/simple-miner/` | `hypo propose`, `hypo run`, `hypo submit` | LLM judgment bounded by write-gating |
+| Validate   | MCP tools + agent orchestrating the validator loop | `hypo validate …` | **deterministic; agent is operator layer only** |
+
+The validator row is the load-bearing one. Scoring is a pure function
+over artifacts — rigor, reproduction, improvement, novelty, cost — and
+LLMs do not participate in that computation. Agents wrap the validator
+process: surfacing pending work, explaining score differences,
+triaging failed reruns, alerting on anomalies. Replacing a
+deterministic score with an LLM's opinion is a spec violation.
 
 ## Integration layers
 
@@ -27,14 +50,15 @@ Three layers, from highest-level to lowest:
 1. **MCP server** (`hypo mcp serve`) — exposes subnet operations as
    Model Context Protocol tools. Any MCP-capable agent host (Claude
    Code, Claude Desktop, Cursor, custom hosts using the MCP SDK)
-   attaches and can act. Primary integration point for LLM agents.
+   attaches and can act. **Primary path for LLM agents.**
 2. **Python SDK** (`hypotheses.client`) — typed, importable surface
-   that wraps the same operations. For agents built as Python
-   services or frameworks (e.g. LangGraph, custom orchestrators).
+   that wraps the same operations. **Primary path for framework-
+   embedded agents** (LangGraph, custom orchestrators, service code).
 3. **CLI** (`hypo`) — the single unified command per
-   [14](14-cli.md). The MCP server and SDK are both built on top of
-   the same `hypotheses.miner` and `hypotheses.validator` modules
-   the CLI dispatches to; there is no divergence.
+   [14](14-cli.md). **Escape hatch for humans.** All three surfaces
+   dispatch to the same `hypotheses.miner`, `hypotheses.validator`,
+   and `hypotheses.client` modules; there is no capability divergence
+   between them.
 
 All three layers are thin wrappers over the same core. Changes to
 behaviour are made in `src/hypotheses/miner/` or

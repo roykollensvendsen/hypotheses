@@ -38,6 +38,25 @@ interaction and stay inside bounded scope.
 - No swapping pinned tools or adding top-level deps without a spec
   update + ADR.
 
+### Agent / CLI parity
+
+The subnet is agent-first (see
+[13](13-agent-integration.md)). That imposes a hard rule:
+
+- **Every capability exposed by `hypo` is also exposed by MCP and the
+  SDK, and vice versa.** The three surfaces dispatch to the same
+  underlying modules; they never branch behaviour.
+- **CLI flags that affect behaviour have MCP / SDK equivalents.** If
+  `hypo run --seed N` exists, `run_hypothesis(seed=N)` exists. If
+  not, remove the CLI flag.
+- **Validator scoring is deterministic.** Operator-layer code
+  (announcement polling, triage, explanation, runbook suggestions)
+  may be agent-driven; scoring itself is pure and agent-free. See
+  [05 — Validator](05-validator.md).
+- **No "human-only" paths.** If an operation is too risky for an
+  agent, gate it with the confirmation modes from 13 — never with a
+  CLI-only branch.
+
 ## Toolchain (pinned)
 
 | tool | version | notes |

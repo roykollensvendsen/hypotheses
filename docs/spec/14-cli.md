@@ -5,16 +5,21 @@ description: the single hypo command — unified entry point for humans and scri
 
 # 14 — `hypo` — the one command
 
-Humans, operators, and scripts interact with the subnet through a single
-command: `hypo`. It replaces what earlier drafts of the spec called
-`hypo-miner`, `hypo-validator`, and `hypo-mcp`; those are internal
-modules behind this one entry point.
+The CLI is the **escape hatch**. Agent-first is the default operating
+mode (see [13](13-agent-integration.md)); `hypo` exists for humans
+setting policy, responding to incidents, and running one-off tasks.
+Every capability `hypo` offers is also reachable through MCP and the
+SDK — the CLI never confers a privilege that agents lack.
 
-Why one command:
+`hypo` replaces what earlier drafts of the spec called `hypo-miner`,
+`hypo-validator`, and `hypo-mcp`; those are internal modules behind
+this one entry point.
+
+Why one command (when humans do use it):
 
 - Discoverable. `hypo --help` prints every operation; tab-completion
   reveals the full surface.
-- Fewer things to remember. The operator learns one binary.
+- Fewer things to remember. One binary covers every role.
 - Role-free. A single node can act as miner, validator, and MCP host
   at once; there is no reason to split the CLI by role.
 
