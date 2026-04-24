@@ -95,6 +95,13 @@ The subnet is agent-first (see
 
 ## License headers
 
+> **HM-REQ-0042** Every tracked `.py` or `.sh` file under `src/`,
+> `scripts/`, `tests/`, or `experiments/` carries the SPDX license
+> identifier `AGPL-3.0-or-later` and an `SPDX-FileCopyrightText` line
+> within the first 10 lines of the file. Enforced by
+> [`scripts/check_spdx_headers.py`](../../scripts/check_spdx_headers.py)
+> via [`spdx.yml`](../../.github/workflows/spdx.yml).
+
 Every tracked `.py` and `.sh` file under `src/`, `scripts/`, `tests/`,
 and `experiments/` MUST carry both markers within the first 10 lines:
 
@@ -181,6 +188,12 @@ Rules:
   tests read the JSON.
 
 ## Test-driven development (mandatory)
+
+> **HM-REQ-0040** Each module's first `test:` commit strictly
+> precedes its first `feat:` or `fix:` commit. The first `test:`
+> commit is red when run against the pre-implementation tree —
+> "tests first" is a discipline, not a commit-log aesthetic (see
+> [AP-0004](antipatterns/ap-0004-skip-tdd.md)).
 
 Every module in `src/hypotheses/` is built test-first. The required
 discipline per slice of behaviour:

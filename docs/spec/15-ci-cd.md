@@ -15,6 +15,13 @@ the spec or the config so they match.
 
 ## Pinning policy
 
+> **HM-REQ-0041** Every `uses:` reference in
+> `.github/workflows/**` and `.github/actions/**` is a 40-character
+> commit SHA with a trailing `# vN.N.N` comment naming the version.
+> Tag refs and branch refs are rejected at PR time by
+> [`scripts/check_action_pins.sh`](../../scripts/check_action_pins.sh)
+> via [`action-pin-check.yml`](../../.github/workflows/action-pin-check.yml).
+
 All GitHub Actions (first-party and third-party) MUST be referenced by
 full commit SHA (40 hex chars) with a trailing `# vN.N.N` comment
 naming the version:
@@ -58,6 +65,7 @@ Sorted by when it fires. `Gate` = blocks PR merge on failure.
 | `pr-size.yml` | label by size; fail PRs >500 LOC | always (excludes `uv.lock`, LICENSE, CHANGELOG) |
 | `spdx.yml` | SPDX license + copyright header on every `.py`/`.sh` under `src/`, `scripts/`, `tests/`, `experiments/` | runs on source-path changes |
 | `prompt-injection.yml` | scans `VISION.md`, `AGENTS.md`, `docs/**`, and `agents/prompts/**` for injection-style directives, fake system tags, and unsafe-protocol URLs; allow-lists the antipatterns corpus | runs on markdown / doc changes |
+| `requirements.yml` | cross-checks `HM-REQ-NNNN` / `HM-INV-NNNN` tags: every indexed ID is defined inline, every inline ID is indexed, no duplicates; reports code refs to unknown IDs as warnings | runs on `docs/spec/**` + `src/` + `tests/` changes |
 
 ### On every push to `main`
 

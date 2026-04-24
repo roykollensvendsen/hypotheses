@@ -12,6 +12,16 @@ The on-chain wire protocol consists of a small number of Bittensor
 synapses. The payloads are canonical JSON (RFC 8785), signed by the
 sender's hotkey.
 
+> **HM-REQ-0030** Every synapse payload is signed by the sending
+> hotkey using ed25519 over the canonical JSON body (exclusive of the
+> `signature` field). Unsigned or invalidly-signed payloads are
+> rejected at the transport boundary.
+
+> **HM-REQ-0031** Canonical JSON (RFC 8785) is the only serialisation
+> admissible for signing and verification. A different byte-exact
+> encoding of the same logical payload is a signature failure, not a
+> tolerated variant.
+
 ## Schema
 
 All four synapses are machine-checkable via

@@ -1,0 +1,55 @@
+---
+name: requirements index
+description: catalogue of normative HM-REQ statements and the spec section that defines each
+tokens: 500
+load_for: [implementation, review]
+depends_on: []
+---
+
+# Requirements index
+
+Every **HM-REQ-NNNN** tag is a normative statement the implementation
+must satisfy. IDs are stable forever: once assigned, they are never
+renamed or recycled, even if the text they tag is revised.
+
+The implementation links back with a `# spec: HM-REQ-NNNN` comment in
+the relevant test or module. The
+[`scripts/check_requirements.py`](../../scripts/check_requirements.py)
+checker enforces one-way invariants:
+
+- Every ID in this index has an inline definition in a spec doc.
+- Every inline ID in a spec doc has a row here.
+- IDs are unique.
+
+## Index
+
+| ID | Doc | Section | Short statement | Status |
+|----|-----|---------|-----------------|--------|
+| HM-REQ-0001 | [02](02-hypothesis-format.md) | Schema validation | Hypothesis front matter is governed by the JSON Schema; the schema is the contract | normative |
+| HM-REQ-0002 | [02](02-hypothesis-format.md) | Versioning and immutability | Results announced against a given `(id, version)` are valid only if the spec at that version was committed before `submitted_at` | normative |
+| HM-REQ-0003 | [02](02-hypothesis-format.md) | Versioning and immutability | A version bump invalidates every prior submission against the earlier version | normative |
+| HM-REQ-0010 | [05](05-validator.md) | Two layers | Validator scoring is deterministic pure functions over artifacts; two validators on the same inputs produce the same score vector | normative |
+| HM-REQ-0011 | [05](05-validator.md) | Two layers | No LLM output participates in the scoring pipeline | normative |
+| HM-REQ-0012 | [05](05-validator.md) | Anti-collusion | A validator cannot score its own miner hotkey | normative |
+| HM-REQ-0020 | [06](06-scoring.md) | Composite score | Composite score is `w_rigor*rigor + w_reproduction*reproduction + w_improvement*improvement + w_novelty*novelty − w_cost*cost_penalty` | normative |
+| HM-REQ-0021 | [06](06-scoring.md) | Novelty / Ordering | Novelty tiebreak is (1) announcement block height, (2) in-block extrinsic index, (3) hotkey SS58 lex order | normative |
+| HM-REQ-0030 | [09](09-protocol.md) | Synapses | Every synapse payload is signed by the sender's hotkey (ed25519) | normative |
+| HM-REQ-0031 | [09](09-protocol.md) | Synapses | Signing is over canonical JSON (RFC 8785); non-canonical encoding fails verification | normative |
+| HM-REQ-0040 | [12](12-implementation-constraints.md) | Test-driven development | Each module's first `test:` commit precedes its first `feat:`/`fix:` commit; the `test:` is red on its own | normative |
+| HM-REQ-0041 | [15](15-ci-cd.md) | Pinning policy | Every `uses:` in `.github/workflows/**` is a 40-char SHA | normative |
+| HM-REQ-0042 | [12](12-implementation-constraints.md) | License headers | Every new `.py`/`.sh` under `src/`, `scripts/`, `tests/`, `experiments/` carries SPDX identifier + copyright lines in the first 10 lines | normative |
+
+## How to add
+
+1. Pick the next free ID (`HM-REQ-NNNN`, four digits, monotonic by
+   cluster: 00xx hypothesis format, 00xx–01xx validator, 02xx
+   scoring, 03xx protocol, 04xx implementation).
+2. Insert an inline block-quote at the normative statement's
+   canonical home in the spec, e.g.
+   `> **HM-REQ-0099** The checker rejects …`
+3. Add a row to this index.
+4. Reference it from any relevant test / ADR as `# spec: HM-REQ-0099`.
+
+Removing an ID is only permissible if the requirement itself is
+withdrawn — mark the row `withdrawn` rather than deleting, so
+historical references stay resolvable.

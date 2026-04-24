@@ -17,6 +17,14 @@ The validator splits cleanly into two layers:
 
 ### Deterministic core (pure, agent-free)
 
+> **HM-REQ-0010** Validator scoring is a deterministic pure function
+> over artifacts. Two validators on the same inputs (same manifest,
+> same rerun sample) produce the same score vector.
+
+> **HM-REQ-0011** No LLM output participates in the scoring pipeline,
+> neither in rigor evaluation, reproduction tolerance checks,
+> improvement calculations, nor composite aggregation.
+
 Everything that influences the score vector. Pure functions over
 artifacts: schema validation, signature verification, artifact
 integrity, sandboxed rerun, statistical tests, score composition, and
@@ -149,6 +157,11 @@ should not have been accepted). Both are addressable: see
 protocol-level tolerance for the second.
 
 ## Anti-collusion
+
+> **HM-REQ-0012** A validator MUST NOT produce a non-zero score for
+> any submission whose `miner_hotkey` matches a hotkey under the same
+> operator. Self-scoring is rejected before the deterministic core
+> runs.
 
 - A validator MUST NOT score a submission whose `miner_hotkey` matches any
   hotkey controlled by the validator operator (enforced by the operator,

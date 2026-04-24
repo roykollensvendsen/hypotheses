@@ -10,6 +10,12 @@ depends_on: [02, 18]
 
 ## Composite score
 
+> **HM-REQ-0020** The composite score for a submission `s` is
+> `S(s) = w_rigor·rigor(s) + w_reproduction·reproduction(s) +
+> w_improvement·improvement(s, H) + w_novelty·novelty(H) −
+> w_cost·cost_penalty(s)`. Weights are governed values; the formula
+> is not.
+
 For a submission `s` against spec `H` at version `v`:
 
 ```
@@ -106,6 +112,12 @@ which keeps emission flowing to new questions rather than rehashing
 old ones.
 
 #### Ordering (tiebreak for simultaneous settlements)
+
+> **HM-REQ-0021** Novelty ordering is resolved in this order: (1)
+> block height of the `ResultsAnnouncement` extrinsic, (2) in-block
+> extrinsic index, (3) lex-ordering of `miner_hotkey` in SS58 form.
+> The rule is deterministic; validators agree on novelty without
+> coordination.
 
 "First" is resolved deterministically — no ambiguity, no judgement
 call:

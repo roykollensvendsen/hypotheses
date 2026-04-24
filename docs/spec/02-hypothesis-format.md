@@ -131,6 +131,11 @@ contradicts: []
 
 ## Schema validation
 
+> **HM-REQ-0001** Hypothesis front matter is governed by
+> [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
+> The schema is the contract; a hypothesis that does not validate
+> does not merge.
+
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
 - Every PR that touches `hypotheses/` runs
@@ -147,6 +152,16 @@ contradicts: []
   values).
 
 ## Versioning and immutability
+
+> **HM-REQ-0002** A `ResultsAnnouncement` against `(id, version)` is
+> valid only if the spec at that version was committed to `main`
+> strictly before the announcement's `submitted_at`. Results
+> "announced against a future spec" are rejected by the validator.
+
+> **HM-REQ-0003** Incrementing `version` invalidates every prior
+> submission against the earlier version; reruns under the new
+> version start novelty, rigor, reproduction, and improvement
+> accounting from scratch.
 
 - The `id` is immutable.
 - Any change to `claim`, `variables`, `metrics`, `baselines`, `protocol`,
