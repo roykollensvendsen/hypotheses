@@ -48,6 +48,8 @@ Read in order:
     transitions, authorities, edge cases
 19. [18 — Oracle contract](18-oracle.md) — oracle interface,
     classes, composition, outage, SN42 adapter
+20. [19 — Operations](19-operations.md) — observability, SLIs,
+    alerts, runbooks, disaster recovery
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](
