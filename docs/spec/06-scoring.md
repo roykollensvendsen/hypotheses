@@ -89,7 +89,8 @@ still earns score from the other components; a *honest null* is not a loss.
 ### Novelty
 
 First miner to settle a hypothesis (pass reproduction + either
-`success_criteria` or `falsification_criteria` at the current version):
+`success_criteria` or `falsification_criteria` at the current
+version):
 
 ```
 novelty = 1.0 for the first settling submission
@@ -97,8 +98,32 @@ novelty = 1.0 for the first settling submission
         = 0.0 thereafter
 ```
 
-Novelty decays to zero for reruns of an already-settled hypothesis, which
-keeps emission flowing to new questions rather than rehashing old ones.
+Novelty decays to zero for reruns of an already-settled hypothesis,
+which keeps emission flowing to new questions rather than rehashing
+old ones.
+
+#### Ordering (tiebreak for simultaneous settlements)
+
+"First" is resolved deterministically — no ambiguity, no judgement
+call:
+
+1. **Primary key:** the block height of the on-chain
+   `ResultsAnnouncement` extrinsic that carried the submission.
+   Earlier block = earlier settlement.
+2. **Secondary key** (same block): the in-block extrinsic index.
+3. **Tertiary key** (same block, same extrinsic index — effectively
+   impossible on Bittensor but defined for completeness): lex
+   ordering of the submitting `miner_hotkey` in its SS58 string
+   form.
+
+Two announcements in the same block thus receive novelty `1.0` and
+`0.5` respectively under the tertiary rule; a third announcement in
+the same block receives `0.0`.
+
+Chain block height cannot be chosen by the miner beyond ±a few
+blocks of inclusion latency — this makes the tiebreak
+game-resistant. The rule is also independent of which validator
+scores first, so validators agree on novelty without coordination.
 
 ### Cost penalty
 

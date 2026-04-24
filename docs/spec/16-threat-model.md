@@ -106,7 +106,7 @@ number; resolved threats keep their ID with `status: mitigated`.
 | T-002 | Miner tunes thresholds post-hoc to fit their numbers | preregistration: spec committed to `main` and hashed before results announce; `version` bump invalidates prior results; `code_commit` in manifest must predate `submitted_at` | [02 § versioning](02-hypothesis-format.md#versioning-and-immutability), [05 § structural validate](05-validator.md#pipeline), [07 § preregistration](07-incentive.md#preregistration) | mitigated |
 | T-003 | Miner trains on the evaluation set to inflate accuracy | validator rerun uses the pinned `dataset_revision`; the runtime dataset adapter is the only network path allowed in-sandbox; egress allowlist enforces this at the container level | [08 § dataset handling](08-experiment-runtime.md#dataset-handling), [08 § sandbox](08-experiment-runtime.md#sandbox) | mitigated |
 | T-004 | Fabricated single-seed submission (`seeds: [0]`) to shortcut rerun probability | spec requires `seeds_required` in every success criterion; hypotheses below the floor fail rigor; `hypo` miner client refuses to submit single-seed runs | [06 § rigor](06-scoring.md#rigor), [04 § miner etiquette](04-miner.md#miner-etiquette-and-gotchas) | mitigated |
-| T-005 | Novelty-bonus race — two miners settle the same hypothesis in the same block | novelty = 1.0 for the first settling submission, 0.5 for the second, 0.0 thereafter. Ordering is by the block height at which the announcement settled, ties broken by miner-hotkey lexicographic order | [06 § novelty](06-scoring.md#novelty) | **partial — needs tiebreak rule in 06** |
+| T-005 | Novelty-bonus race — two miners settle the same hypothesis in the same block | novelty = 1.0 first, 0.5 second, 0.0 thereafter. Tiebreak order: (1) block height of the `ResultsAnnouncement` extrinsic, (2) in-block extrinsic index, (3) miner-hotkey SS58 lex order | [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements) | mitigated |
 | T-006 | Sybil farming — one operator registers many miner hotkeys to capture novelty multiple times | per-hotkey scoring is independent, but novelty is per-hypothesis so a Sybil cluster still only gets one novelty bonus per hypothesis per version; compute cost to run experiments doesn't drop at scale; validator rerun sampling is per-hotkey | [07 § hotkey-identity binding](07-incentive.md#hotkey-identity-binding), [06 § novelty](06-scoring.md#novelty) | mitigated |
 
 ### B. Scoring / registry integrity
@@ -127,7 +127,7 @@ number; resolved threats keep their ID with `status: mitigated`.
 | id | threat | mitigation | spec section | status |
 |----|--------|------------|--------------|--------|
 | T-020 | Miner uploads huge bundles to exhaust validator storage | 10 GiB per-hotkey quota, 500 MiB per-artifact cap, 1 MiB per-manifest cap; validators refuse oversize `GetArtifact` requests | [03 § failure modes](03-architecture.md#failure-modes-the-architecture-must-resist), [04 § artifact contract](04-miner.md#submit-artifact-contract) | mitigated |
-| T-021 | Announcement-stream flooding | per-hotkey rate limit on announcements (**TBD: specific limit**); duplicate submission per `(spec_id, version, hotkey)` collapses | [05 § discover](05-validator.md#pipeline) | **partial — rate limit is TBD** |
+| T-021 | Announcement-stream flooding | per-hotkey rate limit: 3 announcements per Bittensor epoch (~72 min). Excess dropped, logged. Duplicate submissions per `(spec_id, version, hotkey)` within an epoch collapse to the first | [05 § discover](05-validator.md#pipeline) | mitigated |
 | T-022 | Miner takes artifact offline after submission | validators cache artifacts on successful rerun; the subnet operator pins manifest CIDs centrally; miners who drop bulk artifacts lose reproduction score on recounts, which caps their reputational value | [09 § storage](09-protocol.md#storage) | mitigated (miner-risk model) |
 | T-023 | IPFS gateway outage across validators at once | validators use their own IPFS node; fetch failures degrade gracefully (submission stays pending, not failed); retries on next cycle | [09 § storage](09-protocol.md#storage) | accepted — single-IPFS-provider risk is operational |
 | T-024 | Validator sandbox starved by a slow experiment | wallclock cap per profile (5m–4h depending on profile); kill-on-cap with metrics-absent outcome = validator records the submission failed reproduction | [08 § hardware profiles](08-experiment-runtime.md#hardware-profiles), [08 § failure policy](08-experiment-runtime.md#failure-policy) | mitigated |
@@ -197,12 +197,8 @@ number; resolved threats keep their ID with `status: mitigated`.
 
 ## Open questions / gaps
 
-Listed as remaining spec work:
+Remaining spec work referenced from this table:
 
-- **T-005 tiebreak rule** — 06-scoring needs an explicit ordering for
-  simultaneous settlements.
-- **T-021 rate limit numbers** — announcement-stream DoS protection
-  has a TBD in 05-validator.
 - **T-061 oracle composition** — deferred to the oracle-contract
   spec (17), not yet written.
 

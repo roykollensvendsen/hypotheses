@@ -43,9 +43,28 @@ core to adjust a number.
 Per validator cycle (cadence: **20 minutes**, aligned to Bittensor
 epochs — revisit if an epoch changes length):
 
-1. **Discover.** Read recent `ResultsAnnouncement` synapses from the chain.
-   Filter out announcements whose `(spec_id, spec_version, miner_hotkey)`
-   has already been scored in the current epoch.
+1. **Discover.** Read recent `ResultsAnnouncement` synapses from the
+   chain. Filter out announcements whose
+   `(spec_id, spec_version, miner_hotkey)` has already been scored
+   in the current epoch.
+
+   **Per-hotkey rate limit:** at most **3 announcements per
+   miner_hotkey per Bittensor epoch** (~72 minutes at 360 blocks
+   × 12 s). Any fourth announcement in the same epoch is dropped —
+   the validator records it in `events.jsonl` with reason
+   `rate_limit_exceeded` and does not score it. The limit applies
+   to announcements the validator observes, so a miner splitting
+   across validators gains nothing; announcements hit every
+   validator.
+
+   Rationale: entry-level hypotheses on `cpu-small` take roughly an
+   hour end-to-end; a miner legitimately submitting more than 3
+   times per epoch is almost certainly re-announcing the same
+   submission or farming novelty attempts. The limit is tuned
+   generously enough that honest operators never hit it and low
+   enough that spam is capped before validator cycles stall.
+   Revisit once we have per-profile submission-latency data from
+   Phase 2.
 2. **Fetch.** Pull the spec from the registry and `run.manifest.json` from
    the miner. Verify the miner's signature.
 3. **Structural validate.**
