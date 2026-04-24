@@ -211,6 +211,10 @@ gates are required for a module to count as done.
 - `INFO` for lifecycle, `WARNING` for recoverable anomalies, `ERROR`
   for failures ending the current action. No debug-level chatter in
   production paths.
+- Operator-facing SLIs, alert names, and runbooks live in
+  [19 — Operations](19-operations.md). That doc consumes the log
+  schema specified above; adding a new required field here is a
+  breaking change to operators' dashboards.
 
 ## Fail-fast policy
 
