@@ -206,7 +206,7 @@ and `uv` are available.
   sandbox image; verify byte-identical `metrics.jsonl` across two
   seed=0 runs. If identical locally but diverging in validator
   runs, raise a
-  [`spec-question` issue](.github/ISSUE_TEMPLATE/spec-question.yml)
+  [`spec-question` issue](../../.github/ISSUE_TEMPLATE/spec-question.yml)
   — the hypothesis's `rerun_tolerance` may be tighter than the
   profile supports.
 - **Close.** Bump the hypothesis's `version` with a corrected
@@ -266,7 +266,7 @@ and `uv` are available.
   miners, suspect the spec.
 - **Mitigate.** Runtime bug → restart with a fresh sandbox image.
   Spec bug → open a
-  [`spec-question`](.github/ISSUE_TEMPLATE/spec-question.yml)
+  [`spec-question`](../../.github/ISSUE_TEMPLATE/spec-question.yml)
   issue and notify the maintainer.
 - **Close.** Rate returns above 0.95.
 
