@@ -155,6 +155,10 @@ description: target directory structure for the full subnet codebase
 │           ├── base.py
 │           └── sn42.py             # TBD adapter
 ├── tests/
+│   ├── golden/                     # frozen JSON i/o fixtures (no code)
+│   │   ├── scoring/
+│   │   ├── hypothesis-parsing/
+│   │   └── protocol/
 │   ├── spec/                       # schema and parser tests
 │   ├── scoring/
 │   ├── runtime/

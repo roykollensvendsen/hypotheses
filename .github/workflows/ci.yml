@@ -81,11 +81,11 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-      - name: Skip if tests absent
+      - name: Skip if pytest files absent
         id: guard
         run: |
-          if [ ! -d tests ]; then
-            echo "no tests/ yet; no-op until Phase 1"
+          if [ ! -d tests ] || ! find tests \( -name 'test_*.py' -o -name '*_test.py' \) 2>/dev/null | grep -q .; then
+            echo "no pytest files yet; no-op until Phase 1"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"

@@ -1,0 +1,25 @@
+{
+  "name": "falsification",
+  "source": "docs/spec/06-scoring.md § Improvement (honest null clause)",
+  "notes": "A clean settled-refuted submission: improvement = 0 because the falsification criterion is met, but rigor, reproduction, and novelty still pay out. The composite is w_rigor + w_reproduction + w_novelty − w_cost * cost_penalty.",
+  "input": {
+    "weights": {
+      "rigor": 0.20,
+      "reproduction": 0.35,
+      "improvement": 0.30,
+      "novelty": 0.15,
+      "cost_penalty": 0.10
+    },
+    "components": {
+      "rigor": 1.0,
+      "reproduction": 1.0,
+      "improvement": 0.0,
+      "novelty": 1.0,
+      "cost_penalty": 0.10
+    }
+  },
+  "expected": {
+    "composite": 0.69,
+    "tolerance": 1e-9
+  }
+}

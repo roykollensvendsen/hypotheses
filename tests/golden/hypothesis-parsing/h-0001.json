@@ -1,0 +1,67 @@
+{
+  "name": "h-0001",
+  "source": "hypotheses/H-0001-connectivity-first-training.md (front matter)",
+  "notes": "Canonical parser output for H-0001. Any structural reshuffle in src/hypotheses/spec/parser.py updates this file in the same PR.",
+  "input": {
+    "path": "hypotheses/H-0001-connectivity-first-training.md"
+  },
+  "expected": {
+    "id": "H-0001",
+    "title": "Connectivity-first training: pruning beats sparse init on a 2-layer MLP",
+    "authors": [
+      {"name": "repo-maintainer", "hotkey": null}
+    ],
+    "status": "proposed",
+    "version": 1,
+    "created": "2026-04-24",
+    "updated": "2026-04-24",
+    "claim": "A fully-connected 2-layer MLP trained on CIFAR-10 with gradient-magnitude edge decay, pruned to a target final density, reaches 60% test accuracy in fewer training FLOPs than a sparse-random initialisation of the same final density trained to the same accuracy.\n",
+    "motivation": "Establishes a small, tractable first test of the connectivity-first frame. The hypothesis is deliberately modest (small model, weak accuracy bar) to serve as the end-to-end test fixture for the subnet implementation. If it holds at all, a stronger version belongs in a follow-up hypothesis.\n",
+    "variables": [
+      {"name": "init_topology", "values": ["fully_connected", "sparse_random"]},
+      {"name": "edge_dynamics", "values": ["none", "gradient_decay"]}
+    ],
+    "metrics": [
+      {"name": "flops_to_target_acc", "units": "flops", "target_direction": "minimize"},
+      {"name": "final_test_accuracy", "units": "ratio", "target_direction": "maximize"}
+    ],
+    "baselines": [
+      {"name": "sparse_baseline", "init_topology": "sparse_random", "edge_dynamics": "none"}
+    ],
+    "protocol": {
+      "dataset": "cifar10",
+      "dataset_revision": "huggingface:uoft-cs/cifar10@0b2714987fa478483af9968de7c934580d0bb9a2",
+      "model_family": "mlp-2-layer",
+      "model_config_ref": "experiments/H-0001/model.yaml",
+      "seeds": [0, 1, 2, 3, 4],
+      "max_steps": 20000,
+      "hardware_profile": "cpu-small",
+      "code_ref": "experiments/H-0001/",
+      "entrypoint": "experiments/H-0001/run.py"
+    },
+    "success_criteria": [
+      {
+        "metric": "flops_to_target_acc",
+        "operator": "lte",
+        "vs_baseline": "sparse_baseline",
+        "threshold_ratio": 0.80,
+        "statistical_test": "welch_t",
+        "p_max": 0.01,
+        "seeds_required": 5
+      }
+    ],
+    "falsification_criteria": [
+      {
+        "metric": "flops_to_target_acc",
+        "operator": "gte",
+        "vs_baseline": "sparse_baseline",
+        "threshold_ratio": 1.00,
+        "statistical_test": "welch_t",
+        "p_max": 0.05
+      }
+    ],
+    "oracle": {"subnet": null, "task_ref": null, "tolerance": null},
+    "depends_on": [],
+    "contradicts": []
+  }
+}

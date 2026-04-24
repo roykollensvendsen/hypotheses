@@ -158,6 +158,25 @@ against Bittensor testnet, not in default CI.
 Coverage: package ≥ 85% statements; per-module floor 75%. A module
 below its floor fails CI.
 
+### Golden fixtures
+
+Static input/output fixtures live under
+[`tests/golden/`](../../tests/golden/) as JSON files only — never
+`.py`. Unit tests parametrise over these files for any behaviour
+whose expected output comes directly from the spec (composite score,
+parsed hypothesis front matter, wire-format dispatch, etc.).
+
+Rules:
+
+- Phase 1 adds `pytest --update-golden` for scaffolding; a PR that
+  regenerates a pre-existing fixture must cite the spec change or
+  bug that justifies the update. Silent drift is a review-blocker.
+- Every fixture that has a schema in
+  `src/hypotheses/spec/schema/` also validates against that schema.
+- No test fixture is a `.py` file. If the fixture needs code to
+  generate, the generator lives in `scripts/` and writes the JSON;
+  tests read the JSON.
+
 ## Test-driven development (mandatory)
 
 Every module in `src/hypotheses/` is built test-first. The required

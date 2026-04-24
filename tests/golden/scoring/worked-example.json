@@ -1,0 +1,25 @@
+{
+  "name": "worked-example",
+  "source": "docs/spec/06-scoring.md § Worked example",
+  "notes": "Canonical composite-score calculation from H-0001 at v1. Recomputes 0.992 from the listed component values.",
+  "input": {
+    "weights": {
+      "rigor": 0.20,
+      "reproduction": 0.35,
+      "improvement": 0.30,
+      "novelty": 0.15,
+      "cost_penalty": 0.10
+    },
+    "components": {
+      "rigor": 1.0,
+      "reproduction": 1.0,
+      "improvement": 1.0,
+      "novelty": 1.0,
+      "cost_penalty": 0.08
+    }
+  },
+  "expected": {
+    "composite": 0.992,
+    "tolerance": 1e-9
+  }
+}

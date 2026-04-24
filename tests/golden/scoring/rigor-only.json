@@ -1,0 +1,25 @@
+{
+  "name": "rigor-only",
+  "source": "docs/spec/06-scoring.md § Composite score",
+  "notes": "Submission that passes every rigor check but scores zero everywhere else. The composite is rigor * w_rigor with no cost penalty adjustment; reproduction = improvement = novelty = 0 on a rerun-failing seed.",
+  "input": {
+    "weights": {
+      "rigor": 0.20,
+      "reproduction": 0.35,
+      "improvement": 0.30,
+      "novelty": 0.15,
+      "cost_penalty": 0.10
+    },
+    "components": {
+      "rigor": 1.0,
+      "reproduction": 0.0,
+      "improvement": 0.0,
+      "novelty": 0.0,
+      "cost_penalty": 0.0
+    }
+  },
+  "expected": {
+    "composite": 0.20,
+    "tolerance": 1e-9
+  }
+}

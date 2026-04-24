@@ -1,0 +1,26 @@
+{
+  "name": "results-announcement-valid",
+  "source": "docs/spec/09-protocol.md § Synapse: ResultsAnnouncement",
+  "notes": "Canonical valid ResultsAnnouncement. Exercised against src/hypotheses/spec/schema/synapses.schema.json. Phase 1 protocol tests treat this file as the happy-path fixture for announcement validation and signature-recovery.",
+  "input": {
+    "payload": {
+      "type": "ResultsAnnouncement",
+      "schema_version": 1,
+      "hypothesis_id": "H-0001",
+      "hypothesis_version": 1,
+      "spec_cid": "bafybeihzkxh7qj3ptoxhypfetpwwmvqgkaamrp4nekxeymeu7rymqqnudm",
+      "artifact_cid": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
+      "miner_hotkey": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+      "declared_summary": {
+        "flops_to_target_loss": {"median": 1.25e9, "n": 5},
+        "final_test_accuracy": {"median": 0.910, "n": 5}
+      },
+      "submitted_at": "2026-04-24T10:00:00Z",
+      "signature": "0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    }
+  },
+  "expected": {
+    "schema_valid": true,
+    "dispatch": "ResultsAnnouncement"
+  }
+}
