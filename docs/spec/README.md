@@ -50,6 +50,8 @@ Read in order:
     classes, composition, outage, SN42 adapter
 20. [19 — Operations](19-operations.md) — observability, SLIs,
     alerts, runbooks, disaster recovery
+21. [20 — Economic model](20-economic-model.md) — emission flow,
+    parameter inventory, stake, Sybil cost, governance
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](

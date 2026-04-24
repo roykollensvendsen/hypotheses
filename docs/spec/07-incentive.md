@@ -27,9 +27,14 @@ Emission per epoch (Bittensor default: 360 blocks ≈ 72 minutes):
 - 82% to miners, weighted by validator-consensus score.
 - 18% to validators, as standard subnet dividends on their bond.
 
-Numbers match Bittensor defaults; we may revisit after Phase 2 if the
-balance of work warrants it (e.g. reruns are a larger share of compute than
-proposing).
+Numbers match Bittensor defaults; we may revisit after Phase 2 if
+the balance of work warrants it (e.g. reruns are a larger share of
+compute than proposing).
+
+The quantitative model — parameter inventory, Sybil-cost
+arithmetic, scoring-weight justification, calibration plan, and
+governance over every tunable — is in
+[20 — Economic model](20-economic-model.md).
 
 ## What emission rewards, concretely
 
