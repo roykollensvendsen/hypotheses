@@ -30,6 +30,8 @@ Read in order:
     typed SDK, and starter agents for LLM-driven miners
 15. [14 — CLI](14-cli.md) — the unified `hypo` command, one entry
     point for humans and scripts
+16. [15 — CI / CD and repo automations](15-ci-cd.md) — catalog of
+    `.github/` workflows, configs, templates, scripts
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](
