@@ -169,6 +169,11 @@ documented in an ADR. A hypothesis whose claim cannot be phrased as a
 known-answer question on an oracle subnet sets `oracle: null` and
 relies on reproduction + improvement alone.
 
+The full oracle adapter contract — interface, classes
+(known-answer vs. consensus-answer), registration process,
+disagreement handling, outage semantics, and the SN42 adapter
+specifics — is in [18 — Oracle contract](18-oracle.md).
+
 ## Statistical tests
 
 Supported in v1:

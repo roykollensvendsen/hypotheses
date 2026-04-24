@@ -166,7 +166,7 @@ number; resolved threats keep their ID with `status: mitigated`.
 | id | threat | mitigation | spec section | status |
 |----|--------|------------|--------------|--------|
 | T-060 | Miner games SN42 oracle to claim a false positive | oracle check is a hard gate: beyond tolerance = score vector zero regardless of other components. Oracle answers come from the oracle subnet's consensus | [06 § oracles](06-scoring.md#oracles) | mitigated |
-| T-061 | Oracle disagrees with itself across validator cycles | **TBD** — multi-oracle composition and cross-cycle stability is deferred to the oracle-contract spec (17) | [06 § oracles](06-scoring.md#oracles) | **deferred to 17-oracle.md** |
+| T-061 | Oracle disagrees with itself across validator cycles | N consecutive consistent verdicts required before the verdict is final (default N=3 for consensus-answer; N=1 for known-answer where self-disagreement is itself an error). Persistent disagreement >24h triggers operator alert | [18 § disagreement](18-oracle.md#disagreement-handling-same-oracle-cross-cycle) | mitigated |
 | T-062 | Oracle subnet itself goes down | submission scored without the oracle check — but fails if oracle was declared. This aligns with fail-fast: no degraded-scoring-with-missing-oracle path | [12 § fail-fast](12-implementation-constraints.md#fail-fast-policy) | mitigated |
 
 ### H. Governance / process attacks
@@ -197,10 +197,11 @@ number; resolved threats keep their ID with `status: mitigated`.
 
 ## Open questions / gaps
 
-Remaining spec work referenced from this table:
-
-- **T-061 oracle composition** — deferred to the oracle-contract
-  spec (17), not yet written.
+No open gaps remaining in the current threat table; each entry has
+a concrete mitigation or an explicit accepted-risk entry. New
+threats get filed as they're discovered; the "partial" entries
+continue to move toward "mitigated" as deferred work lands per
+[15 § deferred / planned](15-ci-cd.md#deferred--planned).
 
 ## References
 

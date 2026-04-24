@@ -46,6 +46,8 @@ Read in order:
     threats, and mitigations; the security audit trail
 18. [17 — Hypothesis lifecycle](17-hypothesis-lifecycle.md) — states,
     transitions, authorities, edge cases
+19. [18 — Oracle contract](18-oracle.md) — oracle interface,
+    classes, composition, outage, SN42 adapter
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](
