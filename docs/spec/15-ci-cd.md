@@ -203,9 +203,46 @@ A workflow may be removed only when the capability it enforces is
 covered by another gate. A removal PR updates this doc (removes the
 row) and includes a one-line rationale in the commit message.
 
-## Non-goals
+## Deferred / planned
+
+These were considered during the Phase 0 CI hardening and deliberately
+deferred. Each has a named trigger for when to pick it up.
+
+### Tier 2 — Land as Phase 1 begins (when `src/` exists)
+
+| item | rationale | trigger |
+|------|-----------|---------|
+| **CodeQL for Python** (`github/codeql-action@v3`) | Free SAST for public repos, catches what `bandit` misses (SQLi, path traversal, insecure deserialization). | First `src/hypotheses/**/*.py` commit. |
+| **`pip-audit` → official action with SARIF upload** (`pypa/gh-action-pip-audit`) | Findings land in the Security tab with triage UI rather than raw logs. | `pyproject.toml` exists. |
+| **JUnit XML + test summary** (`pytest --junitxml=junit.xml` + `mikepenz/action-junit-report`) | Gives agents structured failure data rather than scraped logs. | First `tests/` file. |
+| **Codecov with OIDC** (`codecov/codecov-action@v5`, `use_oidc: true`) | No secret to rotate; coverage-diff PR comment; visibility drives the norm. | First `tests/` file. |
+| **`pytest-benchmark` regression gate** (`benchmark-action/github-action-benchmark`, alert >20% regression) | Performance cliffs are the class of bug LLM agents most frequently introduce. | First `tests/benchmark/`. |
+
+### Tier 3 — Land at first release (Phase 3)
+
+| item | rationale | trigger |
+|------|-----------|---------|
+| **PyPI trusted publishing via OIDC** (`pypa/gh-action-pypi-publish`) | No long-lived API tokens; PyPI's default path. | First `release-please` release PR merged. |
+| **SLSA Level 3 build provenance + `actions/attest-build-provenance`** | Downstream consumers verify artifacts came from this repo+workflow. | Same as above. |
+| **SBOM on release** (`anchore/sbom-action`, CycloneDX) | NIST SSDF / EO 14028; enterprise downstream adoption. | Same as above. |
+
+### Other deferred work
+
+| item | rationale | trigger |
+|------|-----------|---------|
+| **`harden-runner` `egress-policy: block`** (currently `audit`) | Audit mode logs outbound; block mode enforces an allow-list. Requires stable egress surface. | End of Phase 2 — after observation period is long enough to build the allow-list. |
+| **`spec-mirror.yml`** (IPFS mirror of `hypotheses/`) | Referenced in 03-architecture; kubo-node-based mirroring. | IPFS pinning service stood up (Phase 2). |
+| **`scripts/check_schema_matches_doc.py`** | Consistency between `docs/spec/02-hypothesis-format.md` and the JSON Schema. | JSON Schema file exists (early Phase 1). |
+| **`scripts/validate_hypotheses.py`** | JSON Schema validation of every `hypotheses/*.md`. | Same as above. |
+| **AI-generated-code attestation** | Emerging 2026 pattern; no canonical action yet. | Canonical tooling exists. |
+| **Branch protection rules as code** (Rulesets + settings-as-code) | Declarative branch protection, reviewable in PRs. | Phase 2 (move off direct pushes). |
+
+### Explicit non-goals (will not implement)
 
 - **Matrix builds across Python versions.** We pinned 3.12.
 - **Matrix across OS.** Linux-only by spec.
 - **DCO / CLA bots.** AGPL doesn't need either.
 - **Welcome bots, all-contributors bots.** Low signal.
+- **`probot/settings`** for repo settings. Unmaintained. If
+  settings-as-code becomes necessary, use GitHub Rulesets or
+  Terraform's `github_repository_ruleset`.
