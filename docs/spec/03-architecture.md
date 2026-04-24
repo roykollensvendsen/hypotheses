@@ -128,15 +128,18 @@ is deferred to Phase 3+ if needed.
 
 ## Failure modes the architecture must resist
 
-| Failure | Mitigation |
-| --- | --- |
-| Miner cherry-picks seeds | `seeds` in spec is fixed; reruns sample from the declared set |
-| Miner tunes thresholds post-hoc | `success_criteria` is preregistered and hashed before submit |
-| Miner trains on the evaluation set | Validators rerun with pinned dataset revision in sandbox |
-| Validator collusion with miner | Validators cannot self-score; weight normalisation across validators |
-| Spec drift (code doesn't match claim) | `code_ref` and `entrypoint` are committed before results submit |
-| Non-determinism | Runtime pins seeds, BLAS threads, CUDA flags; tolerance explicit |
-| Large artifact DOS | Per-hotkey quota: 10 GiB. Per-artifact cap: 500 MiB. Per-manifest cap: 1 MiB. Revisit after Phase 2. |
+Short summary; the canonical enumeration lives in
+[16 — Threat model](16-threat-model.md).
+
+| Failure | Mitigation | Threat ID |
+| --- | --- | --- |
+| Miner cherry-picks seeds | `seeds` in spec is fixed; reruns sample from the declared set | [T-001](16-threat-model.md) |
+| Miner tunes thresholds post-hoc | `success_criteria` is preregistered and hashed before submit | [T-002](16-threat-model.md) |
+| Miner trains on the evaluation set | Validators rerun with pinned dataset revision in sandbox | [T-003](16-threat-model.md) |
+| Validator collusion with miner | Validators cannot self-score; weight normalisation across validators | [T-010](16-threat-model.md), [T-015](16-threat-model.md) |
+| Spec drift (code doesn't match claim) | `code_ref` and `entrypoint` are committed before results submit | [T-013](16-threat-model.md) |
+| Non-determinism | Runtime pins seeds, BLAS threads, CUDA flags; tolerance explicit | [T-042](16-threat-model.md) |
+| Large artifact DOS | Per-hotkey quota: 10 GiB. Per-artifact cap: 500 MiB. Per-manifest cap: 1 MiB. | [T-020](16-threat-model.md) |
 
 ## What is explicitly *out* of architecture scope
 

@@ -42,6 +42,8 @@ Read in order:
     point for humans and scripts
 16. [15 — CI / CD and repo automations](15-ci-cd.md) — catalog of
     `.github/` workflows, configs, templates, scripts
+17. [16 — Threat model](16-threat-model.md) — actors, assets,
+    threats, and mitigations; the security audit trail
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](
