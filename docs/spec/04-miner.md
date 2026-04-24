@@ -121,3 +121,17 @@ Exact synapse definitions live in [09 Protocol](09-protocol.md).
 - **Artifact size.** Keep weights out of the bundle unless the hypothesis
   explicitly requires them. The manifest can reference weight CIDs hosted
   separately.
+
+## Self-audit
+
+This doc is done when:
+
+- Every CLI command listed exists as a verb in
+  [14-cli.md](14-cli.md) and an MCP tool in
+  [13-agent-integration.md](13-agent-integration.md).
+- The artifact contract matches the manifest fields checked in
+  [05 § structural validate](05-validator.md#pipeline).
+- Every synapse listed exists in [09-protocol.md](09-protocol.md).
+- Etiquette rules map to economic or integrity mechanisms in
+  [07-incentive.md](07-incentive.md) or
+  [16-threat-model.md](16-threat-model.md).

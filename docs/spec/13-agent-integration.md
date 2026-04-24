@@ -262,3 +262,18 @@ surfaced by the server is documented here and vice versa.
 - Phase 2: MCP write tools enabled. One or more starter agents
   running on testnet.
 - Phase 3: starter agents are part of the onboarding documentation.
+
+## Self-audit
+
+This doc is done when:
+
+- Every MCP tool listed has a matching SDK method and a matching
+  CLI verb — agent / CLI parity from
+  [12 § scope discipline](12-implementation-constraints.md#scope-discipline).
+- Write-gating confirmation modes are enumerated and link to the
+  operator control for each.
+- The role × surface matrix covers every active role (developer,
+  miner, validator operator).
+- Every prompt referenced in `agents/prompts/` exists.
+- Identity / key-handling rules match the threat model's T-050
+  mitigation.

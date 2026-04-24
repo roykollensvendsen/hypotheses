@@ -132,3 +132,18 @@ is framework.
   the run).
 - Running multi-node distributed training in v1. `multi-gpu-4x80gb` is a
   single-host profile; distributed profiles are a Phase 3+ question.
+
+## Self-audit
+
+This doc is done when:
+
+- Every `hardware_profile` enum value in the JSON Schema has a row
+  in the profiles table with concrete caps.
+- Every sandbox failure mode maps to a typed exception in
+  [12 § fail-fast](12-implementation-constraints.md#fail-fast-policy).
+- Determinism rules cover every non-determinism source in the
+  declared toolchain (Python, PyTorch, BLAS, CUDA).
+- The entrypoint contract matches
+  [04 § artifact contract](04-miner.md#submit-artifact-contract).
+- Dataset and environment pinning rules are enforceable by
+  `runtime/data/` and `runtime/sandbox/` respectively.

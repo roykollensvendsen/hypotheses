@@ -110,3 +110,16 @@ implementation. The trusted-maintainer model ships to mainnet. A
 dedicated post-mainnet spec PR will propose the transition when the
 subnet has demonstrated stable operation for an extended period; values
 like "≥ N miners, ≥ M weeks" are left for that PR.
+
+## Self-audit
+
+This doc is done when:
+
+- Qualitative claims (what emission rewards / doesn't reward) match
+  the formulas in [06](06-scoring.md).
+- Every anti-gaming measure maps to a threat ID in
+  [16 § A](16-threat-model.md#a-economic-attacks--dishonest-rewards).
+- Quantitative framing is deferred to
+  [20-economic-model.md](20-economic-model.md) rather than
+  restated.
+- Governance claims match [`GOVERNANCE.md`](../../GOVERNANCE.md).

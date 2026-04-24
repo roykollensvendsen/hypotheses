@@ -125,3 +125,17 @@ Earlier spec drafts referenced `hypo-miner`, `hypo-validator`, and
 `hypo-mcp` as three separate entry points. Those names are gone. If
 you see them in historical text, read `hypo …`. No shim scripts; the
 three names never shipped.
+
+## Self-audit
+
+This doc is done when:
+
+- Every CLI verb maps to a module under `src/hypotheses/cli/` per
+  [10](10-repo-layout.md).
+- Every verb has a matching MCP tool and SDK method in
+  [13](13-agent-integration.md) — agent / CLI parity.
+- Global flags, exit codes, and JSON-mode semantics are specified
+  without "should" hedging.
+- Role-specific verbs (validator, miner, mcp) match their
+  respective role docs ([04](04-miner.md), [05](05-validator.md),
+  [13](13-agent-integration.md)).

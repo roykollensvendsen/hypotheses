@@ -473,3 +473,17 @@ recovery — it's a last-ditch continuity option.
 - [`SECURITY.md`](../../SECURITY.md) — private advisory flow.
 - [`GOVERNANCE.md`](../../GOVERNANCE.md) — who has authority during
   incidents.
+
+## Self-audit
+
+This doc is done when:
+
+- Every alert name maps to exactly one runbook.
+- Every runbook has trigger, impact, diagnose, mitigate, close —
+  no hand-waving.
+- Every event name in the `events.jsonl` table is emitted by a
+  specific component in `src/hypotheses/`.
+- Every DR scenario names the affected asset from
+  [16 § assets](16-threat-model.md#assets).
+- No observability stack is prescribed (operator-choice), but
+  every SLI is derivable from the spec'd event stream.

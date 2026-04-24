@@ -153,3 +153,17 @@ protocol-level tolerance for the second.
 - Validators whose score vectors are persistent outliers vs consensus are
   down-weighted by the chain's YUMA mechanism. No additional subnet-side
   logic required initially; revisit after Phase 2.
+
+## Self-audit
+
+This doc is done when:
+
+- The "deterministic core vs. operator layer" split is referenced
+  (or enforced) by every section mentioning agents.
+- Every pipeline step has a named outcome and a clear next step.
+- Every "what kills a submission" row maps to a typed exception in
+  [12 § fail-fast](12-implementation-constraints.md#fail-fast-policy).
+- Rerun-sampling determinism is specified as a function of
+  `(validator_hotkey, epoch, spec_id, version)`.
+- Anti-collusion rules match the threats in
+  [16 § B](16-threat-model.md#b-scoring--registry-integrity).

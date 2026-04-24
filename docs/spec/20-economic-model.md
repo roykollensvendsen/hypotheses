@@ -407,3 +407,18 @@ the change, and this doc updates.
   relevant to incentive compatibility.
 - [`GOVERNANCE.md`](../../GOVERNANCE.md) — change process for
   economic parameters.
+
+## Self-audit
+
+This doc is done when:
+
+- Every tunable parameter is in the inventory table with default,
+  location, changer, and change mechanism.
+- Every parameter's default is either calibrated (with cite) or
+  explicitly labelled assumed.
+- The incentive-compatibility arithmetic produces a concrete
+  honest / dishonest payoff ratio.
+- Every open question has a named resolution path (Phase X
+  simulation / ADR trigger / external-dependency event).
+- Sybil-cost claims reference the specific defences in
+  [16 § A](16-threat-model.md#a-economic-attacks--dishonest-rewards).

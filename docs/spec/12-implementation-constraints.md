@@ -447,3 +447,18 @@ assistants).
 
 Body and footer are free-form; use them for context that doesn't fit
 in the subject.
+
+## Self-audit
+
+This doc is done when:
+
+- Every rule has a corresponding CI gate, hook, or lint rule —
+  nothing aspirational.
+- The build order covers every module in
+  [10](10-repo-layout.md#package-surface).
+- Every module's definition-of-done is concrete enough that an
+  agent can decide "done / not done" without asking.
+- The fail-fast table covers every failure mode referenced
+  elsewhere in the spec.
+- Tool pins match `pyproject.toml` (once it exists) or the
+  matching ADR resolving the discrepancy.

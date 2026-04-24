@@ -306,3 +306,20 @@ pointers:
   what "pending" means for lifecycle transitions.
 - [`GOVERNANCE.md`](../../GOVERNANCE.md) — oracle additions require
   maintainer approval.
+
+## Self-audit
+
+This doc is done when:
+
+- The interface signature (`query(...)` and `OracleVerdict`) is
+  implementable as a pure-function stub in `src/hypotheses/oracle/`
+  without further clarification.
+- Every oracle class has enforceable criteria distinguishing it
+  from the others.
+- The disagreement and outage rules are compatible with the
+  fail-fast policy in
+  [12 § fail-fast](12-implementation-constraints.md#fail-fast-policy).
+- Registration process requires the same artifacts (ADR, adapter,
+  schema entry, threat entry) in every case.
+- Multi-oracle composition is either specified or explicitly
+  deferred — no half-state.

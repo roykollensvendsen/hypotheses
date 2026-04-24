@@ -213,3 +213,21 @@ median FLOPs: 0.72× baseline, Welch's t p=0.004.
 - cost_penalty = 0.08
 
 Composite: `0.20 + 0.35 + 0.30 + 0.15 − 0.10*0.08 = 0.992`.
+
+## Self-audit
+
+This doc is done when:
+
+- Every formula here is implementable as a pure function (no I/O,
+  no LLM) per [05 § two layers](05-validator.md#two-layers-deterministic-core-and-operator-layer).
+- The worked example's composite (0.992) recomputes from the
+  component numbers without additional context.
+- Every statistical test named is listed in the schema's
+  `statistical_test` enum.
+- The ordering rule for simultaneous settlements is unambiguous in
+  every corner (block height, extrinsic index, hotkey lex order).
+- Weights cross-reference
+  [20-economic-model.md § scoring weight justification](20-economic-model.md#scoring-weight-justification)
+  for calibration status.
+- Oracle integration links to [18](18-oracle.md) for the full
+  contract rather than restating it.

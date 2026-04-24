@@ -277,3 +277,18 @@ A submission's status-dependent scoring behaviour:
 - [`GOVERNANCE.md`](../../GOVERNANCE.md) — maintainer authority.
 - [16 § B — integrity attacks](16-threat-model.md#b-scoring--registry-integrity)
   — threats that exploit transitions.
+
+## Self-audit
+
+This doc is done when:
+
+- Every state has a clear definition and its terminal-ness rule.
+- Every transition has an ID, trigger, authority, and side-effect
+  list.
+- Every invariant is enforceable by code or CI (not just a written
+  hope).
+- Every edge case has a deterministic rule — no "probably" or
+  "typically" in decision points.
+- Authorities match [`GOVERNANCE.md`](../../GOVERNANCE.md).
+- Scoring-status interaction table covers every `(status,
+  submission)` combination reachable in practice.

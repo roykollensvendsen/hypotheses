@@ -55,3 +55,15 @@ whose claims can be expressed as questions with a known answer on a
 known-answer subnet. Not all hypotheses have an SN42-shaped oracle;
 for the rest, scoring falls back to reproducibility + baseline
 comparison. See [06](06-scoring.md).
+
+## Self-audit
+
+This doc is done when:
+
+- The flow under "What the subnet does" matches the pipeline in
+  [05](05-validator.md).
+- Every substantive non-negotiable is enforced by a CI gate,
+  runtime rule, or scoring function — no aspirational claims.
+- The accessibility promises in `VISION.md` are covered here or
+  linked, never contradicted.
+- No vision content is restated; `VISION.md` is the single source.

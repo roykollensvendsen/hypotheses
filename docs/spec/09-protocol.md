@@ -133,3 +133,18 @@ fields) unless a subnet-wide version bump is explicitly coordinated.
   validators verify against.
 - Code. The `experiments/<id>/` directory lives only in git; the
   `code_commit` in the manifest is the pointer.
+
+## Self-audit
+
+This doc is done when:
+
+- Every synapse has a canonical JSON example showing all required
+  fields.
+- `schema_version` handling is consistent across all synapses.
+- Storage semantics (manifest pinning, bulk artifact hosting) match
+  [03 § storage](03-architecture.md#storage).
+- Versioning policy is compatible with the decisions in
+  [12 § implementation constraints](12-implementation-constraints.md).
+- Every synapse the miner exposes matches
+  [04 § synapses](04-miner.md#synapses-the-miner-exposes) and vice
+  versa.

@@ -200,3 +200,17 @@ sandbox per-run.
   `.github/workflows/spec-validate.yml`. The script parses the `## Spec
   fields` YAML block from the doc and compares required/optional fields
   and types against the JSON Schema; divergence fails CI.
+
+## Self-audit
+
+This doc is done when:
+
+- Every path listed exists on the filesystem, or is explicitly
+  marked "Phase N planned."
+- Every `src/hypotheses/<module>/` entry has a matching build-order
+  step in [12 § build order](12-implementation-constraints.md#build-order).
+- Every workflow listed exists in `.github/workflows/` and is
+  catalogued in [15](15-ci-cd.md#workflow-catalog).
+- `pyproject.toml` script entries match the CLI verbs in
+  [14](14-cli.md).
+- Agent directories match [13-agent-integration.md](13-agent-integration.md).

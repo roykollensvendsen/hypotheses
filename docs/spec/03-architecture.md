@@ -147,3 +147,18 @@ Short summary; the canonical enumeration lives in
 - General compute rental. Miners run hypotheses, not arbitrary user code.
 - Model hosting. If a hypothesis produces a useful model, that's a result
   artifact, not a service.
+
+## Self-audit
+
+This doc is done when:
+
+- Every component in the diagram maps to a directory or module in
+  [10-repo-layout.md](10-repo-layout.md).
+- Every arrow in the data-flow section names the synapse, git path,
+  or storage CID that carries it.
+- Every failure-mode table row links to a threat ID in
+  [16-threat-model.md](16-threat-model.md).
+- Trust-model claims match the attacker capabilities in
+  [16 — Actors](16-threat-model.md#actors).
+- No storage, chain, or runtime behaviour is described here that
+  isn't the canonical home — link instead.

@@ -108,3 +108,17 @@ by the maintainer (solo development, speed > ceremony). Phase 2+ is
 PR-based with CI gating and no direct pushes to `main`. Releases are
 annotated tags (`v0.1.0`, `v0.2.0`) per subnet CLI version; no
 long-lived release branches.
+
+## Self-audit
+
+This doc is done when:
+
+- Every phase has explicit, check-off-able exit criteria.
+- Every criterion is either a CI-verifiable state, a filesystem
+  fact, or an operator-attested milestone — nothing subjective.
+- Phase boundaries match the conditional guards in CI workflows
+  (e.g. `if src/ exists then run mutation`).
+- No TBD except external-dependency items (`netuid assigned at
+  registration`).
+- Ownership + branching decisions align with
+  [`GOVERNANCE.md`](../../GOVERNANCE.md).

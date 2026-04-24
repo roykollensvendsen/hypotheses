@@ -171,3 +171,19 @@ A copy-paste starter lives at `hypotheses/HYPOTHESIS_TEMPLATE.md`.
   declared baseline), not absolute.
 - A method paper. Methods come in via the `code_ref` + discussion body; the
   spec is the contract, not the implementation.
+
+## Self-audit
+
+This doc is done when:
+
+- Every field documented here has a corresponding entry in the
+  JSON Schema at `src/hypotheses/spec/schema/hypothesis.schema.json`
+  (enforced by `scripts/check_schema_matches_doc.py`).
+- The worked-example YAML block validates against the schema
+  (CI-enforced).
+- Versioning + lifecycle behaviour link to
+  [17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) rather
+  than restating it.
+- Every field in the example either exercises a schema constraint
+  or is necessary for a miner to understand the format.
+- The `HYPOTHESIS_TEMPLATE.md` matches the fields listed here.

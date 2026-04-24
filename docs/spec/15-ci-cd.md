@@ -266,3 +266,17 @@ deferred. Each has a named trigger for when to pick it up.
 - **`probot/settings`** for repo settings. Unmaintained. If
   settings-as-code becomes necessary, use GitHub Rulesets or
   Terraform's `github_repository_ruleset`.
+
+## Self-audit
+
+This doc is done when:
+
+- Every file in `.github/workflows/` is catalogued with trigger,
+  purpose, and guard condition.
+- Every script in `scripts/` is catalogued with invoker.
+- Every action ref in every workflow is SHA-pinned (enforced by
+  `action-pin-check.yml`).
+- Deferred items have named triggers (phase or file-exists) for
+  picking up.
+- Every "live" gate mentioned in [12](12-implementation-constraints.md#ci-gates)
+  has a workflow file.

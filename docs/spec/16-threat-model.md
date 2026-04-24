@@ -216,3 +216,18 @@ continue to move toward "mitigated" as deferred work lands per
   enforcement.
 - [`docs/adr/0001-phase-zero-foundation.md`](../adr/0001-phase-zero-foundation.md)
   — why each non-obvious mitigation was chosen.
+
+## Self-audit
+
+This doc is done when:
+
+- Every threat row has a stable ID, a mitigation, a spec-link, and
+  a status (`mitigated` / `partial` / `accepted` / `deferred`).
+- No threat row is `mitigated` without a corresponding mechanism
+  in a spec doc, a CI gate, or a code module.
+- Every `partial` threat names the path to full mitigation
+  (usually a Phase-exit item or an ADR trigger).
+- Every `accepted` risk is explicit about why the project chose
+  not to mitigate.
+- Attack surfaces cover every external-facing interface: git, chain,
+  IPFS, sandbox, runtime, CI, wallet.

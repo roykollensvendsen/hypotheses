@@ -67,3 +67,14 @@ cost score**
 **Connectivity dynamics**
   Rules — usually local — governing how edges are added, removed, or reweighted
   during training.
+
+## Self-audit
+
+This doc is done when:
+
+- Every capitalised term used elsewhere in the spec has an entry
+  here (or is an industry-standard term that doesn't need one).
+- Every entry here is used at least once in another spec doc.
+- No entry defines a term in terms of another undefined term.
+- Entries are sorted logically (not strictly alphabetical —
+  related terms cluster).
