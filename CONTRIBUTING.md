@@ -77,9 +77,10 @@ are binding:
 ## Commit messages
 
 Conventional commits, lowercase subject, ≤ 72 chars, no
-`Co-Authored-By: Claude …` or similar AI trailers. See the
-[`commit-msg` hook](.git/hooks/commit-msg). The hook is installed
-per-clone; a CI job (`commitlint.yml`) catches violations.
+`Co-Authored-By: Claude …` or similar AI trailers. The `commit-msg`
+hook (installed per-clone under `.git/hooks/`) enforces this locally;
+the [`commitlint.yml`](.github/workflows/commitlint.yml) CI job
+catches anything that slips past.
 
 Types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`,
 `refactor`, `revert`, `style`, `test`.
