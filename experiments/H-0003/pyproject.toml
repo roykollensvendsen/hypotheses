@@ -1,0 +1,15 @@
+[project]
+name = "hypotheses-experiment-H-0003"
+version = "0.1.0"
+description = "Scaffold for hypothesis H-0003 (SGD vs AdamW FLOPs-to-target)"
+requires-python = "==3.12.*"
+
+dependencies = [
+  "torch==2.5.*",
+  "numpy==2.1.*",
+  "datasets==3.*",
+]
+
+[tool.uv]
+# Deps resolve into a matching uv.lock at install time by the implementing
+# agent in Phase 1+. Same pattern as ../H-0001/ and ../H-0002/.

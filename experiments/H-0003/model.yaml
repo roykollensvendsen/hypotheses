@@ -1,0 +1,29 @@
+arch: mlp-2-layer
+input_dim: 3072
+hidden_dim: 256
+output_dim: 10
+activation: relu
+bias_on_hidden: false
+
+training:
+  batch_size: 128
+  max_steps: 20000
+  target_accuracy: 0.60
+
+optimizers:
+  sgd_momentum:
+    name: sgd
+    lr: 0.01
+    momentum: 0.9
+    weight_decay: 5.0e-4
+  adamw:
+    name: adamw
+    lr: 1.0e-3
+    betas: [0.9, 0.999]
+    weight_decay: 5.0e-4
+
+schedules:
+  constant: {}
+  cosine:
+    max_steps: 20000
+    min_lr_ratio: 0.01

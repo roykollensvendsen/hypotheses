@@ -1,0 +1,15 @@
+[project]
+name = "hypotheses-experiment-H-0002"
+version = "0.1.0"
+description = "Scaffold for hypothesis H-0002 (oracle-verified distillation)"
+requires-python = "==3.12.*"
+
+dependencies = [
+  "torch==2.5.*",
+  "numpy==2.1.*",
+  "datasets==3.*",
+]
+
+[tool.uv]
+# Deps resolve into a matching uv.lock at install time by the implementing
+# agent in Phase 1+. See ../H-0001/pyproject.toml for the same pattern.
