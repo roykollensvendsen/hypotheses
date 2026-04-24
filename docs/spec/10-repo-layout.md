@@ -62,6 +62,9 @@ description: target directory structure for the full subnet codebase
 │   ├── research-notes/             # free-form essays and questions
 │   └── spec/                       # the authoritative specification
 │       ├── README.md
+│       ├── antipatterns/           # machine-readable do-NOT-do patterns
+│       │   ├── README.md
+│       │   └── ap-NNNN-<slug>.md
 │       ├── 00-overview.md
 │       ├── 01-glossary.md
 │       ├── 02-hypothesis-format.md

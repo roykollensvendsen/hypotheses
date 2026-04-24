@@ -53,6 +53,11 @@ Read in order:
 21. [20 — Economic model](20-economic-model.md) — emission flow,
     parameter inventory, stake, Sybil cost, governance
 
+Cross-cutting references:
+
+- [`antipatterns/`](antipatterns/) — machine-readable corpus of "do
+  NOT do this" shapes the implementing agent must recognise.
+
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](
 12-implementation-constraints.md) is addressed directly to that agent
