@@ -50,6 +50,11 @@ too niche for Phase 0–3.
 
 ## Determinism
 
+> **HM-INV-0020** For identical `(spec, seed, hardware_profile,
+> env.lock)` inputs, the resulting `metrics.jsonl` is byte-identical
+> across runs. Divergence is a runtime bug unless the spec declares
+> an explicit `rerun_tolerance` override with justification.
+
 Every experiment runs with:
 
 - `PYTHONHASHSEED` = declared seed
@@ -77,6 +82,10 @@ between the miner-submitted `env.lock` and the pin in the repo is a
 rejection.
 
 ## Dataset handling
+
+> **HM-INV-0021** The declared `dataset_revision` must match the
+> fetched blob's content hash on every load. A mismatch raises
+> `DatasetHashMismatch` and fails the run.
 
 Datasets are accessed via a thin adapter:
 

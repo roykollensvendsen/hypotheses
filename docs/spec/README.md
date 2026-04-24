@@ -62,6 +62,8 @@ Cross-cutting references:
 - [`requirements.md`](requirements.md) — stable `HM-REQ-NNNN`
   normative statements; inline in their owning doc, indexed here,
   cross-checked in CI.
+- [`invariants.md`](invariants.md) — stable `HM-INV-NNNN`
+  properties; Phase 1 property-based tests enforce each one.
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](

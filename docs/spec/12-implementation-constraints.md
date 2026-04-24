@@ -168,6 +168,15 @@ against Bittensor testnet, not in default CI.
 Coverage: package ≥ 85% statements; per-module floor 75%. A module
 below its floor fails CI.
 
+### Property tests
+
+Every `HM-INV-NNNN` in
+[`invariants.md`](invariants.md) is enforced by a
+Hypothesis-library property test under `tests/properties/`, linked
+back via `# spec: HM-INV-NNNN`. Property tests complement golden
+fixtures: fixtures lock specific input/output pairs, properties
+lock a relation that must hold over the input space.
+
 ### Golden fixtures
 
 Static input/output fixtures live under

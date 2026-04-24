@@ -28,7 +28,12 @@ S(s) = w_rigor        * rigor(s)
 
 Each component is in `[0, 1]` except `cost_penalty`, which is in `[0, 1]`
 and subtracts. Weights sum to 1 excluding the cost penalty, which is
-applied additively on top. Initial values:
+applied additively on top.
+
+> **HM-INV-0010** For any legal component vector,
+> `composite(s) ∈ [−w_cost, w_rigor + w_reproduction + w_improvement + w_novelty]`.
+> The upper bound is hit by the worked example minus cost; the lower
+> bound is hit only by a zeroed-submission with maximum cost penalty. Initial values:
 
 | component    | weight | source |
 |--------------|--------|--------|
@@ -78,6 +83,11 @@ dishonest miners.
 
 ### Improvement
 
+> **HM-INV-0012** `improvement(s, H) ∈ [0, 1]` for every legal
+> submission `s` and spec `H`: 0 when the statistical test fails or
+> the falsification criterion is met, 1 when the observed effect
+> meets or exceeds the target effect.
+
 Evaluated from the full miner-declared metric set, one value per declared
 success criterion:
 
@@ -96,6 +106,10 @@ If the hypothesis's falsification criterion is met instead, `improvement =
 still earns score from the other components; a *honest null* is not a loss.
 
 ### Novelty
+
+> **HM-INV-0011** For a fixed `(id, version)`, novelty is non-
+> increasing in settlement order: the first settling submission
+> receives 1.0, the second 0.5, the third and all subsequent 0.0.
 
 First miner to settle a hypothesis (pass reproduction + either
 `success_criteria` or `falsification_criteria` at the current

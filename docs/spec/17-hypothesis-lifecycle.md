@@ -94,6 +94,26 @@ up with [`GOVERNANCE.md`](../../GOVERNANCE.md):
 
 ## Invariants
 
+> **HM-INV-0001** No on-chain `ResultsAnnouncement` for `(id,
+> version)` is scored until that `(id, version)` exists on `main`.
+> Validators check `spec_cid` against the current registry entry.
+
+> **HM-INV-0002** Fields at `(id, version)` are immutable post-merge
+> except `status` (which follows the state machine) and `updated`
+> (the date of the status change).
+
+> **HM-INV-0003** `version` is strictly increasing per `id`.
+
+> **HM-INV-0004** `settled-*` is terminal for its own `(id, version)`;
+> new versions re-enter the lifecycle at `proposed`.
+
+> **HM-INV-0005** `withdrawn` is terminal across every version of
+> that `id`.
+
+> **HM-INV-0006** An author retains the right to withdraw a not-yet-
+> settled hypothesis they own; post-settlement withdrawal requires
+> maintainer participation and an ADR.
+
 1. **Preregistration invariant.** No on-chain `ResultsAnnouncement`
    for `(spec_id, version)` may be scored until that `(spec_id,
    version)` exists on `main`. This is mechanically enforced by
