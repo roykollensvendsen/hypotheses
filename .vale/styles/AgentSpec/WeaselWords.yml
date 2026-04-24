@@ -1,0 +1,12 @@
+extends: existence
+message: "'%s' is a weasel word in a spec; name the condition or drop it."
+link: https://docs.errata.ai/vale/styles#existence
+level: warning
+ignorecase: true
+tokens:
+  - should
+  - may
+  - typically
+  - where appropriate
+  - usually
+  - often

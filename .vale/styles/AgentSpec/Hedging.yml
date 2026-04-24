@@ -1,0 +1,12 @@
+extends: existence
+message: "'%s' hedges; an agent reading this can't act on it. State the rule or delete it."
+link: https://docs.errata.ai/vale/styles#existence
+level: warning
+ignorecase: true
+tokens:
+  - might
+  - could probably
+  - perhaps
+  - tends to
+  - seems to
+  - roughly

@@ -1,0 +1,50 @@
+name: Vale ambiguity linter
+
+on:
+  pull_request:
+    paths:
+      - 'docs/spec/**'
+      - 'VISION.md'
+      - '.vale.ini'
+      - '.vale/**'
+      - '.github/workflows/vale.yml'
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vale-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  vale:
+    runs-on: ubuntu-latest
+    name: Vale (warning-only)
+    # Warning-only posture: the job always reports success so PRs are not
+    # blocked while the spec's pre-existing weasel-words are worked down.
+    # Promote to error after a cleanup PR lowers the count below an agreed
+    # threshold. See docs/spec/15-ci-cd.md for the promotion trigger.
+    continue-on-error: true
+    steps:
+      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Skip if config absent
+        id: guard
+        run: |
+          if [ ! -f .vale.ini ]; then
+            echo ".vale.ini absent; no-op"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Run Vale
+        if: steps.guard.outputs.skip == 'false'
+        uses: errata-ai/vale-action@d89dee975228ae261d22c15adcd03578634d429c  # v2.1.1
+        with:
+          files: 'docs/spec/ VISION.md'
+          fail_on_error: false
+          reporter: github-pr-check

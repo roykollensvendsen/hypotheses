@@ -66,6 +66,7 @@ Sorted by when it fires. `Gate` = blocks PR merge on failure.
 | `spdx.yml` | SPDX license + copyright header on every `.py`/`.sh` under `src/`, `scripts/`, `tests/`, `experiments/` | runs on source-path changes |
 | `prompt-injection.yml` | scans `VISION.md`, `AGENTS.md`, `docs/**`, and `agents/prompts/**` for injection-style directives, fake system tags, and unsafe-protocol URLs; allow-lists the antipatterns corpus | runs on markdown / doc changes |
 | `requirements.yml` | cross-checks `HM-REQ-NNNN` / `HM-INV-NNNN` tags: every indexed ID is defined inline, every inline ID is indexed, no duplicates; reports code refs to unknown IDs as warnings | runs on `docs/spec/**` + `src/` + `tests/` changes |
+| `vale.yml` | Vale prose linter with the `AgentSpec` custom style (weasel words, hedging, quantifier-less claims); **warning-only** until a cleanup PR drops the count below an agreed threshold, then promoted to error | runs on `docs/spec/**`, `VISION.md`, `.vale/**` changes |
 
 ### On every push to `main`
 

@@ -1,0 +1,13 @@
+extends: existence
+message: "'%s' is a quantifier-less claim; attach a number or cite a spec section that gives one."
+link: https://docs.errata.ai/vale/styles#existence
+level: warning
+ignorecase: true
+tokens:
+  - \bfast\b
+  - \bslow\b
+  - \bsmall\b
+  - \blarge\b
+  - \bsoon\b
+  - \bmany\b
+  - \bfew\b
