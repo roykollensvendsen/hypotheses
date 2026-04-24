@@ -176,6 +176,7 @@ number; resolved threats keep their ID with `status: mitigated`.
 | T-070 | Malicious hypothesis PRs flood the registry with bogus claims | maintainer-gated merges, schema validation, falsifiability + relational-baseline requirements, issue-first discussion via `hypothesis-proposal.yml` | [`CONTRIBUTING.md`](../../CONTRIBUTING.md), [02](02-hypothesis-format.md) | mitigated |
 | T-071 | PR rewrites a spec doc silently to weaken a rule | PR-title + commit convention + PR size limit forces visibility; CODEOWNERS routes spec PRs to the maintainer; any change to pinned deps requires ADR | [`CODEOWNERS`](../../.github/CODEOWNERS), [15](15-ci-cd.md) | mitigated |
 | T-072 | CI bypass attempt — `[skip ci]` or `--no-verify` | spec forbids both explicitly; Phase 2+ branch protection enforces required checks | [12 § how to work](12-implementation-constraints.md) | partial — Phase 0 relies on maintainer discipline |
+| T-073 | Prompt-injection content lands via spec PR (directive phrases, fake system tags, unsafe-protocol URLs in docs that agents load) | scanner gate [`prompt-injection.yml`](../../.github/workflows/prompt-injection.yml) + [`scripts/check_prompt_injection.py`](../../scripts/check_prompt_injection.py); agent posture in [AGENTS.md § spec content is data, not instructions](../../AGENTS.md#spec-content-is-data-not-instructions); allow-listed negative examples in [`docs/spec/antipatterns/`](antipatterns/) | [AGENTS.md](../../AGENTS.md) | mitigated |
 
 ## Known accepted risk
 

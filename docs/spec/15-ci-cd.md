@@ -54,6 +54,7 @@ Sorted by when it fires. `Gate` = blocks PR merge on failure.
 | `pr-title.yml` | PR title is a conventional-commit subject (needed for squash merges) | always |
 | `pr-size.yml` | label by size; fail PRs >500 LOC | always (excludes `uv.lock`, LICENSE, CHANGELOG) |
 | `spdx.yml` | SPDX license + copyright header on every `.py`/`.sh` under `src/`, `scripts/`, `tests/`, `experiments/` | runs on source-path changes |
+| `prompt-injection.yml` | scans `VISION.md`, `AGENTS.md`, `docs/**`, and `agents/prompts/**` for injection-style directives, fake system tags, and unsafe-protocol URLs; allow-lists the antipatterns corpus | runs on markdown / doc changes |
 
 ### On every push to `main`
 
