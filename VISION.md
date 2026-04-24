@@ -3,16 +3,34 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
 -->
 
-# Vision
+# Vision and Mission
 
-A permissionless scientific hypothesis market on Bittensor. Anyone with
-a good hypothesis and modest compute can mine; anyone can contribute
-by staking, developing, mining, or validating. Agent-first by design,
-with a human CLI as the escape hatch.
+## Vision
+
+A world where scientific knowledge about machine learning is produced
+bottom-up by a permissionless network of researchers — humans and
+agents alike — with every claim preregistered, reproduced, and
+rewarded on its merits.
+
+## Mission
+
+Operate a Bittensor subnet that turns falsifiable ML hypotheses into
+a tradeable, incentivized activity — making high-quality ML research
+cheaper to do and harder to fake.
+
+## Elevator pitch
+
+A permissionless scientific hypothesis market on Bittensor. Anyone
+with a good hypothesis and modest compute can mine; anyone can
+contribute by staking, developing, mining, or validating. Agent-first
+by design, with a human CLI as the escape hatch.
+
+---
 
 This file is the canonical statement of what we're building and why.
-Any other document that talks about *why the subnet exists* links
-back here; it does not restate the vision.
+Any other document that talks about *why the subnet exists*, cites
+the vision, or cites the mission links back here; it does not
+restate these statements.
 
 ## What we're building
 
