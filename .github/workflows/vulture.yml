@@ -1,0 +1,34 @@
+name: Dead code (vulture)
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+  push:
+    branches: [main]
+
+jobs:
+  vulture:
+    runs-on: ubuntu-latest
+    name: vulture on src/
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Skip if src/ absent
+        id: guard
+        run: |
+          if [ ! -d src ]; then
+            echo "no src/ yet; no-op"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        if: steps.guard.outputs.skip == 'false'
+        with:
+          python-version: '3.12'
+      - name: Install vulture
+        if: steps.guard.outputs.skip == 'false'
+        run: pip install vulture
+      - name: Run vulture
+        if: steps.guard.outputs.skip == 'false'
+        run: vulture src/ --min-confidence 80

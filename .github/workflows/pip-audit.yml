@@ -1,0 +1,37 @@
+name: Dependency audit
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"   # Monday 05:00 UTC
+  pull_request:
+    paths:
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - 'experiments/**/pyproject.toml'
+  workflow_dispatch:
+
+jobs:
+  pip-audit:
+    runs-on: ubuntu-latest
+    name: pip-audit against pinned deps
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Skip if no pyproject.toml
+        id: guard
+        run: |
+          if [ ! -f pyproject.toml ]; then
+            echo "no pyproject.toml yet; no-op until Phase 1"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        if: steps.guard.outputs.skip == 'false'
+        with:
+          python-version: '3.12'
+      - name: Install pip-audit
+        if: steps.guard.outputs.skip == 'false'
+        run: pip install pip-audit
+      - name: Run pip-audit
+        if: steps.guard.outputs.skip == 'false'
+        run: pip-audit --strict

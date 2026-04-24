@@ -340,7 +340,7 @@ A PR merges only if:
 - `pytest` unit+integration passes.
 - Coverage thresholds hold (≥ 85% package, ≥ 75% per module).
 - `scripts/check_schema_matches_doc.py` passes (spec ↔ schema
-  consistency).
+  consistency, via `spec-validate.yml`).
 - The hypothesis schema validator accepts every file in `hypotheses/`.
 - Commitlint passes on every commit in the PR range
   (conventional commits, lowercase subject, ≤72 chars, no
@@ -348,12 +348,33 @@ A PR merges only if:
   enforces the same rules at commit time.
 - TDD gate passes: `feat:` / `fix:` commits touching `src/` are
   preceded by `test:` commits in the PR range
-  (`.github/workflows/tdd-gate.yml`).
+  (`tdd-gate.yml`).
+- Bandit passes on `src/` and `scripts/` (`bandit.yml`).
+- Vulture reports no dead code ≥ 80% confidence
+  (`vulture.yml`).
+- Lychee finds no broken links in docs (`link-check.yml`).
+- ADR present when `pyproject.toml` or `uv.lock` changes
+  (`adr-required.yml`).
 
-Out-of-band gates (run nightly, not per-PR):
+Out-of-band gates:
 
-- Mutation score ≥ 75% per module (`.github/workflows/mutation.yml`).
-  Regressions here block the next release tag, not individual PRs.
+- **Weekly:** `pip-audit` against pinned deps (`pip-audit.yml`).
+- **Weekly:** Lychee full-docs scheduled scan.
+- **Nightly:** `mutmut` mutation score ≥ 75% per module
+  (`mutation.yml`). Regressions block the next release tag, not
+  individual PRs.
+- **Daily:** `actions/stale` — 30 days to stale, 60 to close
+  (`stale.yml`).
+
+Other automations:
+
+- **Dependabot** opens grouped weekly pip PRs and monthly
+  actions PRs.
+- **Release-please** opens a release PR on every push to `main`,
+  deriving the version bump and CHANGELOG from conventional commits.
+- **PR labeler** auto-applies labels from changed paths per
+  `.github/labeler.yml`.
+- **CODEOWNERS** routes reviews by path.
 
 No `[skip ci]` shortcuts, no bypassing hooks.
 

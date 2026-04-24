@@ -1,0 +1,55 @@
+spec:
+  - changed-files:
+      - any-glob-to-any-file: 'docs/spec/**'
+
+hypothesis:
+  - changed-files:
+      - any-glob-to-any-file: 'hypotheses/**'
+
+experiment:
+  - changed-files:
+      - any-glob-to-any-file: 'experiments/**'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ['.github/**', 'scripts/**']
+
+miner:
+  - changed-files:
+      - any-glob-to-any-file: 'src/hypotheses/miner/**'
+
+validator:
+  - changed-files:
+      - any-glob-to-any-file: 'src/hypotheses/validator/**'
+
+runtime:
+  - changed-files:
+      - any-glob-to-any-file: 'src/hypotheses/runtime/**'
+
+scoring:
+  - changed-files:
+      - any-glob-to-any-file: 'src/hypotheses/scoring/**'
+
+protocol:
+  - changed-files:
+      - any-glob-to-any-file: 'src/hypotheses/protocol/**'
+
+client:
+  - changed-files:
+      - any-glob-to-any-file: 'src/hypotheses/client/**'
+
+mcp:
+  - changed-files:
+      - any-glob-to-any-file: 'src/hypotheses/mcp/**'
+
+agents:
+  - changed-files:
+      - any-glob-to-any-file: 'agents/**'
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file: ['docs/**', '**/*.md']
+
+deps:
+  - changed-files:
+      - any-glob-to-any-file: ['pyproject.toml', 'uv.lock']

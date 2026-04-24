@@ -13,14 +13,25 @@ description: target directory structure for the full subnet codebase
 ├── uv.lock                         # pinned deps
 ├── .commitlintrc.mjs               # conventional commits, ≤72 chars
 ├── .github/
+│   ├── CODEOWNERS                  # path → reviewer routing
 │   ├── PULL_REQUEST_TEMPLATE.md    # TDD + spec alignment checklist
+│   ├── dependabot.yml              # weekly deps, monthly actions
+│   ├── labeler.yml                 # paths → PR labels
 │   └── workflows/
 │       ├── ci.yml                  # lint, typecheck, tests
 │       ├── commitlint.yml          # conventional commit enforcement
 │       ├── tdd-gate.yml            # tests precede implementation
 │       ├── mutation.yml            # nightly mutation-score gate
 │       ├── spec-validate.yml       # hypothesis schema validation on PR
-│       └── spec-mirror.yml         # mirror specs to IPFS on merge
+│       ├── spec-mirror.yml         # mirror specs to IPFS on merge
+│       ├── pip-audit.yml           # weekly CVE scan on pinned deps
+│       ├── bandit.yml              # python security lint on PR
+│       ├── vulture.yml             # dead-code detector on PR
+│       ├── link-check.yml          # lychee on docs/
+│       ├── adr-required.yml        # ADR required on dep/tool changes
+│       ├── labeler.yml             # auto-label PRs by changed paths
+│       ├── stale.yml               # close 30/60-day inactive issues/PRs
+│       └── release-please.yml      # generate release PRs from commits
 ├── docs/
 │   ├── initial-discord-conversation.md
 │   ├── research-notes/             # free-form essays and questions
@@ -123,7 +134,9 @@ description: target directory structure for the full subnet codebase
     ├── dev-validator.sh
     ├── check_schema_matches_doc.py # spec ↔ schema consistency
     ├── check_tdd_order.py          # PR gate: test: commits before feat:/fix:
-    └── check_mutation_score.py     # parse mutmut output, enforce minimum
+    ├── check_mutation_score.py     # parse mutmut output, enforce minimum
+    ├── check_adr_required.py       # ADR required on dep/tool changes
+    └── validate_hypotheses.py      # JSON Schema validate all hypotheses/
 ```
 
 ## Package surface

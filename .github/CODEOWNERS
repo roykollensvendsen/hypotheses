@@ -1,0 +1,13 @@
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner — the repo maintainer reviews anything unclaimed.
+* @roykollensvendsen
+
+# Spec is load-bearing; only the maintainer merges changes.
+/docs/spec/    @roykollensvendsen
+/hypotheses/   @roykollensvendsen
+/experiments/  @roykollensvendsen
+
+# CI/automation.
+/.github/      @roykollensvendsen
+/scripts/      @roykollensvendsen
