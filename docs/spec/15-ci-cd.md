@@ -193,8 +193,8 @@ Shell- and Python-only, invoked by workflows or by operators.
 | `scripts/check_adr_required.py` | require ADR when `pyproject.toml`/`uv.lock` changes | `adr-required.yml` |
 | `scripts/check_action_pins.sh` | fail if any action ref is not a 40-char SHA | `action-pin-check.yml` |
 | `scripts/check_spdx_headers.py` | SPDX license + copyright header on every source file | `spdx.yml` |
-| `scripts/check_schema_matches_doc.py` | spec ↔ JSON Schema consistency (not yet implemented) | `spec-validate.yml` |
-| `scripts/validate_hypotheses.py` | JSON Schema validate every file in `hypotheses/` (not yet implemented) | `spec-validate.yml` |
+| `scripts/check_schema_matches_doc.py` | spec ↔ JSON Schema consistency for `02-hypothesis-format.md` | `spec-validate.yml` |
+| `scripts/validate_hypotheses.py` | JSON Schema validate every file in `hypotheses/` | `spec-validate.yml` |
 | `scripts/register_subnet.sh` | one-off Bittensor registration (Phase 2+) | operator |
 | `scripts/dev-miner.sh` / `dev-validator.sh` | local dev helpers (Phase 1) | operator |
 
@@ -254,8 +254,6 @@ deferred. Each has a named trigger for when to pick it up.
 |------|-----------|---------|
 | **`harden-runner` `egress-policy: block`** (currently `audit`) | Audit mode logs outbound; block mode enforces an allow-list. Requires stable egress surface. | End of Phase 2 — after observation period is long enough to build the allow-list. |
 | **`spec-mirror.yml`** (IPFS mirror of `hypotheses/`) | Referenced in 03-architecture; kubo-node-based mirroring. | IPFS pinning service stood up (Phase 2). |
-| **`scripts/check_schema_matches_doc.py`** | Consistency between `docs/spec/02-hypothesis-format.md` and the JSON Schema. | JSON Schema file exists (early Phase 1). |
-| **`scripts/validate_hypotheses.py`** | JSON Schema validation of every `hypotheses/*.md`. | Same as above. |
 | **AI-generated-code attestation** | Emerging 2026 pattern; no canonical action yet. | Canonical tooling exists. |
 | **Branch protection rules as code** (Rulesets + settings-as-code) | Declarative branch protection, reviewable in PRs. | Phase 2 (move off direct pushes). |
 

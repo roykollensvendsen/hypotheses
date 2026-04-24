@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roykollensvendsen/hypotheses/src/hypotheses/spec/schema/hypothesis.schema.json",
+  "title": "Hypothesis spec",
+  "description": "YAML front matter for files under hypotheses/. See docs/spec/02-hypothesis-format.md.",
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "authors",
+    "status",
+    "version",
+    "created",
+    "updated",
+    "claim",
+    "motivation",
+    "variables",
+    "metrics",
+    "baselines",
+    "protocol",
+    "success_criteria",
+    "falsification_criteria",
+    "oracle",
+    "depends_on",
+    "contradicts"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^H-(\\d{4}|XXXX)$",
+      "description": "H-NNNN where NNNN is four decimal digits; H-XXXX is reserved for the template."
+    },
+    "title": { "type": "string", "minLength": 1 },
+
+    "authors": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/author" }
+    },
+
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "accepted",
+        "running",
+        "settled-supported",
+        "settled-refuted",
+        "withdrawn"
+      ]
+    },
+
+    "version": { "type": "integer", "minimum": 1 },
+
+    "created": { "type": "string", "format": "date" },
+    "updated": { "type": "string", "format": "date" },
+
+    "claim": { "type": "string", "minLength": 1 },
+    "motivation": { "type": "string", "minLength": 1 },
+
+    "variables": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/variable" }
+    },
+
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/metric" }
+    },
+
+    "baselines": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/baseline" }
+    },
+
+    "protocol": { "$ref": "#/$defs/protocol" },
+
+    "success_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/criterion" }
+    },
+
+    "falsification_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/criterion" }
+    },
+
+    "oracle": { "$ref": "#/$defs/oracle" },
+
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^H-\\d{4}$" }
+    },
+    "contradicts": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^H-\\d{4}$" }
+    }
+  },
+
+  "$defs": {
+    "author": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "hotkey"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "hotkey": { "type": ["string", "null"] }
+      }
+    },
+
+    "variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "values"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "values": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "units", "target_direction"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "units": { "type": "string", "minLength": 1 },
+        "target_direction": {
+          "type": "string",
+          "enum": ["minimize", "maximize"]
+        }
+      }
+    },
+
+    "baseline": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset",
+        "dataset_revision",
+        "model_family",
+        "model_config_ref",
+        "seeds",
+        "max_steps",
+        "hardware_profile",
+        "code_ref",
+        "entrypoint"
+      ],
+      "properties": {
+        "dataset": { "type": "string", "minLength": 1 },
+        "dataset_revision": { "type": "string", "minLength": 1 },
+        "model_family": { "type": "string", "minLength": 1 },
+        "model_config_ref": { "type": "string", "minLength": 1 },
+        "seeds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer", "minimum": 0 },
+          "uniqueItems": true
+        },
+        "max_steps": { "type": "integer", "minimum": 1 },
+        "hardware_profile": {
+          "type": "string",
+          "enum": [
+            "cpu-small",
+            "cpu-large",
+            "single-gpu-24gb",
+            "single-gpu-80gb",
+            "multi-gpu-4x80gb"
+          ]
+        },
+        "code_ref": { "type": "string", "minLength": 1 },
+        "entrypoint": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric",
+        "operator",
+        "vs_baseline",
+        "threshold_ratio",
+        "statistical_test",
+        "p_max"
+      ],
+      "properties": {
+        "metric": { "type": "string", "minLength": 1 },
+        "operator": {
+          "type": "string",
+          "enum": ["lt", "lte", "gt", "gte", "eq"]
+        },
+        "vs_baseline": { "type": "string", "minLength": 1 },
+        "threshold_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "statistical_test": {
+          "type": "string",
+          "enum": ["welch_t", "bootstrap", "mann_whitney"]
+        },
+        "p_max": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "seeds_required": { "type": "integer", "minimum": 1 }
+      }
+    },
+
+    "oracle": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["subnet", "task_ref", "tolerance"],
+          "properties": {
+            "subnet": { "type": ["integer", "null"], "minimum": 0 },
+            "task_ref": { "type": ["string", "null"] },
+            "tolerance": { "type": ["number", "null"] }
+          }
+        }
+      ]
+    }
+  }
+}

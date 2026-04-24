@@ -128,12 +128,20 @@ contradicts: []
 
 ## Schema validation
 
-- Front matter is validated against a JSON Schema at
-  `src/hypotheses/spec/schema/hypothesis.schema.json` (**TBD**: schema to be
-  authored during Phase 1).
-- Every PR that touches `hypotheses/` runs the validator in CI.
-- A hypothesis with `status: proposed` may merge; any hypothesis with
-  `status: accepted` or beyond must pass full validation.
+- Front matter is validated against the JSON Schema at
+  [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
+- Every PR that touches `hypotheses/` runs
+  [`scripts/validate_hypotheses.py`](../../scripts/validate_hypotheses.py)
+  in CI via
+  [`.github/workflows/spec-validate.yml`](../../.github/workflows/spec-validate.yml).
+- [`scripts/check_schema_matches_doc.py`](../../scripts/check_schema_matches_doc.py)
+  extracts the worked-example YAML block below and confirms it
+  validates against the schema. If the doc and schema drift, CI
+  fails.
+- Any hypothesis MUST pass validation to merge, regardless of
+  `status`. `HYPOTHESIS_TEMPLATE.md` is excluded from validation
+  (it carries placeholder enum values that are not valid hypothesis
+  values).
 
 ## Versioning and immutability
 
