@@ -24,18 +24,17 @@ integration surface that makes it easy to drop an agent in.
 
 Three layers, from highest-level to lowest:
 
-1. **MCP server** (`hypo-mcp`) — exposes subnet operations as Model
-   Context Protocol tools. Any MCP-capable agent host (Claude Code,
-   Claude Desktop, Cursor, custom hosts using the MCP SDK) attaches
-   and can act. Primary integration point for LLM agents.
+1. **MCP server** (`hypo mcp serve`) — exposes subnet operations as
+   Model Context Protocol tools. Any MCP-capable agent host (Claude
+   Code, Claude Desktop, Cursor, custom hosts using the MCP SDK)
+   attaches and can act. Primary integration point for LLM agents.
 2. **Python SDK** (`hypotheses.client`) — typed, importable surface
    that wraps the same operations. For agents built as Python
    services or frameworks (e.g. LangGraph, custom orchestrators).
-3. **CLI** (`hypo-miner`, `hypo-validator`) — already specified in
-   [04](04-miner.md) and [05](05-validator.md). The MCP server and
-   SDK are both built on top of the same `hypotheses.miner` and
-   `hypotheses.validator` modules the CLI uses; there is no
-   divergence.
+3. **CLI** (`hypo`) — the single unified command per
+   [14](14-cli.md). The MCP server and SDK are both built on top of
+   the same `hypotheses.miner` and `hypotheses.validator` modules
+   the CLI dispatches to; there is no divergence.
 
 All three layers are thin wrappers over the same core. Changes to
 behaviour are made in `src/hypotheses/miner/` or
@@ -46,17 +45,16 @@ behaviour are made in `src/hypotheses/miner/` or
 ### Invocation
 
 ```
-hypo-mcp serve [--hotkey NAME] [--allow-writes]
+hypo mcp serve [--hotkey NAME] [--allow-writes] [--transport stdio|http]
 ```
 
 - `--hotkey NAME` binds the server to a named Bittensor wallet hotkey.
   Without this, only read-only tools are available.
 - `--allow-writes` enables tools that broadcast on-chain or upload
   artifacts. Off by default.
-
-The server speaks stdio-MCP for Claude Code-style integration and
-HTTP-MCP for long-running hosts. Both transports expose the same
-tool set.
+- `--transport` selects stdio-MCP (default, for Claude Code-style
+  hosts) or HTTP-MCP (for long-running hosts). Both transports expose
+  the same tool set.
 
 ### Tool surface
 
@@ -104,8 +102,8 @@ receive signed announcements as opaque objects.
 {
   "mcpServers": {
     "hypotheses": {
-      "command": "hypo-mcp",
-      "args": ["serve", "--hotkey", "miner-a", "--allow-writes"]
+      "command": "hypo",
+      "args": ["mcp", "serve", "--hotkey", "miner-a", "--allow-writes"]
     }
   }
 }

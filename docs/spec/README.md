@@ -28,6 +28,8 @@ Read in order:
     rules for the autonomous implementing agent
 14. [13 — Agent integration](13-agent-integration.md) — MCP server,
     typed SDK, and starter agents for LLM-driven miners
+15. [14 — CLI](14-cli.md) — the unified `hypo` command, one entry
+    point for humans and scripts
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](

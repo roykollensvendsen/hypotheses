@@ -16,7 +16,7 @@ Not runnable until the `hypotheses` runtime package is implemented.
 Invocation contract (from Phase 1 onward):
 
 ```
-hypo-miner run H-0001 --seed 0
+hypo run H-0001 --seed 0
 ```
 
 The runtime materialises the env from this directory's `pyproject.toml`,

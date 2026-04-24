@@ -68,11 +68,14 @@ re-announcing.
 
 ## Validator CLI
 
+Validator operations live under the unified `hypo` command (see
+[14](14-cli.md)):
+
 ```
-hypo-validator register
-hypo-validator serve          # long-running validator loop
-hypo-validator rescore <announcement-cid>   # debug single submission
-hypo-validator audit <hotkey>               # history of a miner
+hypo register validator
+hypo validate serve                    # long-running validator loop
+hypo validate rescore <ann-cid>        # debug single submission
+hypo validate audit <hotkey>           # history of a miner
 ```
 
 ## State each validator keeps

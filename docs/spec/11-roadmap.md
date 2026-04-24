@@ -36,13 +36,13 @@ on one machine, with no Bittensor chain involvement.
 
 **Exit criteria:**
 
-- `hypo-miner propose`, `run`, `submit` work against a local
+- `hypo propose`, `hypo run`, `hypo submit` work against a local
   filesystem-backed storage.
-- `hypo-validator` can pull a local submission, rerun, and produce a
-  score vector written to a local file.
+- `hypo validate serve` can pull a local submission, rerun, and
+  produce a score vector written to a local file.
 - `hypotheses.client` SDK exposes the full surface documented in
   [13](13-agent-integration.md).
-- `hypo-mcp` ships with the read-only tool set enabled.
+- `hypo mcp serve` ships with the read-only tool set enabled.
 - JSON schema for hypotheses is authored and CI-enforced.
 - Runtime sandbox runs `experiments/H-0001/` deterministically on at
   least `cpu-small` and `single-gpu-24gb` profiles.
@@ -66,9 +66,9 @@ and ≥2 external validators participating.
 - IPFS mirroring and retrieval working in anger.
 - SN42 oracle adapter implemented and exercised by at least one
   hypothesis.
-- `hypo-mcp` write tools enabled; at least one reference agent under
-  `agents/examples/` submits an accepted hypothesis end-to-end on
-  testnet.
+- `hypo mcp serve` write tools enabled; at least one reference agent
+  under `agents/examples/` submits an accepted hypothesis end-to-end
+  on testnet.
 - Two weeks of stable operation without a validator getting stuck,
   without a manifest-hash mismatch bug, without a sandbox escape
   incident.

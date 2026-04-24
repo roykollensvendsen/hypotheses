@@ -19,19 +19,25 @@ allocate their own compute.
 
 ## CLI
 
-The reference miner exposes a `hypo-miner` CLI. Subcommands:
+Miner operations are surfaced through the unified `hypo` command (see
+[14](14-cli.md)):
 
 ```
-hypo-miner register        # register hotkey on the subnet
-hypo-miner propose <path>  # validate and PR a hypothesis spec
-hypo-miner run <id>        # run an accepted hypothesis locally
-hypo-miner submit <run-id> # upload artifacts and broadcast announcement
-hypo-miner serve           # long-running axon for validator queries
+hypo register miner        # register hotkey on the subnet
+hypo propose <path>        # validate and scaffold a hypothesis spec
+hypo run <id>              # run an accepted hypothesis locally
+hypo submit <run-handle>   # upload artifacts and broadcast announcement
 ```
 
-`run` and `submit` are separated deliberately: a miner can run, inspect the
-result, and decide not to submit. Once submitted, withdrawals are impossible
-and a dishonest submission is penalised.
+The miner also runs a long-lived axon to serve validator queries; that
+process is started by `hypo register miner` and supervised by the
+operator's init system (systemd, launchd, or equivalent). There is no
+separate `hypo serve` verb — serving is a consequence of being
+registered, not an explicit operator action.
+
+`run` and `submit` are separated deliberately: a miner can run, inspect
+the result, and decide not to submit. Once submitted, withdrawals are
+impossible and a dishonest submission is penalised.
 
 ## Run: what happens
 

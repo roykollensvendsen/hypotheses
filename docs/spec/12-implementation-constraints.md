@@ -237,8 +237,16 @@ Module-specific acceptance:
 - Weight vector sums to 1 (± float eps).
 
 ### `cli/`
-- Subcommands match 04-miner and 05-validator exactly.
-- CLI is a thin shim; no business logic here.
+- Single `hypo` entry point per [14](14-cli.md). Subcommands match
+  04-miner, 05-validator, and 13-agent-integration exactly.
+- CLI is a thin dispatcher; no business logic here.
+- `hypo --help`, `hypo help`, and `hypo help <topic>` all work and
+  collectively surface the complete command tree.
+- Global flags (`--wallet`, `--hotkey`, `--endpoint`, `--profile`,
+  `--json`, `--verbose`, `--quiet`) are accepted at any level.
+- `--json` switches every command's output to structured JSON.
+- Tests: every documented subcommand is exercised with `--help` (for
+  surface discoverability) and with a happy-path invocation.
 
 ### `client/`
 - Public typed SDK per 13-agent-integration.

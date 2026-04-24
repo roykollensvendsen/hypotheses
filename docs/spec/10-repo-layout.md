@@ -52,15 +52,20 @@ description: target directory structure for the full subnet codebase
 ├── src/
 │   └── hypotheses/
 │       ├── __init__.py
-│       ├── cli/
-│       │   ├── miner.py            # hypo-miner
-│       │   └── validator.py        # hypo-validator
+│       ├── cli/                    # `hypo` unified entry point
+│       │   ├── __init__.py         # top-level dispatcher: main()
+│       │   ├── read.py             # ls, show, search, submissions, scores
+│       │   ├── miner.py            # propose, run, submit, register miner
+│       │   ├── validator.py        # validate *, register validator
+│       │   ├── mcp.py              # mcp *
+│       │   ├── doctor.py
+│       │   └── init.py
 │       ├── client/                 # public typed SDK (hypotheses.client)
 │       │   ├── __init__.py
 │       │   ├── sync.py             # Client
 │       │   ├── aio.py              # AsyncClient
 │       │   └── models.py           # pydantic models re-exported
-│       ├── mcp/                    # hypo-mcp server
+│       ├── mcp/                    # `hypo mcp *` server implementation
 │       │   ├── server.py
 │       │   ├── tools.py            # tool surface per 13-agent-integration
 │       │   └── schema/             # per-tool argument schemas
@@ -122,9 +127,7 @@ are exported:
 
 ```toml
 [project.scripts]
-hypo-miner     = "hypotheses.cli.miner:main"
-hypo-validator = "hypotheses.cli.validator:main"
-hypo-mcp       = "hypotheses.mcp.server:main"
+hypo = "hypotheses.cli:main"
 ```
 
 Anything outside `src/` is consumed as data (the spec, the hypotheses
