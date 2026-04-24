@@ -170,6 +170,40 @@ protocol-level tolerance for the second.
   down-weighted by the chain's YUMA mechanism. No additional subnet-side
   logic required initially; revisit after Phase 2.
 
+## Acceptance scenarios
+
+```gherkin
+Scenario: Valid submission scored non-zero
+  # spec: HM-REQ-0010
+  Given hypothesis H-0001 at status accepted
+  And a miner submits a signed manifest with 5 seeds
+  And every rerun-sampled seed reproduces within rerun_tolerance
+  When the validator runs its cycle
+  Then the submission's composite score is non-zero
+  And the score vector is byte-equal to what another validator
+      running the same core with the same rerun sample would produce
+```
+
+```gherkin
+Scenario: Out-of-tolerance rerun zeros the submission
+  # spec: HM-REQ-0010
+  Given a miner declares metric X with median 1.25e9 over 5 seeds
+  And the validator reruns 2 sampled seeds
+  And one rerun metric lies outside rerun_tolerance
+  When the validator completes the cycle
+  Then the submission's reproduction component is 0
+  And the composite is computed without propagating partial credit
+```
+
+```gherkin
+Scenario: Self-scoring is rejected before the core runs
+  # spec: HM-REQ-0012
+  Given validator V is operated by the same principal as miner hotkey M
+  When the validator receives an announcement signed by M
+  Then the deterministic core is not invoked for that submission
+  And the rejection reason is logged as "SelfScoringRejected"
+```
+
 ## Self-audit
 
 This doc is done when:

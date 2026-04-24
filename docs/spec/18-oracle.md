@@ -310,6 +310,41 @@ pointers:
 - [`GOVERNANCE.md`](../../GOVERNANCE.md) — oracle additions require
   maintainer approval.
 
+## Acceptance scenarios
+
+```gherkin
+Scenario: Oracle agrees — submission scored normally
+  Given hypothesis H declares oracle.subnet = 42
+  And oracle.tolerance = 0.01
+  And a miner submits a declared_answer of 0.710
+  And the oracle returns ground truth 0.715
+  When the validator runs the scoring pipeline
+  Then |declared_answer − oracle_answer| = 0.005 ≤ tolerance
+  And the deterministic core proceeds to composite scoring
+```
+
+```gherkin
+Scenario: Oracle disagrees — submission zeroed
+  Given hypothesis H declares oracle.subnet = 42
+  And oracle.tolerance = 0.01
+  And a miner submits declared_answer = 0.800
+  And the oracle returns 0.710
+  When the validator runs the scoring pipeline
+  Then |declared − oracle| = 0.090 > tolerance
+  And the composite score vector is zero
+  And the rejection is logged as "OracleDisagreement"
+```
+
+```gherkin
+Scenario: Oracle outage — submission stays pending, never silently skipped
+  Given hypothesis H declares oracle.subnet = 42
+  And the oracle subnet responds with OracleUnavailable
+  When the validator attempts to score the submission
+  Then the submission's status is pending (not rejected, not settled)
+  And the pipeline retries on the next cycle
+  And at no point does the validator compute a composite without the oracle check
+```
+
 ## Self-audit
 
 This doc is done when:

@@ -281,6 +281,37 @@ A submission's status-dependent scoring behaviour:
 - [16 § B — integrity attacks](16-threat-model.md#b-scoring--registry-integrity)
   — threats that exploit transitions.
 
+## Acceptance scenarios
+
+```gherkin
+Scenario: Proposed transitions to accepted on maintainer merge
+  Given hypothesis H is at status proposed in an open PR
+  And the maintainer approves and merges the PR
+  When the state machine processes the merge event
+  Then H's status becomes accepted
+  And the transition carries the merge commit SHA as evidence
+```
+
+```gherkin
+Scenario: Mid-run version bump invalidates in-flight submissions
+  # spec: HM-REQ-0003
+  Given H is at status running at version 1
+  And miner M has submitted a manifest not yet scored
+  When a maintainer-approved PR bumps version to 2
+  Then M's submission is marked invalid-against-prior-version
+  And M must resubmit against version 2 to be scored
+```
+
+```gherkin
+Scenario: Duplicate settlement announcements collapse to the first
+  # spec: HM-REQ-0021
+  Given miner M has already announced a valid settlement for (H, v=1)
+  And M broadcasts an identical ResultsAnnouncement in a later block
+  When the validator discovers the second announcement
+  Then the duplicate is rejected with reason "DuplicateSettlement"
+  And the first announcement's novelty stands
+```
+
 ## Self-audit
 
 This doc is done when:

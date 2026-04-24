@@ -190,6 +190,40 @@ A copy-paste starter lives at `hypotheses/HYPOTHESIS_TEMPLATE.md`.
 - A method paper. Methods come in via the `code_ref` + discussion body; the
   spec is the contract, not the implementation.
 
+## Acceptance scenarios
+
+Machine-readable Gherkin cases exercising this doc's normative
+statements. Phase 1 parses these via
+`tests/acceptance/test_hypothesis_format.py` into parametrised cases.
+
+```gherkin
+Scenario: Valid hypothesis validates against the schema
+  # spec: HM-REQ-0001
+  Given a hypothesis file hypotheses/H-0001-connectivity-first-training.md
+  And the file's front matter matches the worked example in § spec fields
+  When scripts/validate_hypotheses.py runs against the repository
+  Then the hypothesis validates with exit code 0
+```
+
+```gherkin
+Scenario: Missing required field is rejected
+  # spec: HM-REQ-0001
+  Given a hypothesis with protocol.seeds removed from front matter
+  When scripts/validate_hypotheses.py runs against the file
+  Then the exit code is non-zero
+  And the error references the missing "seeds" field
+```
+
+```gherkin
+Scenario: Version bump invalidates prior settlement
+  # spec: HM-REQ-0003
+  Given hypothesis H-0001 is at version 1 and settled-supported
+  And the maintainer bumps version to 2 with a changed protocol.max_steps
+  When a validator scores a new submission against version 2
+  Then the submission's novelty accounting starts from scratch for version 2
+  And prior settled-supported status on version 1 does not populate novelty
+```
+
 ## Self-audit
 
 This doc is done when:

@@ -229,6 +229,41 @@ median FLOPs: 0.72× baseline, Welch's t p=0.004.
 
 Composite: `0.20 + 0.35 + 0.30 + 0.15 − 0.10*0.08 = 0.992`.
 
+## Acceptance scenarios
+
+```gherkin
+Scenario: Worked example recomputes to 0.992
+  # spec: HM-REQ-0020
+  Given rigor = 1.0, reproduction = 1.0, improvement = 1.0
+  And novelty = 1.0, cost_penalty = 0.08
+  And weights {rigor: 0.20, reproduction: 0.35, improvement: 0.30,
+      novelty: 0.15, cost_penalty: 0.10}
+  When the composite score is computed
+  Then the result is 0.992 ± 1e-9
+```
+
+```gherkin
+Scenario: Honest null (falsification) still pays rigor + reproduction + novelty
+  # spec: HM-REQ-0020
+  Given a submission that meets the falsification criterion
+  And rigor = 1.0, reproduction = 1.0, novelty = 1.0, cost_penalty = 0.10
+  When the composite score is computed
+  Then improvement = 0
+  And the composite is 0.20 + 0.35 + 0.15 − 0.01 = 0.69 ± 1e-9
+```
+
+```gherkin
+Scenario: Same-block simultaneous settlements are tiebroken by extrinsic index, then hotkey
+  # spec: HM-REQ-0021
+  Given two miners M_a and M_b settle hypothesis H in block B
+  And the announcement from M_a has extrinsic index 3
+  And the announcement from M_b has extrinsic index 7
+  When novelty is assigned
+  Then M_a receives novelty 1.0
+  And M_b receives novelty 0.5
+  And a third same-block settlement by M_c receives novelty 0.0
+```
+
 ## Self-audit
 
 This doc is done when:
