@@ -90,6 +90,55 @@ The subnet is agent-first (see
 - Public API is what `__all__` declares. Anything else is private.
 - Docstrings on public classes and functions only; one-line summary.
 
+## License headers
+
+Every tracked `.py` and `.sh` file under `src/`, `scripts/`, `tests/`,
+and `experiments/` MUST carry both markers within the first 10 lines:
+
+```
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-FileCopyrightText: <year> <holder>
+```
+
+Python style (two comment lines before the docstring):
+
+```python
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
+
+"""Module docstring."""
+```
+
+Shell style (immediately after the shebang):
+
+```bash
+#!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
+```
+
+The collective holder string `The hypotheses subnet contributors`
+is the project default. Individual contributors may add their own
+`SPDX-FileCopyrightText` line above or below if they want named
+attribution.
+
+Enforcement: `.github/workflows/spdx.yml` runs
+`scripts/check_spdx_headers.py` on every PR and push, checking
+every tracked `.py` and `.sh` under the protected roots. Missing
+headers fail CI. YAML, TOML, JSON, and markdown are NOT checked —
+the root `LICENSE` covers them under AGPL's standard "work as a
+whole" clause.
+
+When `pyproject.toml` lands in Phase 1, it MUST include:
+
+```toml
+[project]
+license = "AGPL-3.0-or-later"
+classifiers = [
+  "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+]
+```
+
 ## Testing strategy
 
 Pyramid:

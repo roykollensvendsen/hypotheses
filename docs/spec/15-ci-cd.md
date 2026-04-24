@@ -53,6 +53,7 @@ Sorted by when it fires. `Gate` = blocks PR merge on failure.
 | `typos.yml` | spell-check all tracked files | always |
 | `pr-title.yml` | PR title is a conventional-commit subject (needed for squash merges) | always |
 | `pr-size.yml` | label by size; fail PRs >500 LOC | always (excludes `uv.lock`, LICENSE, CHANGELOG) |
+| `spdx.yml` | SPDX license + copyright header on every `.py`/`.sh` under `src/`, `scripts/`, `tests/`, `experiments/` | runs on source-path changes |
 
 ### On every push to `main`
 
@@ -104,6 +105,23 @@ Every workflow follows the same conventions:
   major). Patch-level drift has caused real CI breakage in the past.
 - **Tool invocation via `uvx`** where possible (ruff, bandit,
   vulture, pip-audit) — no separate install steps, cached by uv.
+
+## License marking
+
+The project is AGPL-3.0-or-later. License is marked in three places:
+
+1. **`LICENSE` at repo root** — full license text.
+2. **SPDX headers on every source file** — see
+   [12-implementation-constraints § License headers](12-implementation-constraints.md#license-headers).
+3. **`pyproject.toml` metadata** — `license = "AGPL-3.0-or-later"` +
+   AGPL classifier (lands in Phase 1).
+
+CI enforcement is `.github/workflows/spdx.yml` +
+`scripts/check_spdx_headers.py`. The approach is what the research
+classified as "conventional" — SPDX headers + package metadata, but
+not the rigorous REUSE spec (no `REUSE.toml`, no `LICENSES/`
+directory). Upgrading to REUSE is a one-PR change if EU CRA or
+mixed-license content forces it.
 
 ## Configs
 
@@ -171,6 +189,7 @@ Shell- and Python-only, invoked by workflows or by operators.
 | `scripts/check_mutation_score.py` | parse `mutmut results`; enforce ≥75% | `mutation.yml` |
 | `scripts/check_adr_required.py` | require ADR when `pyproject.toml`/`uv.lock` changes | `adr-required.yml` |
 | `scripts/check_action_pins.sh` | fail if any action ref is not a 40-char SHA | `action-pin-check.yml` |
+| `scripts/check_spdx_headers.py` | SPDX license + copyright header on every source file | `spdx.yml` |
 | `scripts/check_schema_matches_doc.py` | spec ↔ JSON Schema consistency (not yet implemented) | `spec-validate.yml` |
 | `scripts/validate_hypotheses.py` | JSON Schema validate every file in `hypotheses/` (not yet implemented) | `spec-validate.yml` |
 | `scripts/register_subnet.sh` | one-off Bittensor registration (Phase 2+) | operator |

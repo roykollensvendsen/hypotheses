@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
+#
 # Fail if any workflow or composite action references a non-SHA ref.
 #
 # A SHA ref is 40 hex chars; anything else (tag like @v1, branch like @main)

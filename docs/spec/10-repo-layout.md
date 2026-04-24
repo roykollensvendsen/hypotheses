@@ -32,6 +32,7 @@ description: target directory structure for the full subnet codebase
 │       ├── action-pin-check.yml    # every action ref is a 40-char SHA
 │       ├── zizmor.yml              # workflow static-analysis
 │       ├── scorecard.yml           # OpenSSF Scorecard, weekly
+│       ├── spdx.yml                # SPDX license headers on sources
 │       ├── typos.yml               # spell check
 │       ├── pr-title.yml            # conventional PR title
 │       ├── pr-size.yml             # size labels + 500 LoC gate
@@ -143,6 +144,7 @@ description: target directory structure for the full subnet codebase
     ├── check_mutation_score.py     # parse mutmut output, enforce minimum
     ├── check_adr_required.py       # ADR required on dep/tool changes
     ├── check_action_pins.sh        # every action ref must be a 40-char SHA
+    ├── check_spdx_headers.py       # SPDX headers on every .py and .sh source
     └── validate_hypotheses.py      # JSON Schema validate all hypotheses/
 ```
 

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
+
 """Entrypoint for hypothesis H-0001.
 
 This file is a design stub. It encodes the entrypoint contract from

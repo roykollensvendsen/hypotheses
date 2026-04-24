@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
+
 """Check that tests precede implementation in a PR's commit range.
 
 Walks commits in `<base>..<head>` oldest-first. For every commit whose

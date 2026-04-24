@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
+
 """Require an ADR file when pinned toolchain or deps change.
 
 A PR that modifies `pyproject.toml` or `uv.lock` must include a new
