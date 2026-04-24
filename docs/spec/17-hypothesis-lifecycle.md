@@ -1,6 +1,9 @@
 ---
 name: hypothesis lifecycle
 description: states, transitions, authorities, and edge cases for hypothesis status
+tokens: 2600
+load_for: [implementation, proposal, agent-operator, review]
+depends_on: [02, 06]
 ---
 
 # 17 — Hypothesis lifecycle

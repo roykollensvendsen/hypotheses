@@ -1,6 +1,9 @@
 ---
 name: oracle contract
 description: interface, composition, outage semantics, and SN42 adapter for ground-truth oracles
+tokens: 2300
+load_for: [implementation, agent-operator, review]
+depends_on: [02, 06]
 ---
 
 # 18 — Oracle contract

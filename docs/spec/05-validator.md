@@ -1,6 +1,9 @@
 ---
 name: validator
 description: validator pipeline, rerun policy, score commitment
+tokens: 1400
+load_for: [implementation, agent-operator, review]
+depends_on: [02, 03, 06]
 ---
 
 # 05 — Validator

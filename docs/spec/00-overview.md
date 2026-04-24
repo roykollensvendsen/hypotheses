@@ -1,6 +1,9 @@
 ---
 name: overview
 description: mechanics overview — what the subnet does operationally and what it is not
+tokens: 500
+load_for: [implementation, agent-operator, proposal, governance, review]
+depends_on: []
 ---
 
 # 00 — Overview

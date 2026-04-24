@@ -1,6 +1,9 @@
 ---
 name: architecture
 description: components, data flow, and trust model for the subnet
+tokens: 1200
+load_for: [implementation, agent-operator, review]
+depends_on: [00, 01]
 ---
 
 # 03 — Architecture

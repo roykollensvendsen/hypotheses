@@ -1,6 +1,9 @@
 ---
 name: economic model
 description: emission flow, parameter inventory, stake, sybil cost, governance over economic parameters
+tokens: 3200
+load_for: [governance, review, implementation]
+depends_on: [06, 07]
 ---
 
 # 20 — Economic model

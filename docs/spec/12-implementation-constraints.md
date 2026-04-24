@@ -1,6 +1,9 @@
 ---
 name: implementation constraints
 description: rules for an autonomous Claude agent implementing the subnet from this spec
+tokens: 3400
+load_for: [implementation, review]
+depends_on: [10, 11, 16]
 ---
 
 # 12 — Implementation constraints

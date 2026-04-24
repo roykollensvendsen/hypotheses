@@ -1,6 +1,9 @@
 ---
 name: hypothesis format
 description: preregistration-style schema for hypothesis specs stored in hypotheses/
+tokens: 1000
+load_for: [implementation, proposal, review]
+depends_on: [01]
 ---
 
 # 02 — Hypothesis format

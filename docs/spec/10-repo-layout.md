@@ -1,6 +1,9 @@
 ---
 name: repo layout
 description: target directory structure for the full subnet codebase
+tokens: 1600
+load_for: [implementation, review]
+depends_on: [12]
 ---
 
 # 10 — Repo layout

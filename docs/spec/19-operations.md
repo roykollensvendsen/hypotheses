@@ -1,6 +1,9 @@
 ---
 name: operations
 description: observability, alerting, runbooks, and disaster recovery for operators
+tokens: 3800
+load_for: [agent-operator, implementation, review]
+depends_on: [12, 16]
 ---
 
 # 19 — Operations: observability and runbook

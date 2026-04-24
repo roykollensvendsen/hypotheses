@@ -1,6 +1,9 @@
 ---
 name: roadmap
 description: phased plan from spec freeze to mainnet
+tokens: 900
+load_for: [implementation, governance, review]
+depends_on: []
 ---
 
 # 11 — Roadmap

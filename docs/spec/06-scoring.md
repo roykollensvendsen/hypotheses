@@ -1,6 +1,9 @@
 ---
 name: scoring
 description: composite score rubric, statistical tests, oracle integration
+tokens: 1500
+load_for: [implementation, review, governance]
+depends_on: [02, 18]
 ---
 
 # 06 — Scoring

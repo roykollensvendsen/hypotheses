@@ -1,6 +1,9 @@
 ---
 name: threat model
 description: actors, assets, threats, and mitigations for the subnet
+tokens: 3800
+load_for: [implementation, agent-operator, governance, review]
+depends_on: [03]
 ---
 
 # 16 — Threat model
