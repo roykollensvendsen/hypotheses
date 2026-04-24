@@ -89,6 +89,37 @@ If you're in plain Claude Code kicking off Phase 1 implementation,
 go to [`docs/implementation-handoff.md`](docs/implementation-handoff.md)
 instead; it's the concrete starting prompt.
 
+## Context routing
+
+Agents have a bounded context window. Loading the whole spec tree on
+every session is wasteful and buries the relevant rules. Every spec
+doc carries a `tokens:`, `load_for:`, and `depends_on:` front-matter
+block (see any file under `docs/spec/NN-*.md`); this table names the
+minimum load-set for common tasks, ordered by expected frequency.
+
+| task | load (approx tokens) |
+|------|----------------------|
+| **Implement a scoring component** (e.g. composite, rigor) | 06 (~1500) + 18 (~2300) + invariants (~600) + antipatterns/ap-0002 | ≈ 4800 |
+| **Implement errors.py** (T-P1-002) | 12 (~3400) + 16 (~3800) | ≈ 7200 |
+| **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~500) | ≈ 4700 |
+| **Implement the validator pipeline** (T-P1-015) | 05 (~1400) + 06 (~1500) + 16 (~3800) + 18 (~2300) | ≈ 9000 |
+| **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
+| **Review a validator-side PR** | 05 (~1400) + 06 (~1500) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8200 |
+| **Draft a new hypothesis** | 02 (~1000) + 01 (~500) + existing H-000x (~800–2500) | ≈ 2500–4000 |
+| **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
+| **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
+| **Governance / weight change** | 06 (~1500) + 07 (~800) + 20 (~3200) | ≈ 5500 |
+
+Token estimates come from the `tokens:` front matter and are rough
+(wc × 1.3 rounded to 100). Treat them as planning, not a hard cap —
+always follow `depends_on:` chains when the load above doesn't
+cover a concept you need.
+
+The routing map is referenced from
+[`docs/implementation-handoff.md`](docs/implementation-handoff.md)
+so the Phase 1 implementing agent can budget context per task
+instead of re-reading the full spec every session.
+
 ## How to verify your work
 
 Every gate runs in CI — see

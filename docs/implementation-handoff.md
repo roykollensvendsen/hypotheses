@@ -41,6 +41,11 @@ Load these into context:
    "do NOT do this" shapes; read before writing code.
 9. [`docs/adr/`](adr/) — prior decisions you must respect.
 
+Don't load the whole spec tree on every session — see the
+[context-routing map in AGENTS.md](../AGENTS.md#context-routing) for
+per-task load-sets. Each `docs/spec/*.md` advertises its own
+`tokens:` and `depends_on:` in front matter.
+
 ## Your Phase 1 exit criteria
 
 Quoted from [`docs/spec/11-roadmap.md`](spec/11-roadmap.md):
