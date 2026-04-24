@@ -10,9 +10,13 @@ organised, and how miners and validators interact. The code in `src/` must
 conform to these documents; when they disagree, the spec wins and the code gets
 a PR.
 
+Before the spec, read the vision: [`/VISION.md`](../../VISION.md). It
+is the canonical statement of what the subnet is and why. Everything
+here builds on that.
+
 Read in order:
 
-1. [00 — Overview](00-overview.md) — what the subnet is and why
+1. [00 — Overview](00-overview.md) — operational mechanics (vision is in /VISION.md)
 2. [01 — Glossary](01-glossary.md) — terms used throughout
 3. [02 — Hypothesis format](02-hypothesis-format.md) — the preregistration schema
 4. [03 — Architecture](03-architecture.md) — components, data flow, trust model
