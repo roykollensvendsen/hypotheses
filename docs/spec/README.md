@@ -44,6 +44,8 @@ Read in order:
     `.github/` workflows, configs, templates, scripts
 17. [16 — Threat model](16-threat-model.md) — actors, assets,
     threats, and mitigations; the security audit trail
+18. [17 — Hypothesis lifecycle](17-hypothesis-lifecycle.md) — states,
+    transitions, authorities, edge cases
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](

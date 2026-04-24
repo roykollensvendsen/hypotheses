@@ -155,6 +155,10 @@ contradicts: []
 - `withdrawn` is terminal; a withdrawn hypothesis may be replaced by a new
   one that lists it in `contradicts`.
 
+The full state machine — every transition, who can trigger it, side
+effects, edge cases — is specified in
+[17 — Hypothesis lifecycle](17-hypothesis-lifecycle.md).
+
 ## The template
 
 A copy-paste starter lives at `hypotheses/HYPOTHESIS_TEMPLATE.md`.
