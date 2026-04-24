@@ -59,6 +59,7 @@ epochs — revisit if an epoch changes length):
    `(spec_id, spec_version, miner_hotkey)` has already been scored
    in the current epoch.
 
+   <!-- canonical:announcement_rate_limit=3 -->
    **Per-hotkey rate limit:** at most **3 announcements per
    miner_hotkey per Bittensor epoch** (~72 minutes at 360 blocks
    × 12 s). Any fourth announcement in the same epoch is dropped —
@@ -85,7 +86,7 @@ epochs — revisit if an epoch changes length):
      `submitted_at` and contains `experiments/<id>/`.
    - Ensure every declared seed and condition is present in the manifest.
 4. **Rerun sample.** Pick `rerun_fraction` of the declared seeds uniformly
-   without replacement. **Decision:** `rerun_fraction = 0.4` uniform across
+   without replacement. **Decision:** <!-- canonical:rerun_fraction=0.4 --> `rerun_fraction = 0.4` uniform across
    profiles for Phase 1–2, minimum 1 seed. Per-profile tuning is a
    Phase 3 concern. The sample is seeded deterministically by
    `(validator_hotkey, epoch, spec_id, version)` so two validators

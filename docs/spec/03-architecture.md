@@ -144,6 +144,9 @@ Short summary; the canonical enumeration lives in
 | Non-determinism | Runtime pins seeds, BLAS threads, CUDA flags; tolerance explicit | [T-042](16-threat-model.md) |
 | Large artifact DOS | Per-hotkey quota: 10 GiB. Per-artifact cap: 500 MiB. Per-manifest cap: 1 MiB. | [T-020](16-threat-model.md) |
 
+<!-- canonical:per_hotkey_storage_gb=10 -->
+<!-- canonical:per_artifact_cap_mib=500 -->
+
 ## What is explicitly *out* of architecture scope
 
 - Inference serving. This is not an inference subnet.

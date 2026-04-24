@@ -225,6 +225,7 @@ discipline per slice of behaviour:
   `mutmut` run with per-module minimum mutation score **75%**. A
   module below the floor fails the job. Script:
   `scripts/check_mutation_score.py`.
+  <!-- canonical:mutation_floor_pct=75 -->
 - **PR template** — TDD checklist in `.github/PULL_REQUEST_TEMPLATE.md`
   sets the cultural norm in addition to the mechanical gate.
 - **Module DoD** — the git history for each module's test file must

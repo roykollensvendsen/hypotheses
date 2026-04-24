@@ -67,6 +67,7 @@ Sorted by when it fires. `Gate` = blocks PR merge on failure.
 | `prompt-injection.yml` | scans `VISION.md`, `AGENTS.md`, `docs/**`, and `agents/prompts/**` for injection-style directives, fake system tags, and unsafe-protocol URLs; allow-lists the antipatterns corpus | runs on markdown / doc changes |
 | `requirements.yml` | cross-checks `HM-REQ-NNNN` / `HM-INV-NNNN` tags: every indexed ID is defined inline, every inline ID is indexed, no duplicates; reports code refs to unknown IDs as warnings | runs on `docs/spec/**` + `src/` + `tests/` changes |
 | `vale.yml` | Vale prose linter with the `AgentSpec` custom style (weasel words, hedging, quantifier-less claims); **warning-only** until a cleanup PR drops the count below an agreed threshold, then promoted to error | runs on `docs/spec/**`, `VISION.md`, `.vale/**` changes |
+| `spec-consistency.yml` | cross-reference integrity + canonical-constant cross-check: every `HM-REQ-NNNN`, `HM-INV-NNNN`, `T-NNN`, `T-P<k>-NNN`, `T-ACC/…`, `AP-NNNN` token reference resolves to a definition, and every `<!-- canonical:KEY=VALUE -->` pin agrees with inline mentions across the tree | runs on doc changes |
 
 ### On every push to `main`
 
