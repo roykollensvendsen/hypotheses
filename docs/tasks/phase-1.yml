@@ -1,0 +1,249 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
+#
+# Phase 1 task graph. Consumed by the implementing agent (see
+# docs/implementation-handoff.md). Ordered top-to-bottom; land each
+# task as a single PR that satisfies every DoD bullet before moving on.
+
+phase: 1
+mirrors: docs/spec/12-implementation-constraints.md#build-order
+tasks:
+
+  - id: T-P1-001
+    title: pyproject.toml + uv.lock
+    path: pyproject.toml
+    depends_on: []
+    reqs: []
+    dod:
+      - "pyproject.toml declares package name `hypotheses` and script entry `hypo = \"hypotheses.cli:main\"`."
+      - "Python requirement is `>=3.12` per docs/spec/12 § toolchain."
+      - "uv.lock exists and is checked in; `uv sync` succeeds in clean env."
+      - "An ADR under docs/adr/ records the initial dep set (pydantic v2, structlog, rfc8785, cryptography, pytest, pytest-cov, ruff, pyright, mutmut)."
+    sibling_tests: ~
+    size_budget_loc: 80
+
+  - id: T-P1-002
+    title: errors.py — typed exception hierarchy
+    path: src/hypotheses/errors.py
+    depends_on: [T-P1-001]
+    reqs: [HM-REQ-0040]
+    dod:
+      - "Every row in docs/spec/12 § fail-fast policy has a subclass in errors.py."
+      - "All subclasses inherit from `HypothesisError(Exception)`."
+      - "Each accepts `**details` kwargs and exposes a `.details` dict."
+      - "tests/errors/test_errors.py passes."
+      - "Module has SPDX header per HM-REQ-0042."
+    sibling_tests: tests/errors/
+    size_budget_loc: 150
+
+  - id: T-P1-003
+    title: spec parser + json-schema validator
+    path: src/hypotheses/spec/
+    depends_on: [T-P1-002]
+    reqs: [HM-REQ-0001, HM-REQ-0002, HM-REQ-0003]
+    dod:
+      - "parser.py parses `hypotheses/*.md` into a typed `Hypothesis` model (pydantic v2)."
+      - "validator.py validates front matter against the existing schema and raises `SchemaValidationError` on failure."
+      - "Golden fixture tests/golden/hypothesis-parsing/h-0001.json round-trips."
+      - "tests/spec/ exercises ≥5 malformed fixtures that each raise the right subclass."
+    sibling_tests: tests/spec/
+    size_budget_loc: 300
+
+  - id: T-P1-004
+    title: protocol/signing.py — canonical JSON + ed25519
+    path: src/hypotheses/protocol/signing.py
+    depends_on: [T-P1-002]
+    reqs: [HM-REQ-0030, HM-REQ-0031]
+    dod:
+      - "Canonical JSON via `rfc8785`."
+      - "ed25519 sign / verify via `cryptography`."
+      - "Known-answer test vectors from RFC 8785 appendix land in tests/protocol/."
+      - "Rejecting a non-canonical re-encoding of the same logical payload is covered by a failing-test fixture."
+    sibling_tests: tests/protocol/
+    size_budget_loc: 200
+
+  - id: T-P1-005
+    title: protocol/synapses.py — typed pydantic models
+    path: src/hypotheses/protocol/synapses.py
+    depends_on: [T-P1-003, T-P1-004]
+    reqs: [HM-REQ-0030]
+    dod:
+      - "One pydantic model per synapse in docs/spec/09, matching synapses.schema.json."
+      - "Unknown `schema_version` raises `UnsupportedSchema`."
+      - "Golden fixture tests/golden/protocol/results-announcement-valid.json parses and re-serialises byte-equal."
+    sibling_tests: tests/protocol/
+    size_budget_loc: 250
+
+  - id: T-P1-006
+    title: storage/local_cache.py — CIDv1 cache
+    path: src/hypotheses/storage/local_cache.py
+    depends_on: [T-P1-002]
+    reqs: []
+    dod:
+      - "Interface: `put(bytes) -> cid`, `get(cid) -> bytes`, `has(cid) -> bool`."
+      - "SHA-256 CIDv1 (`sha2-256` multihash)."
+      - "Per-hotkey quota (10 GiB), per-artifact cap (500 MiB) enforced with typed exceptions."
+      - "tests/storage/ covers missing-cid, corrupt-cid, over-cap."
+    sibling_tests: tests/storage/
+    size_budget_loc: 250
+
+  - id: T-P1-007
+    title: storage/ipfs.py — kubo HTTP adapter
+    path: src/hypotheses/storage/ipfs.py
+    depends_on: [T-P1-006]
+    reqs: []
+    dod:
+      - "Uses kubo HTTP API; CID is whatever kubo returns."
+      - "Tests mock the HTTP endpoint; real-kubo tests tagged `@pytest.mark.chain` and skipped by default."
+      - "Over-cap fetch raises before any bytes are downloaded."
+    sibling_tests: tests/storage/
+    size_budget_loc: 200
+
+  - id: T-P1-008
+    title: runtime/metrics.py — jsonl emitter + summariser
+    path: src/hypotheses/runtime/metrics.py
+    depends_on: [T-P1-002]
+    reqs: []
+    dod:
+      - "`metrics.report(name, value)` appends one JSONL line to `/artifacts/metrics.jsonl`."
+      - "Summariser returns `{median, n}` per metric."
+      - "tests/runtime/test_metrics.py covers integer and float metric values."
+    sibling_tests: tests/runtime/
+    size_budget_loc: 150
+
+  - id: T-P1-009
+    title: runtime/data/ — hash-pinned HF adapter
+    path: src/hypotheses/runtime/data/
+    depends_on: [T-P1-002]
+    reqs: [HM-INV-0021]
+    dod:
+      - "Hugging Face adapter only; hash verified on every load."
+      - "Tests use a tiny fixture dataset rather than CIFAR-10."
+      - "Mismatched revision raises `DatasetHashMismatch`."
+    sibling_tests: tests/runtime/data/
+    size_budget_loc: 250
+
+  - id: T-P1-010
+    title: runtime/sandbox/ — podman invocation
+    path: src/hypotheses/runtime/sandbox/
+    depends_on: [T-P1-002]
+    reqs: []
+    dod:
+      - "podman invocation with egress allow-list, wallclock timeout, memory cap, readonly code layer, writable `/artifacts`."
+      - "Happy-path test exercises allow-listed egress."
+      - "Wallclock-kill and egress-kill tests both raise typed exceptions."
+    sibling_tests: tests/runtime/sandbox/
+    size_budget_loc: 300
+
+  - id: T-P1-011
+    title: runtime/run.py — Run harness + manifest writer
+    path: src/hypotheses/runtime/run.py
+    depends_on: [T-P1-005, T-P1-008, T-P1-009, T-P1-010]
+    reqs: [HM-INV-0020]
+    dod:
+      - "`Run.from_env().execute(main)` emits a manifest per docs/spec/04-miner."
+      - "Two runs with the same seed and env.lock produce byte-identical `metrics.jsonl`."
+      - "Manifest validates against run-manifest.schema.json."
+    sibling_tests: tests/runtime/
+    size_budget_loc: 350
+
+  - id: T-P1-012
+    title: scoring/stats/ — welch_t, bootstrap, mann_whitney
+    path: src/hypotheses/scoring/stats/
+    depends_on: [T-P1-002]
+    reqs: []
+    dod:
+      - "Each test matches `scipy.stats` reference outputs within 1e-9."
+      - "Bootstrap uses BCa with 10k resamples; seeded RNG makes it reproducible."
+      - "tests/scoring/stats/ covers edge cases: tied ranks, zero-variance inputs."
+    sibling_tests: tests/scoring/stats/
+    size_budget_loc: 400
+
+  - id: T-P1-013
+    title: scoring/ — rigor, reproduction, improvement, novelty, cost, composite
+    path: src/hypotheses/scoring/
+    depends_on: [T-P1-003, T-P1-012]
+    reqs: [HM-REQ-0010, HM-REQ-0011, HM-REQ-0020, HM-REQ-0021, HM-INV-0010, HM-INV-0011, HM-INV-0012]
+    dod:
+      - "Each component is a pure function matching the signatures in docs/spec/06."
+      - "`composite.score()` returns a `ScoreVector` dataclass."
+      - "Golden fixtures in tests/golden/scoring/ all pass within 1e-9."
+      - "A property test asserts `composite(s) ∈ [−w_cost, 1]` for every generated input."
+      - "No LLM import anywhere in this module tree (ruff rule or CI grep)."
+    sibling_tests: tests/scoring/
+    size_budget_loc: 500
+
+  - id: T-P1-014
+    title: miner/ — propose, run, submit
+    path: src/hypotheses/miner/
+    depends_on: [T-P1-005, T-P1-007, T-P1-011]
+    reqs: []
+    dod:
+      - "`propose` runs schema validation + dry-run entrypoint on cpu-small."
+      - "`run` emits an artifact bundle matching docs/spec/04-miner exactly."
+      - "`submit` signs, uploads, and returns an announcement that validates against synapses.schema.json."
+      - "Integration test exercises the full loop on H-0001."
+    sibling_tests: tests/miner/
+    size_budget_loc: 450
+
+  - id: T-P1-015
+    title: validator/ — pipeline, rerun, weights
+    path: src/hypotheses/validator/
+    depends_on: [T-P1-013, T-P1-014]
+    reqs: [HM-REQ-0010, HM-REQ-0012]
+    dod:
+      - "Pipeline processes a submission against H-0001 end-to-end."
+      - "Rerun sample is deterministic in `(validator_hotkey, epoch, spec_id, version)`."
+      - "Weight vector sums to 1 within float epsilon."
+      - "Self-scoring rejection covered by a failing-then-passing test pair."
+    sibling_tests: tests/validator/
+    size_budget_loc: 450
+
+  - id: T-P1-016
+    title: cli/ — hypo dispatcher + subcommands
+    path: src/hypotheses/cli/
+    depends_on: [T-P1-014, T-P1-015]
+    reqs: []
+    dod:
+      - "Single `hypo` entry point per docs/spec/14."
+      - "Every documented subcommand exercised with `--help` + a happy-path invocation."
+      - "CLI is a thin dispatcher (no business logic)."
+      - "`--json` flag produces structured output on every command."
+    sibling_tests: tests/cli/
+    size_budget_loc: 400
+
+  - id: T-P1-017
+    title: client/ — typed sync + async SDK
+    path: src/hypotheses/client/
+    depends_on: [T-P1-014, T-P1-015]
+    reqs: []
+    dod:
+      - "`Client` (sync) and `AsyncClient` mirror each other method-for-method."
+      - "Models in `client/models.py` are the single public Python surface; internal types are not re-exported."
+      - "Fake-backend tests exercise every public method."
+    sibling_tests: tests/client/
+    size_budget_loc: 400
+
+  - id: T-P1-018
+    title: mcp/ — read-only tool surface
+    path: src/hypotheses/mcp/
+    depends_on: [T-P1-017]
+    reqs: []
+    dod:
+      - "Read-only tools in Phase 1 per docs/spec/13."
+      - "Every MCP tool has a matching `Client` method (AP-0006 parity)."
+      - "Per-tool argument schemas under `mcp/schema/` validate against inputs in tests."
+    sibling_tests: tests/mcp/
+    size_budget_loc: 350
+
+  - id: T-P1-019
+    title: oracle/ — base interface + stub
+    path: src/hypotheses/oracle/
+    depends_on: [T-P1-013]
+    reqs: []
+    dod:
+      - "`oracle/base.py` defines the abstract interface per docs/spec/18."
+      - "Any non-null `oracle.subnet` raises `NotImplementedError` until the SN42 adapter lands in Phase 2."
+      - "A scoring path with `oracle: null` bypasses the oracle check; a path with `oracle.subnet != null` short-circuits to score zero + NotImplementedError."
+    sibling_tests: tests/oracle/
+    size_budget_loc: 200

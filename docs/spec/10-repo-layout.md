@@ -59,6 +59,9 @@ depends_on: [12]
 ├── docs/
 │   ├── initial-discord-conversation.md
 │   ├── implementation-handoff.md   # phase 1 kickoff prompt for an agent
+│   ├── tasks/                      # ordered DoD-annotated task graphs per phase
+│   │   ├── README.md
+│   │   └── phase-1.yml
 │   ├── adr/                        # architecture decision records (MADR)
 │   │   ├── README.md
 │   │   └── NNNN-<slug>.md

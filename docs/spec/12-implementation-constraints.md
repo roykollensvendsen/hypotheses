@@ -292,6 +292,11 @@ structured context. No generic `RuntimeError`.
 
 ## Build order
 
+The canonical, DoD-annotated task graph is
+[`docs/tasks/phase-1.yml`](../tasks/phase-1.yml); the list below is
+the human-readable summary of that file. The YAML is authoritative
+for dependencies, size budgets, and `reqs` traceability.
+
 Each step's tests pass before the next begins.
 
 1. `src/hypotheses/errors.py`

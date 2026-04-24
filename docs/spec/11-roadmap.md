@@ -37,6 +37,10 @@ reviewed, and ready to implement against.
 **Goal:** a single operator can run the full miner→validator round-trip
 on one machine, with no Bittensor chain involvement.
 
+**Task graph.** The ordered, DoD-annotated list is
+[`docs/tasks/phase-1.yml`](../tasks/phase-1.yml). The implementing
+agent consumes that file top-to-bottom.
+
 **Exit criteria:**
 
 - `hypo propose`, `hypo run`, `hypo submit` work against a local
