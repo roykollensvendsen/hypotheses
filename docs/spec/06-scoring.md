@@ -1,0 +1,169 @@
+---
+name: scoring
+description: composite score rubric, statistical tests, oracle integration
+---
+
+# 06 — Scoring
+
+## Composite score
+
+For a submission `s` against spec `H` at version `v`:
+
+```
+S(s) = w_rigor        * rigor(s)
+     + w_reproduction * reproduction(s)
+     + w_improvement  * improvement(s, H)
+     + w_novelty      * novelty(H)
+     - w_cost         * cost_penalty(s)
+```
+
+Each component is in `[0, 1]` except `cost_penalty`, which is in `[0, 1]`
+and subtracts. Weights sum to 1 excluding the cost penalty, which is
+applied additively on top. Initial values:
+
+| component    | weight | source |
+|--------------|--------|--------|
+| rigor        | 0.20   | spec-quality check |
+| reproduction | 0.35   | rerun agreement |
+| improvement  | 0.30   | vs declared baseline |
+| novelty      | 0.15   | first-to-settle bonus |
+| cost penalty | 0.10   | compute + artifact storage |
+
+Weights are reviewable via subnet governance. **TBD**: who holds the
+governance key and the process to rotate these numbers.
+
+## Components
+
+### Rigor
+
+A discrete checklist evaluated on the spec at the time of submission:
+
+| check | points |
+|-------|-------:|
+| At least one baseline declared | 0.10 |
+| ≥3 seeds declared | 0.15 |
+| Both success and falsification criteria present | 0.15 |
+| Statistical test named | 0.10 |
+| `dataset_revision` pinned | 0.10 |
+| Oracle declared (if one is applicable to the family) | 0.15 |
+| `code_ref` exists and contains entrypoint | 0.15 |
+| No free-form TBD in front matter | 0.10 |
+
+Rigor is identical for all miners submitting against the same spec version
+(it is a property of the spec, not the submission).
+
+### Reproduction
+
+Fraction of sampled rerun seeds whose metrics agree with the
+miner-declared metrics within tolerance:
+
+```
+reproduction = (# seeds reproduced) / (# seeds sampled)
+```
+
+A submission with even one out-of-tolerance seed receives a hard zero on
+this component. This is deliberate: partial reproduction rewards noisy or
+dishonest miners.
+
+### Improvement
+
+Evaluated from the full miner-declared metric set, one value per declared
+success criterion:
+
+```
+improvement = min(1.0, observed_effect / target_effect)
+```
+
+where `observed_effect` is the change in the candidate metric vs the
+baseline, and `target_effect` is the change implied by the success
+criterion's `threshold_ratio`. The statistical test in the criterion
+(e.g. Welch's t-test across seeds) must pass at `p_max` for the effect to
+count; otherwise `improvement = 0`.
+
+If the hypothesis's falsification criterion is met instead, `improvement =
+0` but rigor and reproduction are scored normally. A clean falsification
+still earns score from the other components; a *honest null* is not a loss.
+
+### Novelty
+
+First miner to settle a hypothesis (pass reproduction + either
+`success_criteria` or `falsification_criteria` at the current version):
+
+```
+novelty = 1.0 for the first settling submission
+        = 0.5 for the second
+        = 0.0 thereafter
+```
+
+Novelty decays to zero for reruns of an already-settled hypothesis, which
+keeps emission flowing to new questions rather than rehashing old ones.
+
+### Cost penalty
+
+Computed from the manifest's `wallclock_seconds` sum + artifact storage:
+
+```
+cost_penalty = min(1.0,
+  wallclock_cost_usd / budget_wallclock +
+  storage_cost_usd   / budget_storage)
+```
+
+Budgets are per-hardware-profile and updated periodically. **TBD**: budget
+values.
+
+## Oracles
+
+When a hypothesis declares `oracle.subnet`, the scoring pipeline adds a
+hard gate:
+
+```
+if oracle.subnet is set:
+    oracle_answer = query_oracle(oracle.subnet, oracle.task_ref)
+    if abs(declared_answer - oracle_answer) > oracle.tolerance:
+        return ScoreVector.zero()
+```
+
+The initial supported oracle is **SN42 (omron)**, **TBD** for exact task
+adapter. A hypothesis whose claim cannot be phrased as a known-answer
+question on an oracle subnet sets `oracle: null` and relies on
+reproduction + improvement alone.
+
+## Statistical tests
+
+Supported in v1:
+
+- `welch_t`: Welch's t-test across seeds. For metrics where higher or
+  lower is the target direction, the test is one-sided.
+- `bootstrap`: nonparametric bootstrap on the difference of medians,
+  10k resamples, BCa CIs.
+- `mann_whitney`: for non-normal metric distributions.
+
+New tests require a spec update and a corresponding implementation in
+`src/hypotheses/scoring/stats/`.
+
+## Per-metric aggregation
+
+When a spec declares multiple `success_criteria`, all must pass for the
+improvement component to be non-zero. This is deliberately strict: if a
+hypothesis says "faster AND at least as accurate", a win on speed that
+regresses accuracy does not count.
+
+## Worked example
+
+Spec `H-0001` declares:
+
+- baselines: `sparse_dense_default`
+- success: `flops_to_target_loss` ≤ 0.80 × baseline at `p<0.01`, seeds=5
+- falsification: `flops_to_target_loss` ≥ 1.00 × baseline at `p<0.05`
+- oracle: null
+
+Miner submits 5 seeds. Validator reruns 2; both within tolerance. Declared
+median FLOPs: 0.72× baseline, Welch's t p=0.004.
+
+- rigor = 1.0 (all checks pass)
+- reproduction = 1.0 (2/2 reruns within tolerance)
+- improvement = min(1.0, 0.28 / 0.20) = 1.0
+- novelty = 1.0 (first settling submission at this version)
+- cost_penalty = 0.08
+
+Composite: `0.20 + 0.35 + 0.30 + 0.15 − 0.10*0.08 = 0.992`.
