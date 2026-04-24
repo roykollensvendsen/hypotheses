@@ -1,0 +1,18 @@
+name: TDD gate
+
+on:
+  pull_request:
+
+jobs:
+  tdd-order:
+    runs-on: ubuntu-latest
+    name: Tests precede implementation
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          fetch-depth: 0
+      - name: Check TDD commit order
+        run: |
+          python3 scripts/check_tdd_order.py \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}"

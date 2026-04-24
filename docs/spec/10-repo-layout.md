@@ -11,11 +11,14 @@ description: target directory structure for the full subnet codebase
 ├── LICENSE                         # AGPL-3.0-or-later
 ├── pyproject.toml                  # single package: hypotheses
 ├── uv.lock                         # pinned deps
-├── .commitlintrc.mjs               # conventional commits, sentence case, ≤72 chars
+├── .commitlintrc.mjs               # conventional commits, ≤72 chars
 ├── .github/
+│   ├── PULL_REQUEST_TEMPLATE.md    # TDD + spec alignment checklist
 │   └── workflows/
 │       ├── ci.yml                  # lint, typecheck, tests
 │       ├── commitlint.yml          # conventional commit enforcement
+│       ├── tdd-gate.yml            # tests precede implementation
+│       ├── mutation.yml            # nightly mutation-score gate
 │       ├── spec-validate.yml       # hypothesis schema validation on PR
 │       └── spec-mirror.yml         # mirror specs to IPFS on merge
 ├── docs/
@@ -117,7 +120,10 @@ description: target directory structure for the full subnet codebase
 └── scripts/
     ├── register_subnet.sh          # one-off registration script
     ├── dev-miner.sh
-    └── dev-validator.sh
+    ├── dev-validator.sh
+    ├── check_schema_matches_doc.py # spec ↔ schema consistency
+    ├── check_tdd_order.py          # PR gate: test: commits before feat:/fix:
+    └── check_mutation_score.py     # parse mutmut output, enforce minimum
 ```
 
 ## Package surface

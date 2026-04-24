@@ -66,6 +66,7 @@ The subnet is agent-first (see
 | `ruff` | latest stable | format + lint; config in `pyproject.toml`; no separate formatter |
 | `pyright` | latest stable | strict mode; type errors fail CI |
 | `pytest` | latest stable | plus `pytest-xdist`, `pytest-cov` |
+| `mutmut` | latest stable | nightly mutation gate; 75% min per module |
 | `torch` | 2.5.x | CPU wheel in base; GPU via `[gpu]` extra |
 | `bittensor` SDK | latest stable at Phase 2 kick-off | exact version pinned then; ADR required |
 | `pydantic` | v2.x | no v1 shims |
@@ -107,6 +108,48 @@ against Bittensor testnet, not in default CI.
 
 Coverage: package ≥ 85% statements; per-module floor 75%. A module
 below its floor fails CI.
+
+## Test-driven development (mandatory)
+
+Every module in `src/hypotheses/` is built test-first. The required
+discipline per slice of behaviour:
+
+1. **Red.** Write the tests. Commit as
+   `test: <describe the behaviour under test>`. `pytest` MUST be
+   failing on the new tests at this commit.
+2. **Green.** Write the minimum code to make them pass. Commit as
+   `feat:` or `fix:`. `pytest` MUST pass at this commit.
+3. **Refactor.** Improve structure without changing behaviour.
+   `pytest` stays green. Commit as `refactor:`.
+
+### Enforcement
+
+- **Commit-order gate** (`.github/workflows/tdd-gate.yml`) — fails a
+  PR if any `feat:` / `fix:` commit touching `src/` is not preceded
+  by at least one `test:` commit in the PR range. Script:
+  `scripts/check_tdd_order.py`.
+- **Mutation gate** (`.github/workflows/mutation.yml`) — nightly
+  `mutmut` run with per-module minimum mutation score **75%**. A
+  module below the floor fails the job. Script:
+  `scripts/check_mutation_score.py`.
+- **PR template** — TDD checklist in `.github/PULL_REQUEST_TEMPLATE.md`
+  sets the cultural norm in addition to the mechanical gate.
+- **Module DoD** — the git history for each module's test file must
+  show its first `test:` commit preceding its first
+  `feat:`/`fix:` commit.
+
+### Exemptions (no TDD requirement)
+
+- `docs:`, `chore:`, `style:`, `ci:`, `build:`, `perf:`, `revert:`.
+- `refactor:` — by definition runs under green with no new behaviour.
+- Changes that touch only configuration, assets, or non-`src/` paths.
+
+### Why both coverage and mutation
+
+Coverage catches untested *code*. Mutation catches tests that pass
+*regardless of behaviour* — the silent-failure mode where a test runs
+the code path but doesn't actually assert anything meaningful. Both
+gates are required for a module to count as done.
 
 ## Logging & observability
 
@@ -295,7 +338,7 @@ A PR merges only if:
 - `ruff check`, `ruff format --check` pass.
 - `pyright --strict` passes.
 - `pytest` unit+integration passes.
-- Coverage thresholds hold.
+- Coverage thresholds hold (≥ 85% package, ≥ 75% per module).
 - `scripts/check_schema_matches_doc.py` passes (spec ↔ schema
   consistency).
 - The hypothesis schema validator accepts every file in `hypotheses/`.
@@ -303,6 +346,14 @@ A PR merges only if:
   (conventional commits, lowercase subject, ≤72 chars, no
   Claude/Anthropic references). Local `.git/hooks/commit-msg`
   enforces the same rules at commit time.
+- TDD gate passes: `feat:` / `fix:` commits touching `src/` are
+  preceded by `test:` commits in the PR range
+  (`.github/workflows/tdd-gate.yml`).
+
+Out-of-band gates (run nightly, not per-PR):
+
+- Mutation score ≥ 75% per module (`.github/workflows/mutation.yml`).
+  Regressions here block the next release tag, not individual PRs.
 
 No `[skip ci]` shortcuts, no bypassing hooks.
 

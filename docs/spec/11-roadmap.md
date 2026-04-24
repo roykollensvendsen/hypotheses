@@ -49,6 +49,10 @@ on one machine, with no Bittensor chain involvement.
 - Integration test `tests/integration/smoke_submit_score.py` passes on
   CI.
 - At least one honest-null and one settling result validate end-to-end.
+- Mutation score ≥ 75% per module on the nightly mutation job for two
+  consecutive runs.
+- Every module's git history shows a `test:` commit preceding the
+  first `feat:` commit that touches it.
 
 **What lands:** `src/hypotheses/` fleshed out, dataset adapters, sandbox
 runtime, scoring, local IPC stubs for synapses.
