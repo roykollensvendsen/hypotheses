@@ -29,6 +29,12 @@ description: target directory structure for the full subnet codebase
 │       ├── vulture.yml             # dead-code detector on PR
 │       ├── link-check.yml          # lychee on docs/
 │       ├── adr-required.yml        # ADR required on dep/tool changes
+│       ├── action-pin-check.yml    # every action ref is a 40-char SHA
+│       ├── zizmor.yml              # workflow static-analysis
+│       ├── scorecard.yml           # OpenSSF Scorecard, weekly
+│       ├── typos.yml               # spell check
+│       ├── pr-title.yml            # conventional PR title
+│       ├── pr-size.yml             # size labels + 500 LoC gate
 │       ├── labeler.yml             # auto-label PRs by changed paths
 │       ├── stale.yml               # close 30/60-day inactive issues/PRs
 │       └── release-please.yml      # generate release PRs from commits
@@ -136,6 +142,7 @@ description: target directory structure for the full subnet codebase
     ├── check_tdd_order.py          # PR gate: test: commits before feat:/fix:
     ├── check_mutation_score.py     # parse mutmut output, enforce minimum
     ├── check_adr_required.py       # ADR required on dep/tool changes
+    ├── check_action_pins.sh        # every action ref must be a 40-char SHA
     └── validate_hypotheses.py      # JSON Schema validate all hypotheses/
 ```
 

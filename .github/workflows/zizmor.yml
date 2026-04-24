@@ -1,38 +1,36 @@
-name: Link check (docs)
+name: Zizmor (workflow security lint)
 
 on:
   pull_request:
     paths:
-      - 'docs/**'
-      - '**.md'
+      - '.github/workflows/**'
+      - '.github/actions/**'
   push:
     branches: [main]
     paths:
-      - 'docs/**'
-      - '**.md'
+      - '.github/workflows/**'
+      - '.github/actions/**'
   schedule:
-    - cron: "0 6 * * 1"   # Monday 06:00 UTC
+    - cron: "0 7 * * 1"   # Monday 07:00 UTC
   workflow_dispatch:
 
 permissions:
   contents: read
+  security-events: write
 
 concurrency:
-  group: link-check-${{ github.ref }}
+  group: zizmor-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  lychee:
+  zizmor:
     runs-on: ubuntu-latest
-    name: lychee link check
+    name: Static analysis of GitHub Actions workflows
     steps:
       - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
         with:
           egress-policy: audit
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-      - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
+      - uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e  # v0.5.3
         with:
-          args: --no-progress --include-fragments './**/*.md'
-          fail: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          min-severity: medium

@@ -12,28 +12,25 @@ the spec or the config so they match.
 
 ## Pinning policy
 
-All third-party GitHub Actions MUST be referenced by full commit SHA
-with a trailing `# vN.N.N` comment naming the version:
+All GitHub Actions (first-party and third-party) MUST be referenced by
+full commit SHA (40 hex chars) with a trailing `# vN.N.N` comment
+naming the version:
 
 ```yaml
 - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 ```
 
 Reason: tag references (`@v4`) can be moved by the action publisher to
-point at new code without notice. SHA references cannot. This is the
-same property we enforce on Python deps.
+point at new code without notice. SHA references cannot. The
+`tj-actions/changed-files` compromise of 2025 pushed malicious code
+under existing tags; SHA pinning would have prevented it.
 
-Current violations (tag-pinned, to be SHA-pinned in a follow-up PR;
-each requires its own ADR):
-
-- `lycheeverse/lychee-action@v2` (link-check.yml)
-- `googleapis/release-please-action@v4` (release-please.yml)
-- `actions/labeler@v5` (labeler.yml)
-- `actions/stale@v9` (stale.yml)
-
-**TBD** — add a CI workflow (`check-action-pins.yml`) that greps for
-`@v` patterns and fails the PR. Once added, the follow-up that
-SHA-pins the four above is a single-PR chore.
+Enforcement: `.github/workflows/action-pin-check.yml` runs
+`scripts/check_action_pins.sh` on every PR and push, greps every
+`uses:` line in `.github/workflows/**` and `.github/actions/**`, and
+fails if any ref is not a 40-char SHA. Dependabot (in the
+`github-actions` ecosystem) opens monthly PRs that bump SHAs to the
+latest release — the SHA-pinning policy does NOT mean stale deps.
 
 ## Workflow catalog
 
@@ -51,6 +48,11 @@ Sorted by when it fires. `Gate` = blocks PR merge on failure.
 | `spec-validate.yml` | JSON Schema ↔ hypothesis doc consistency; per-hypothesis schema validation | skip until schema file and script exist |
 | `link-check.yml` | `lychee` on every markdown file | always |
 | `adr-required.yml` | `docs/adr/*.md` required when `pyproject.toml` or `uv.lock` changes | always |
+| `action-pin-check.yml` | every action ref is a 40-char SHA | always; runs on `.github/**` changes |
+| `zizmor.yml` | static-analysis of workflows; fail on medium+ findings | always; runs on `.github/**` changes |
+| `typos.yml` | spell-check all tracked files | always |
+| `pr-title.yml` | PR title is a conventional-commit subject (needed for squash merges) | always |
+| `pr-size.yml` | label by size; fail PRs >500 LOC | always (excludes `uv.lock`, LICENSE, CHANGELOG) |
 
 ### On every push to `main`
 
@@ -66,14 +68,42 @@ Sorted by when it fires. `Gate` = blocks PR merge on failure.
 |----------|---------|---------|
 | `pip-audit.yml` | weekly (Mon 05:00 UTC) + PR on dep files + manual dispatch | CVE scan on pinned deps |
 | `link-check.yml` | weekly (Mon 06:00 UTC) | re-verify external links |
+| `zizmor.yml` | weekly (Mon 07:00 UTC) + `.github/**` PRs + push | workflow-security lint |
+| `scorecard.yml` | weekly (Mon 08:00 UTC) + push to main | OpenSSF Scorecard → code-scanning SARIF |
 | `mutation.yml` | nightly (04:00 UTC) + manual dispatch | `mutmut` ≥75% per module |
 | `stale.yml` | daily (03:00 UTC) + manual dispatch | mark / close inactive issues and PRs |
 
-### On PR target (labeler only)
+### On PR target
 
 | workflow | purpose |
 |----------|---------|
 | `labeler.yml` | auto-apply labels from changed paths per `.github/labeler.yml` |
+| `pr-size.yml` | size label + >500 LoC gate |
+| `pr-title.yml` | conventional-commit PR title (edited events also trigger) |
+
+## Workflow hardening conventions
+
+Every workflow follows the same conventions:
+
+- **Top-level `permissions:`** — defaults to `contents: read`; write
+  scopes granted only to the job that needs them (e.g. `pull-requests:
+  write` on the labeler, `contents: write` on release-please,
+  `security-events: write` on scorecard).
+- **Concurrency groups** — PR-triggered workflows set
+  `cancel-in-progress: ${{ github.event_name == 'pull_request' }}` to
+  kill superseded runs without affecting pushes to `main`. Schedule-
+  and push-only workflows do not set concurrency.
+- **`step-security/harden-runner`** runs first in every job with
+  `egress-policy: audit`. This logs outbound connections from the
+  runner; we may switch to `block` with an explicit allow-list once
+  the egress surface stabilises in Phase 2.
+- **`astral-sh/setup-uv`** with `enable-cache: true` is the canonical
+  way to install `uv` — caches wheels across jobs, invalidates on
+  `uv.lock` changes, and replaces manual `curl | sh` installs.
+- **`actions/setup-python`** pins to `3.12.7` (patch version, not
+  major). Patch-level drift has caused real CI breakage in the past.
+- **Tool invocation via `uvx`** where possible (ruff, bandit,
+  vulture, pip-audit) — no separate install steps, cached by uv.
 
 ## Configs
 
@@ -140,6 +170,7 @@ Shell- and Python-only, invoked by workflows or by operators.
 | `scripts/check_tdd_order.py` | PR gate: `test:` before `feat:`/`fix:` touching `src/` | `tdd-gate.yml` |
 | `scripts/check_mutation_score.py` | parse `mutmut results`; enforce ≥75% | `mutation.yml` |
 | `scripts/check_adr_required.py` | require ADR when `pyproject.toml`/`uv.lock` changes | `adr-required.yml` |
+| `scripts/check_action_pins.sh` | fail if any action ref is not a 40-char SHA | `action-pin-check.yml` |
 | `scripts/check_schema_matches_doc.py` | spec ↔ JSON Schema consistency (not yet implemented) | `spec-validate.yml` |
 | `scripts/validate_hypotheses.py` | JSON Schema validate every file in `hypotheses/` (not yet implemented) | `spec-validate.yml` |
 | `scripts/register_subnet.sh` | one-off Bittensor registration (Phase 2+) | operator |
