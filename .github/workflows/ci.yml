@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    name: ruff (lint + format)
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Find python sources
+        id: guard
+        run: |
+          if find . -name '*.py' -not -path './.git/*' -print -quit | grep -q .; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "no python sources; no-op"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        if: steps.guard.outputs.skip == 'false'
+        with:
+          python-version: '3.12'
+      - name: Install ruff
+        if: steps.guard.outputs.skip == 'false'
+        run: pip install ruff
+      - name: ruff check
+        if: steps.guard.outputs.skip == 'false'
+        run: ruff check .
+      - name: ruff format --check
+        if: steps.guard.outputs.skip == 'false'
+        run: ruff format --check .
+
+  pyright:
+    runs-on: ubuntu-latest
+    name: pyright (strict)
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Skip if pyproject absent
+        id: guard
+        run: |
+          if [ ! -f pyproject.toml ]; then
+            echo "no pyproject.toml; typecheck is a no-op until Phase 1"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        if: steps.guard.outputs.skip == 'false'
+        with:
+          python-version: '3.12'
+      - name: Install uv
+        if: steps.guard.outputs.skip == 'false'
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Sync deps
+        if: steps.guard.outputs.skip == 'false'
+        run: uv sync --extra dev
+      - name: pyright --strict
+        if: steps.guard.outputs.skip == 'false'
+        run: uv run pyright
+
+  pytest:
+    runs-on: ubuntu-latest
+    name: pytest (unit + integration + coverage)
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Skip if tests absent
+        id: guard
+        run: |
+          if [ ! -d tests ]; then
+            echo "no tests/ yet; no-op until Phase 1"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        if: steps.guard.outputs.skip == 'false'
+        with:
+          python-version: '3.12'
+      - name: Install uv
+        if: steps.guard.outputs.skip == 'false'
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Sync deps
+        if: steps.guard.outputs.skip == 'false'
+        run: uv sync --extra dev
+      - name: pytest
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          uv run pytest \
+            --cov=hypotheses \
+            --cov-report=term-missing \
+            --cov-fail-under=85 \
+            -n auto
