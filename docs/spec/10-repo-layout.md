@@ -68,6 +68,10 @@ depends_on: [12]
 │       ├── antipatterns/           # machine-readable do-NOT-do patterns
 │       │   ├── README.md
 │       │   └── ap-NNNN-<slug>.md
+│       ├── formal/                 # quint specs mirroring prose state machines
+│       │   ├── README.md
+│       │   └── lifecycle.qnt
+│       ├── requirements.md         # HM-REQ-NNNN index
 │       ├── 00-overview.md
 │       ├── 01-glossary.md
 │       ├── 02-hypothesis-format.md

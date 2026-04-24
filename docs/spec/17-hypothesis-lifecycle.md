@@ -16,6 +16,11 @@ the registry.
 [02 — Hypothesis format](02-hypothesis-format.md#spec-fields) lists
 the states in passing. This doc is the full contract.
 
+A mechanically-checkable Quint formalisation of this state machine
+lives at [`formal/lifecycle.qnt`](formal/lifecycle.qnt). Prose here
+is authoritative; divergence between the prose and the formalisation
+is a bug and is fixed in the same PR that identifies it.
+
 ## States
 
 A `status` field is always exactly one of:

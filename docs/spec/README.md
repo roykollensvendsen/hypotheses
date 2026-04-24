@@ -57,6 +57,8 @@ Cross-cutting references:
 
 - [`antipatterns/`](antipatterns/) — machine-readable corpus of "do
   NOT do this" shapes the implementing agent must recognise.
+- [`formal/`](formal/) — Quint specifications mirroring prose state
+  machines (lifecycle today; more will follow).
 - [`requirements.md`](requirements.md) — stable `HM-REQ-NNNN`
   normative statements; inline in their owning doc, indexed here,
   cross-checked in CI.
