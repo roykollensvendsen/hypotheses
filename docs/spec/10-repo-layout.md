@@ -7,8 +7,17 @@ description: target directory structure for the full subnet codebase
 
 ```
 .
-├── README.md                       # project intro, pointer to spec
+├── README.md                       # project intro, pointer to VISION/spec
+├── VISION.md                       # canonical vision + mission
+├── AGENTS.md                       # entry point for LLM agents
+├── CONTRIBUTING.md                 # three contribution tracks
+├── CODE_OF_CONDUCT.md              # Contributor Covenant 2.1
+├── GOVERNANCE.md                   # maintainer model + decision process
+├── SECURITY.md                     # private vuln advisory flow
+├── CHANGELOG.md                    # release-please generated
 ├── LICENSE                         # AGPL-3.0-or-later
+├── .editorconfig                   # cross-editor formatting
+├── .gitignore                      # standard Python / uv / IDE ignores
 ├── pyproject.toml                  # single package: hypotheses
 ├── uv.lock                         # pinned deps
 ├── .commitlintrc.mjs               # conventional commits, ≤72 chars
@@ -17,6 +26,11 @@ description: target directory structure for the full subnet codebase
 │   ├── PULL_REQUEST_TEMPLATE.md    # TDD + spec alignment checklist
 │   ├── dependabot.yml              # weekly deps, monthly actions
 │   ├── labeler.yml                 # paths → PR labels
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── config.yml              # disable blank issues; discussion redirect
+│   │   ├── hypothesis-proposal.yml # primary on-ramp
+│   │   ├── spec-question.yml
+│   │   └── bug.yml
 │   └── workflows/
 │       ├── ci.yml                  # lint, typecheck, tests
 │       ├── commitlint.yml          # conventional commit enforcement
@@ -41,6 +55,10 @@ description: target directory structure for the full subnet codebase
 │       └── release-please.yml      # generate release PRs from commits
 ├── docs/
 │   ├── initial-discord-conversation.md
+│   ├── implementation-handoff.md   # phase 1 kickoff prompt for an agent
+│   ├── adr/                        # architecture decision records (MADR)
+│   │   ├── README.md
+│   │   └── NNNN-<slug>.md
 │   ├── research-notes/             # free-form essays and questions
 │   └── spec/                       # the authoritative specification
 │       ├── README.md
@@ -62,7 +80,12 @@ description: target directory structure for the full subnet codebase
 ├── agents/                         # starter llm-agent configurations
 │   ├── README.md
 │   ├── prompts/                    # system-prompt templates
-│   ├── examples/                   # runnable reference agents
+│   │   ├── implementer-system.md
+│   │   ├── miner-system.md
+│   │   ├── validator-operator-system.md
+│   │   ├── proposer-system.md
+│   │   └── reviewer-system.md
+│   ├── examples/                   # runnable reference agents (Phase 1+)
 │   └── eval/
 ├── experiments/                    # executable code per hypothesis
 │   └── H-NNNN/

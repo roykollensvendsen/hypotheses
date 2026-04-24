@@ -14,6 +14,12 @@ Before the spec, read the vision: [`/VISION.md`](../../VISION.md). It
 is the canonical statement of what the subnet is and why. Everything
 here builds on that.
 
+If you are an LLM agent, start at [`/AGENTS.md`](../../AGENTS.md) —
+that's the entry point with links to the role-specific prompts under
+[`/agents/prompts/`](../../agents/prompts/). For kicking off Phase 1
+implementation, see
+[`../implementation-handoff.md`](../implementation-handoff.md).
+
 Read in order:
 
 1. [00 — Overview](00-overview.md) — operational mechanics (vision is in /VISION.md)

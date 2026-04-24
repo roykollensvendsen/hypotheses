@@ -166,18 +166,21 @@ Two checklists: **TDD** (tests committed first, impl made them pass,
 refactor under green, mutation score check) and **Spec alignment**
 (spec updated in-PR for behaviour changes; schema ↔ doc agree).
 
-### Issue templates (planned, not yet created)
+### Issue templates
 
-The collaboration kit will add:
+Live under `.github/ISSUE_TEMPLATE/`:
 
-- `hypothesis-proposal.yml` — the primary on-ramp; collects the same
-  fields as a full hypothesis spec but at a lower fidelity so new
-  contributors can sketch before drafting.
-- `spec-question.yml` — "why does doc N say X?" form.
-- `bug.yml` — standard bug report.
+- `config.yml` — disables blank issues; adds contact links for
+  Discussions and security advisories.
+- `hypothesis-proposal.yml` — primary on-ramp; low-fidelity sketch
+  of a hypothesis with required falsifiability and relational-
+  baseline checkboxes. PR with the full spec file follows.
+- `spec-question.yml` — "why does doc N say X?" form with a doc
+  picker.
+- `bug.yml` — standard bug report with repro + env fields.
 
-Until those exist, GitHub falls back to a free-form issue — acceptable
-for Phase 0.
+Blank issues are disabled — everything enters via a template, keeping
+triage scannable.
 
 ## Scripts
 
