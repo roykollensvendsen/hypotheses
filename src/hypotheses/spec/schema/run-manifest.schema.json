@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roykollensvendsen/hypotheses/src/hypotheses/spec/schema/run-manifest.schema.json",
+  "title": "Run manifest",
+  "description": "Top-level run.manifest.json produced by a miner's submit step. See docs/spec/04-miner.md § submit — artifact contract.",
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hypothesis_id",
+    "hypothesis_version",
+    "spec_cid",
+    "code_commit",
+    "miner_hotkey",
+    "submitted_at",
+    "runs",
+    "declared_summary",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "hypothesis_id": {
+      "type": "string",
+      "pattern": "^H-\\d{4}$"
+    },
+    "hypothesis_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "spec_cid": { "type": "string", "minLength": 1 },
+    "code_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "Git SHA (40 lowercase hex) of this repo at submit time."
+    },
+    "miner_hotkey": { "type": "string", "minLength": 1 },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/run" }
+    },
+    "declared_summary": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/summary_value" }
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ed25519 signature over canonical JSON of the manifest excluding this field."
+    }
+  },
+
+  "$defs": {
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seed", "condition", "metrics", "wallclock_seconds", "artifacts"],
+      "properties": {
+        "seed": { "type": "integer", "minimum": 0 },
+        "condition": {
+          "type": "object",
+          "minProperties": 1,
+          "description": "Variable assignment for this run (keys match hypothesis.variables[].name).",
+          "additionalProperties": true
+        },
+        "metrics": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "number" }
+        },
+        "wallclock_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "artifacts": {
+          "type": "object",
+          "minProperties": 1,
+          "description": "Per-artifact CID references (e.g. metrics, weights).",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^(cid:|bafy|Qm).+"
+          }
+        }
+      }
+    },
+    "summary_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["median", "n"],
+      "properties": {
+        "median": { "type": "number" },
+        "stdev": { "type": "number", "minimum": 0 },
+        "n": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

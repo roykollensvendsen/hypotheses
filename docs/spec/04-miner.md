@@ -102,6 +102,14 @@ seeds/<seed>/<condition>/
 Signature covers everything except the `signature` field itself, serialised
 via canonical JSON (RFC 8785).
 
+### Schema
+
+The full `run.manifest.json` structure is machine-checkable via
+[`src/hypotheses/spec/schema/run-manifest.schema.json`](../../src/hypotheses/spec/schema/run-manifest.schema.json).
+Additions (new artifact kinds, new summary statistics) land in the
+schema first; the manifest writer in `src/hypotheses/miner/submitter.py`
+(Phase 1) is expected to validate against this schema before signing.
+
 ## Synapses the miner exposes
 
 - `GetManifest(spec_id, spec_version) -> run.manifest.json`

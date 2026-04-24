@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roykollensvendsen/hypotheses/src/hypotheses/spec/schema/synapses.schema.json",
+  "title": "Subnet synapses",
+  "description": "On-wire Bittensor synapse payloads. Canonical JSON (RFC 8785), signed by sender hotkey. See docs/spec/09-protocol.md.",
+
+  "oneOf": [
+    { "$ref": "#/$defs/ResultsAnnouncement" },
+    { "$ref": "#/$defs/GetManifest" },
+    { "$ref": "#/$defs/GetArtifact" },
+    { "$ref": "#/$defs/Heartbeat" }
+  ],
+
+  "$defs": {
+    "hotkey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "SS58-encoded Bittensor hotkey."
+    },
+    "cid": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Content identifier (IPFS CID or git blob hash)."
+    },
+    "iso8601_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 / ISO-8601 UTC timestamp."
+    },
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Wire-schema version; unrecognised versions are rejected."
+    },
+    "hypothesis_id": {
+      "type": "string",
+      "pattern": "^H-\\d{4}$"
+    },
+    "hypothesis_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "declared_summary_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["median", "n"],
+      "properties": {
+        "median": { "type": "number" },
+        "stdev": { "type": "number", "minimum": 0 },
+        "n": { "type": "integer", "minimum": 1 }
+      }
+    },
+
+    "ResultsAnnouncement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "schema_version",
+        "hypothesis_id",
+        "hypothesis_version",
+        "spec_cid",
+        "artifact_cid",
+        "miner_hotkey",
+        "declared_summary",
+        "submitted_at",
+        "signature"
+      ],
+      "properties": {
+        "type": { "const": "ResultsAnnouncement" },
+        "schema_version": { "$ref": "#/$defs/schema_version" },
+        "hypothesis_id": { "$ref": "#/$defs/hypothesis_id" },
+        "hypothesis_version": { "$ref": "#/$defs/hypothesis_version" },
+        "spec_cid": { "$ref": "#/$defs/cid" },
+        "artifact_cid": { "$ref": "#/$defs/cid" },
+        "miner_hotkey": { "$ref": "#/$defs/hotkey" },
+        "declared_summary": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/declared_summary_value" }
+        },
+        "submitted_at": { "$ref": "#/$defs/iso8601_utc" },
+        "signature": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "GetManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "hypothesis_id",
+        "hypothesis_version",
+        "miner_hotkey"
+      ],
+      "properties": {
+        "type": { "const": "GetManifest" },
+        "schema_version": { "$ref": "#/$defs/schema_version" },
+        "hypothesis_id": { "$ref": "#/$defs/hypothesis_id" },
+        "hypothesis_version": { "$ref": "#/$defs/hypothesis_version" },
+        "miner_hotkey": { "$ref": "#/$defs/hotkey" }
+      }
+    },
+
+    "GetArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "cid", "max_bytes"],
+      "properties": {
+        "type": { "const": "GetArtifact" },
+        "schema_version": { "$ref": "#/$defs/schema_version" },
+        "cid": { "$ref": "#/$defs/cid" },
+        "max_bytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+
+    "Heartbeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "miner_version",
+        "storage_backend",
+        "free_storage_gb",
+        "supported_profiles"
+      ],
+      "properties": {
+        "type": { "const": "Heartbeat" },
+        "schema_version": { "$ref": "#/$defs/schema_version" },
+        "miner_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+([.-].+)?$"
+        },
+        "storage_backend": {
+          "type": "string",
+          "enum": ["ipfs", "s3"]
+        },
+        "free_storage_gb": { "type": "number", "minimum": 0 },
+        "supported_profiles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "cpu-small",
+              "cpu-large",
+              "single-gpu-24gb",
+              "single-gpu-80gb",
+              "multi-gpu-4x80gb"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -9,6 +9,17 @@ The on-chain wire protocol consists of a small number of Bittensor
 synapses. The payloads are canonical JSON (RFC 8785), signed by the
 sender's hotkey.
 
+## Schema
+
+All four synapses are machine-checkable via
+[`src/hypotheses/spec/schema/synapses.schema.json`](../../src/hypotheses/spec/schema/synapses.schema.json).
+Each subtype is published as a `$def` (`ResultsAnnouncement`,
+`GetManifest`, `GetArtifact`, `Heartbeat`) and the top-level schema is
+a `oneOf` dispatch keyed on `type`. Additions go schema-first: new
+fields in an existing synapse are a schema patch; new synapses are a
+new `$def`. Unknown synapse `type` values are rejected per the
+versioning policy below.
+
 ## Synapse: `ResultsAnnouncement`
 
 Broadcast by a miner to announce a completed submission.

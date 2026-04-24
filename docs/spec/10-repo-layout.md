@@ -115,7 +115,10 @@ description: target directory structure for the full subnet codebase
 │       │   └── schema/             # per-tool argument schemas
 │       ├── spec/
 │       │   ├── schema/
-│       │   │   └── hypothesis.schema.json
+│       │   │   ├── hypothesis.schema.json
+│       │   │   ├── synapses.schema.json
+│       │   │   ├── run-manifest.schema.json
+│       │   │   └── events.schema.json
 │       │   ├── parser.py
 │       │   └── validator.py
 │       ├── protocol/

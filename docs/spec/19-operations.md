@@ -81,6 +81,16 @@ Operators consuming `events.jsonl` should treat unrecognised event
 names as skippable (forward-compatibility); validators and miners
 should not change semantics of existing event names.
 
+#### Schema
+
+Top-level event record shape is machine-checkable via
+[`src/hypotheses/spec/schema/events.schema.json`](../../src/hypotheses/spec/schema/events.schema.json).
+The `event` enum is authoritative — new values are added, old values
+are never renamed. Per-event `data` payloads are currently untyped at
+this tier; per-event sub-schemas may land under
+`src/hypotheses/spec/schema/events/` in a follow-up PR if downstream
+consumers need them.
+
 ## Service-level indicators
 
 SLIs are the metrics an operator dashboards off. They're derived

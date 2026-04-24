@@ -14,9 +14,14 @@ intent; these files are the authoritative structural constraint.
 | schema | spec doc | validates |
 |--------|----------|-----------|
 | [`hypothesis.schema.json`](hypothesis.schema.json) | [`../../../../docs/spec/02-hypothesis-format.md`](../../../../docs/spec/02-hypothesis-format.md) | YAML front matter in `hypotheses/*.md` |
+| [`synapses.schema.json`](synapses.schema.json) | [`../../../../docs/spec/09-protocol.md`](../../../../docs/spec/09-protocol.md) | wire payloads (`ResultsAnnouncement`, `GetManifest`, `GetArtifact`, `Heartbeat`) |
+| [`run-manifest.schema.json`](run-manifest.schema.json) | [`../../../../docs/spec/04-miner.md`](../../../../docs/spec/04-miner.md) | `run.manifest.json` at the top of an artifact bundle |
+| [`events.schema.json`](events.schema.json) | [`../../../../docs/spec/19-operations.md`](../../../../docs/spec/19-operations.md) | one line of a component's `events.jsonl` |
 
-Additional schemas will land alongside the modules they cover:
-manifest, synapses, events. This directory is the single home.
+This directory is the single home for machine-readable contracts.
+Per-object validator scripts (e.g. `validate_synapses.py`,
+`validate_manifest.py`, `validate_events.py`) ship in Phase 1 alongside
+the runtime code that produces these artifacts.
 
 ## CI
 

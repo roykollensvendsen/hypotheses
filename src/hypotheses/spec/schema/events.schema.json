@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roykollensvendsen/hypotheses/src/hypotheses/spec/schema/events.schema.json",
+  "title": "events.jsonl record",
+  "description": "One line of a component's events.jsonl. Log-mandatory fields plus an event-specific data payload. See docs/spec/19-operations.md § events.jsonl and docs/spec/12-implementation-constraints.md § logging.",
+
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["ts", "level", "msg", "component", "event", "data"],
+  "properties": {
+    "ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp with millisecond precision."
+    },
+    "level": {
+      "type": "string",
+      "enum": ["debug", "info", "warning", "error"]
+    },
+    "msg": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Machine-stable message key (not a sentence)."
+    },
+    "component": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9_]*)+$",
+      "description": "Dotted component name, e.g. miner.runner, validator.pipeline."
+    },
+    "cycle_id": { "type": "string" },
+    "hypothesis_id": {
+      "type": "string",
+      "pattern": "^H-\\d{4}$"
+    },
+    "miner_hotkey": { "type": "string" },
+    "spec_version": { "type": "integer", "minimum": 1 },
+    "announcement_cid": { "type": "string" },
+
+    "event": {
+      "type": "string",
+      "enum": [
+        "miner.run.start",
+        "miner.run.seed.done",
+        "miner.run.done",
+        "miner.submit.broadcast",
+        "miner.submit.failed",
+        "validator.cycle.start",
+        "validator.cycle.end",
+        "validator.submission.scored",
+        "validator.submission.rejected",
+        "validator.rerun.disagreement",
+        "validator.oracle.disagreement",
+        "validator.rate_limit_exceeded",
+        "runtime.sandbox.killed",
+        "runtime.dataset.hash_mismatch"
+      ]
+    },
+    "data": {
+      "type": "object",
+      "description": "Event-specific payload. Structural typing only at this tier; per-event payload schemas may land under src/hypotheses/spec/schema/events/ in a follow-up."
+    }
+  }
+}
