@@ -29,8 +29,10 @@ applied additively on top. Initial values:
 | novelty      | 0.15   | first-to-settle bonus |
 | cost penalty | 0.10   | compute + artifact storage |
 
-Weights are reviewable via subnet governance. **TBD**: who holds the
-governance key and the process to rotate these numbers.
+Weights are reviewable via subnet governance. **Decision:** the
+repo-maintainer holds governance authority for Phase 0–2. Any change to
+these weights is a spec PR + ADR. Post-mainnet governance transition is
+a Phase 3+ concern (see [07](07-incentive.md)).
 
 ## Components
 
@@ -108,8 +110,20 @@ cost_penalty = min(1.0,
   storage_cost_usd   / budget_storage)
 ```
 
-Budgets are per-hardware-profile and updated periodically. **TBD**: budget
-values.
+Budgets are per-hardware-profile. **Initial values** (USD, revisit after
+Phase 2):
+
+| profile | `budget_wallclock` | `budget_storage` |
+|---------|-------------------:|-----------------:|
+| `cpu-small`        | $0.10 | $0.05 |
+| `cpu-large`        | $0.50 | $0.20 |
+| `single-gpu-24gb`  | $2.00 | $0.50 |
+| `single-gpu-80gb`  | $8.00 | $1.00 |
+| `multi-gpu-4x80gb` | $40.00 | $2.00 |
+
+Wallclock cost is priced at a spot-market reference set in
+`src/hypotheses/scoring/cost.py` (MANDATORY: a single constant table,
+not per-call lookups). Storage is priced per GiB-month.
 
 ## Oracles
 
@@ -123,10 +137,12 @@ if oracle.subnet is set:
         return ScoreVector.zero()
 ```
 
-The initial supported oracle is **SN42 (omron)**, **TBD** for exact task
-adapter. A hypothesis whose claim cannot be phrased as a known-answer
-question on an oracle subnet sets `oracle: null` and relies on
-reproduction + improvement alone.
+The initial supported oracle is **SN42 (omron)**. **Decision:** Phase 1
+ships with a stub that raises `NotImplementedError` for any non-null
+oracle; the SN42 adapter is implemented before the Phase 2 exit and
+documented in an ADR. A hypothesis whose claim cannot be phrased as a
+known-answer question on an oracle subnet sets `oracle: null` and
+relies on reproduction + improvement alone.
 
 ## Statistical tests
 

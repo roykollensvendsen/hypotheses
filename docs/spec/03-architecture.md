@@ -75,11 +75,11 @@ miners and validators use to run experiment code deterministically. See
 
 ### Storage
 
-Content-addressed storage for specs and artifacts. **TBD**: IPFS vs
-S3-compatible vs on-chain commit hashes. Current lean: IPFS for artifacts
-(since they can be large and content-addressing is native), with the CID
-embedded in the on-chain synapse. Specs are content-addressable directly via
-git blob hash.
+Content-addressed storage for specs and artifacts. **Decision:** IPFS
+(kubo 0.29+) for artifacts, with the CID embedded in the on-chain
+synapse. Specs are content-addressable via git blob hash and mirrored to
+IPFS on merge by the `spec-mirror.yml` workflow. S3-compatible fallback
+is deferred to Phase 3+ if needed.
 
 ## Data flow
 
@@ -121,7 +121,8 @@ git blob hash.
   score their own miner hotkey.
 - **The repo is trusted.** `hypotheses/` merged on `main` is the source of
   truth. Protecting `main` is the subnet's most important governance act.
-  **TBD**: multi-sig or trusted-maintainer list for merges into `main`.
+  **Decision:** single trusted-maintainer (repo owner) for Phase 0–2.
+  Transition to multi-sig or a maintainer council is a Phase 3 exit item.
 - **External datasets are semi-trusted.** Datasets are pinned by revision
   hash; validators verify the hash on fetch.
 
@@ -135,7 +136,7 @@ git blob hash.
 | Validator collusion with miner | Validators cannot self-score; weight normalisation across validators |
 | Spec drift (code doesn't match claim) | `code_ref` and `entrypoint` are committed before results submit |
 | Non-determinism | Runtime pins seeds, BLAS threads, CUDA flags; tolerance explicit |
-| Large artifact DOS | Per-hotkey storage quota + artifact size cap (**TBD: numbers**) |
+| Large artifact DOS | Per-hotkey quota: 10 GiB. Per-artifact cap: 500 MiB. Per-manifest cap: 1 MiB. Revisit after Phase 2. |
 
 ## What is explicitly *out* of architecture scope
 

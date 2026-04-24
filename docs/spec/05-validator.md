@@ -10,8 +10,8 @@ sampled fraction, scores, and sets weights.
 
 ## Pipeline
 
-Per validator cycle (target cadence: **TBD**; initial lean: every 20
-minutes):
+Per validator cycle (cadence: **20 minutes**, aligned to Bittensor
+epochs — revisit if an epoch changes length):
 
 1. **Discover.** Read recent `ResultsAnnouncement` synapses from the chain.
    Filter out announcements whose `(spec_id, spec_version, miner_hotkey)`
@@ -25,8 +25,12 @@ minutes):
      `submitted_at` and contains `experiments/<id>/`.
    - Ensure every declared seed and condition is present in the manifest.
 4. **Rerun sample.** Pick `rerun_fraction` of the declared seeds uniformly
-   without replacement. Default `rerun_fraction = 0.4`, minimum 1 seed
-   (**TBD: tune per hardware profile**).
+   without replacement. **Decision:** `rerun_fraction = 0.4` uniform across
+   profiles for Phase 1–2, minimum 1 seed. Per-profile tuning is a
+   Phase 3 concern. The sample is seeded deterministically by
+   `(validator_hotkey, epoch, spec_id, version)` so two validators
+   sampling the same submission disagree about which seeds to rerun (and
+   thus cover more ground collectively).
 5. **Rerun.** Execute the sampled seeds in the validator's own sandbox using
    the same runtime image and env.lock. Collect metrics.
 6. **Reconcile.** For each rerun metric, compare to miner-declared metric.

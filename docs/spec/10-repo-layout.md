@@ -8,12 +8,14 @@ description: target directory structure for the full subnet codebase
 ```
 .
 ├── README.md                       # project intro, pointer to spec
-├── LICENSE                         # TBD (MIT or Apache-2.0; see roadmap)
+├── LICENSE                         # AGPL-3.0-or-later
 ├── pyproject.toml                  # single package: hypotheses
 ├── uv.lock                         # pinned deps
+├── .commitlintrc.mjs               # conventional commits, sentence case, ≤72 chars
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml                  # lint, typecheck, tests
+│       ├── commitlint.yml          # conventional commit enforcement
 │       ├── spec-validate.yml       # hypothesis schema validation on PR
 │       └── spec-mirror.yml         # mirror specs to IPFS on merge
 ├── docs/
@@ -124,5 +126,8 @@ sandbox per-run.
   "proposed" to "settled" never requires changing `src/`.
 - **Schema + docs co-located.** The JSON schema for the spec lives under
   `src/hypotheses/spec/schema/` but the human-readable definition lives
-  in `docs/spec/02-hypothesis-format.md`. CI enforces they agree (**TBD:
-  consistency check**).
+  in `docs/spec/02-hypothesis-format.md`. CI enforces they agree via
+  `scripts/check_schema_matches_doc.py`, run in
+  `.github/workflows/spec-validate.yml`. The script parses the `## Spec
+  fields` YAML block from the doc and compares required/optional fields
+  and types against the JSON Schema; divergence fails CI.

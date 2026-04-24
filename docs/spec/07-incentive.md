@@ -99,7 +99,9 @@ Initial governance is a trusted-maintainer list that controls:
 - Runtime image allow-list.
 - Oracle registrations.
 
-**TBD**: transition path from trusted-maintainer to a more decentralised
-governance (e.g. dTAO-style staked voting) after the subnet has > N
-active miners and > M weeks of stable operation. Values to be set before
-mainnet launch.
+**Decision:** transition to decentralised governance is a post-mainnet
+(post-Phase-3) concern and explicitly out of scope for the autonomous
+implementation. The trusted-maintainer model ships to mainnet. A
+dedicated post-mainnet spec PR will propose the transition when the
+subnet has demonstrated stable operation for an extended period; values
+like "≥ N miners, ≥ M weeks" are left for that PR.

@@ -20,8 +20,12 @@ reviewed, and ready to implement against.
 - One worked-example hypothesis (e.g. `H-0001`) lives in `hypotheses/`
   at `status: proposed`, with a populated (but possibly stub)
   `experiments/H-0001/` directory.
-- License chosen and LICENSE file committed. **TBD**: MIT vs Apache-2.0;
-  default Apache-2.0 for the patent grant.
+- License chosen and LICENSE file committed. **Decision:** AGPL-3.0-or-later.
+  Chosen to enforce the "bottom-up, not top-down" ethos from the founding
+  discussion: prevents proprietary SaaS forks of the subnet and ensures
+  network-service derivatives ship source to their users. AGPL retains a
+  patent grant. Adoption friction with corporate compliance regimes is an
+  accepted tradeoff.
 
 **What lands:** docs, template, placeholder experiment. No runnable code.
 
@@ -53,7 +57,8 @@ and ≥2 external validators participating.
 
 **Exit criteria:**
 
-- Testnet subnet registered (netuid TBD).
+- Testnet subnet registered (netuid assigned at registration; record
+  in `docs/adr/` when assigned).
 - `synapses.py` wired up to actual Bittensor axon/dendrite.
 - IPFS mirroring and retrieval working in anger.
 - SN42 oracle adapter implemented and exercised by at least one
@@ -88,5 +93,8 @@ Until a second committer joins, owner of every phase is the repo
 maintainer. After that, each phase gets a tracked issue with a named
 owner and a weekly checkpoint.
 
-**TBD**: branching and release model. Current lean: trunk-based with
-tagged releases per subnet CLI version; no long-lived release branches.
+**Decision:** trunk-based. Phase 0–1 allows direct commits to `main`
+by the maintainer (solo development, speed > ceremony). Phase 2+ is
+PR-based with CI gating and no direct pushes to `main`. Releases are
+annotated tags (`v0.1.0`, `v0.2.0`) per subnet CLI version; no
+long-lived release branches.

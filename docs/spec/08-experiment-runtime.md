@@ -41,9 +41,9 @@ The runtime executes experiment code inside a container with:
 - **Timeouts:** `wallclock cap` enforced by runtime, not by the
   experiment.
 
-**TBD**: container runtime choice. Current lean: `podman` with
-`nvidia-container-toolkit`, fallback to Docker. Firecracker/gVisor
-considered but too niche for a first implementation.
+**Decision:** `podman` 4.x with `nvidia-container-toolkit` for GPU
+passthrough. No Docker. Firecracker/gVisor considered and rejected as
+too niche for Phase 0–3.
 
 ## Determinism
 

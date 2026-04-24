@@ -96,19 +96,25 @@ Two separately content-addressed corpora:
   are responsible for artifact availability until the submission settles
   and is cached by enough validators.
 
-**TBD**: exact IPFS pinning story — whether we run a subnet-operated
-pinning service for critical artifacts (manifests + metrics), or rely on
-miner uptime. Lean: the subnet operates a minimal pinning service for
-manifests only; miners keep bulk artifacts (weights) themselves.
+**Decision:** the subnet operator runs a kubo node that pins all
+manifest CIDs (manifests are small, cap 1 MiB). Bulk artifacts (weights,
+per-seed logs) are pinned only by the submitting miner and by any
+validator that caches them. If a miner's bulk artifact becomes
+unavailable before enough validators have cached it, subsequent
+validators cannot rerun and the submission's reproduction score is
+zero on cycles where the artifact is missing. This is the miner's risk
+to manage.
 
 ## Versioning
 
 - `schema_version` on every synapse payload. Validators reject
   unrecognised versions.
 - Hypothesis format schema version lives in
-  `src/hypotheses/spec/schema/hypothesis.schema.json#version`. Changes to
-  that schema trigger a spec-level upgrade sweep (**TBD: migration
-  policy**).
+  `src/hypotheses/spec/schema/hypothesis.schema.json#version`. **Decision:**
+  no automatic spec migration. A schema-breaking change is a spec PR +
+  CLI release; existing hypotheses stay at their original schema version
+  and are evaluated by the CLI release that matches them. Clients refuse
+  to score specs whose schema version they do not recognise.
 - Miner and validator CLI ship with a semver; minor bumps are
   backwards-compatible over the wire.
 
