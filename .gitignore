@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+*.egg
+dist/
+build/
+develop-eggs/
+eggs/
+parts/
+sdist/
+wheels/
+*.whl
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.hypothesis/
+.tox/
+
+# uv / virtual envs
+.venv/
+venv/
+env/
+
+# Type checkers
+.mypy_cache/
+.pyright/
+.pytype/
+
+# Linters / formatters
+.ruff_cache/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Mutation testing
+.mutmut-cache
+
+# Logs / local scratch
+*.log
+events.jsonl
+/artifacts/
+/work/
