@@ -136,9 +136,13 @@ Landing a PR requires all of these pass — see
 
 ## Setting up a local clone
 
-Hooks live in `.git/hooks/`; install them by copying from a working
-clone. The `pre-commit` hook runs `ruff` on staged Python, and
-`commit-msg` enforces the commit convention + AI-reference block.
+Run `make precommit-install` after cloning to wire the pre-commit
+framework and the `commit-msg` hook. The pre-commit hooks run fast
+local checks (SPDX headers, spec cross-references, HM-REQ tag
+consistency, prompt-injection scan) on staged files; the
+`commit-msg` hook enforces the commit convention + AI-reference
+block. Run `make docs-check` before opening a PR for the full
+documentation-quality sweep that CI runs.
 
 Full dev-setup docs land with Phase 1.
 
