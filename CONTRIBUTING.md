@@ -46,7 +46,10 @@ A good hypothesis is:
 ### 2. Change the spec
 
 The spec is the source of truth. Code that contradicts the spec is a
-bug in the code.
+bug in the code. For the doc-system rules — front-matter schema,
+`kind:` taxonomy, the single-source principle (`HM-REQ-0110`) with
+a worked example, and how to add a new spec doc — see
+[`docs/CONTRIBUTING-DOCS.md`](docs/CONTRIBUTING-DOCS.md).
 
 1. Open a PR under `docs/spec/`.
 2. If the change affects any mechanism that the CI or runtime
