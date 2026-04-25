@@ -1,13 +1,18 @@
+---
+name: 0001 phase zero foundation
+description: license, governance, agent-first mode, conventional commits, TDD enforcement, action SHA pinning
+kind: decision
+status: accepted
+date: 2026-04-24
+deciders: ["@roykollensvendsen"]
+---
+
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
 -->
 
 # 0001 — Phase zero foundation
-
-- **Status:** accepted
-- **Date:** 2026-04-24
-- **Deciders:** @roykollensvendsen
 
 ## Context
 

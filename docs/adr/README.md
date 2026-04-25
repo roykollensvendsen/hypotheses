@@ -1,3 +1,9 @@
+---
+name: ADR index
+description: index and template for architecture decision records under docs/adr/
+kind: reference
+---
+
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
@@ -32,16 +38,24 @@ file. Filename: `NNNN-kebab-case-title.md` where `NNNN` is a
 four-digit sequence number (allocate in PR order — first merged gets
 the next free number).
 
-Required sections:
+YAML front-matter (validated by
+[`scripts/check_frontmatter.py`](../../scripts/check_frontmatter.py))
+carries the structured fields:
 
-- **Status** — `proposed`, `accepted`, `rejected`, `superseded by
-  NNNN`, or `deprecated`.
+- `name`, `description` — short identifier and one-line summary.
+- `kind: decision`.
+- `status` — `proposed` | `accepted` | `superseded` | `deprecated`.
+- `date` — `YYYY-MM-DD`.
+- `deciders` — list of GitHub handles.
+
+Body sections:
+
 - **Context** — what problem or situation prompts the decision.
 - **Decision** — the chosen option in one paragraph.
 - **Consequences** — positive, negative, and neutral. Be honest
   about the downsides.
 
-Optional:
+Optional body sections:
 
 - **Options considered** — if picking between alternatives mattered.
 - **Related ADRs / spec sections** — links.
@@ -52,15 +66,20 @@ Keep each ADR under ~1 page. ADRs are a paper trail, not an essay.
 
 ```markdown
 ---
-SPDX-License-Identifier: AGPL-3.0-or-later
-SPDX-FileCopyrightText: YYYY The hypotheses subnet contributors
+name: NNNN title-in-lower-kebab
+description: one-line summary of the decision
+kind: decision
+status: proposed
+date: YYYY-MM-DD
+deciders: ["@handle"]
 ---
 
-# NNNN — Title
+<!--
+SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-FileCopyrightText: YYYY The hypotheses subnet contributors
+-->
 
-- **Status:** proposed | accepted | rejected | superseded by NNNN | deprecated
-- **Date:** YYYY-MM-DD
-- **Deciders:** @handle(s)
+# NNNN — Title
 
 ## Context
 

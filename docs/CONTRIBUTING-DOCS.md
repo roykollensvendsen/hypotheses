@@ -24,7 +24,7 @@ entry point see [`AGENTS.md`](../AGENTS.md).
 | `docs/spec/README.md`, `docs/spec/formal/README.md` | spec-tree indexes | required |
 | `docs/spec/antipatterns/ap-*.md` | "do NOT do this" corpus | line 1 must be `<!-- antipattern-content -->` |
 | `docs/spec/_schemas/*.json` | JSON Schemas the front-matter validator loads | not markdown |
-| `docs/adr/NNNN-*.md` | architecture decision records | not yet validated; future PR adds `kind: decision` |
+| `docs/adr/NNNN-*.md`, `docs/adr/README.md` | architecture decision records and index | required (`kind: decision` for individual ADRs, `kind: reference` for the README) |
 | `docs/CONTRIBUTING-DOCS.md` (this file), `docs/implementation-handoff.md`, `docs/initial-discord-conversation.md` | narrative docs outside the spec tree | none |
 | `hypotheses/H-NNNN-*.md` | preregistered hypothesis specs | validated by `validate_hypotheses.py` |
 | `agents/prompts/*-system.md` | role prompts, model-neutral | validated by `check_agent_prompts.py` |
@@ -72,9 +72,13 @@ match how this project actually writes docs:
   [`invariants`](spec/invariants.md), the spec
   [`README`](spec/README.md). Descriptive, look-up-shaped.
 
-Two further kinds are reserved for future use but not yet emitted:
+- `decision` — ADRs (`docs/adr/NNNN-*.md`). Validated by the
+  ADR front-matter schema
+  (`docs/spec/_schemas/adr-frontmatter.schema.json`) which adds
+  the `status` / `date` / `deciders` fields.
 
-- `decision` — for ADRs once they grow YAML front-matter.
+One further kind is reserved for future use but not yet emitted:
+
 - `hypothesis` — for `hypotheses/H-*.md` once their schema
   acquires a `kind:` field.
 
@@ -196,7 +200,6 @@ Open improvements that are spec'd but not yet implemented:
 
 - **Antipattern `protects:` tags** — each `ap-*.md` should declare
   which `HM-REQ`/`HM-INV` it protects. Editorial work.
-- **ADR `kind:` field** — ADRs need YAML front-matter introduced.
 - **Hypothesis `kind:` field** — `hypothesis.schema.json` needs to
   allow/require `kind: hypothesis`.
 - **Docs-impact PR comment bot** — `scripts/docs_impact_comment.py`
