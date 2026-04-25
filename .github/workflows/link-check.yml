@@ -5,11 +5,15 @@ on:
     paths:
       - 'docs/**'
       - '**.md'
+      - 'lychee.toml'
+      - '.github/workflows/link-check.yml'
   push:
     branches: [main]
     paths:
       - 'docs/**'
       - '**.md'
+      - 'lychee.toml'
+      - '.github/workflows/link-check.yml'
   schedule:
     - cron: "0 6 * * 1"   # Monday 06:00 UTC
   workflow_dispatch:
