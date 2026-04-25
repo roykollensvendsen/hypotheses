@@ -4,6 +4,7 @@ description: miner responsibilities, CLI, synapse interfaces, artifact contract
 tokens: 900
 load_for: [implementation, agent-operator, review]
 depends_on: [02, 03, 09]
+kind: contract
 ---
 
 # 04 — Miner

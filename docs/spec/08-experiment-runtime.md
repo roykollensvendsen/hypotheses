@@ -4,6 +4,7 @@ description: sandbox, determinism, resource limits, hardware profiles
 tokens: 900
 load_for: [implementation, agent-operator, review]
 depends_on: [02, 03]
+kind: contract
 ---
 
 # 08 — Experiment Runtime

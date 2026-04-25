@@ -4,6 +4,7 @@ description: catalogue of HM-INV properties the implementation must preserve
 tokens: 600
 load_for: [implementation, review]
 depends_on: []
+kind: reference
 ---
 
 # Invariants index

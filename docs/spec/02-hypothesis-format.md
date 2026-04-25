@@ -4,6 +4,7 @@ description: preregistration-style schema for hypothesis specs stored in hypothe
 tokens: 1000
 load_for: [implementation, proposal, review]
 depends_on: [01]
+kind: contract
 ---
 
 # 02 — Hypothesis format

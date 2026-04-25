@@ -4,6 +4,7 @@ description: agent-first operating mode — mcp server, typed sdk, and starter a
 tokens: 1800
 load_for: [implementation, agent-operator, review]
 depends_on: [04, 05, 14]
+kind: contract
 ---
 
 # 13 — Agent integration

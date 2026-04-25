@@ -4,6 +4,7 @@ description: contract for the coalition-level attack simulator that must catch e
 tokens: 2000
 load_for: [implementation, review, governance]
 depends_on: [16, 12]
+kind: contract
 ---
 
 # 21 — Adversarial simulator

@@ -4,6 +4,7 @@ description: on-chain synapses, storage contract, versioning
 tokens: 800
 load_for: [implementation, agent-operator, review]
 depends_on: [03, 04, 05]
+kind: contract
 ---
 
 # 09 — Protocol
