@@ -54,7 +54,7 @@ CHECKS: tuple[Check, ...] = (
     Check("prompt-injection", ["python3", "scripts/check_prompt_injection.py"]),
     Check("spdx-headers", ["python3", "scripts/check_spdx_headers.py"]),
     Check("links", ["lychee", "--no-progress", "."], optional=True),
-    Check("vale", ["vale", "docs/spec/", "VISION.md"], optional=True),
+    Check("vale", ["python3", "scripts/check_vale_baseline.py"], optional=True),
     Check("typos", ["typos"], optional=True),
     Check(
         "markdownlint",

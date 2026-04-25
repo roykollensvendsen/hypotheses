@@ -1,4 +1,4 @@
-name: Vale ambiguity linter
+name: Vale prose lint (ratcheted)
 
 on:
   pull_request:
@@ -7,6 +7,7 @@ on:
       - 'VISION.md'
       - '.vale.ini'
       - '.vale/**'
+      - 'scripts/check_vale_baseline.py'
       - '.github/workflows/vale.yml'
   push:
     branches: [main]
@@ -22,12 +23,7 @@ concurrency:
 jobs:
   vale:
     runs-on: ubuntu-latest
-    name: Vale (warning-only)
-    # Warning-only posture: the job always reports success so PRs are not
-    # blocked while the spec's pre-existing weasel-words are worked down.
-    # Promote to error after a cleanup PR lowers the count below an agreed
-    # threshold. See docs/spec/15-ci-cd.md for the promotion trigger.
-    continue-on-error: true
+    name: Vale + baseline ratchet
     steps:
       - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
         with:
@@ -36,16 +32,19 @@ jobs:
       - name: Skip if config absent
         id: guard
         run: |
-          if [ ! -f .vale.ini ]; then
-            echo ".vale.ini absent; no-op"
+          if [ ! -f .vale.ini ] || [ ! -f .vale/baseline.json ]; then
+            echo "vale config or baseline absent; no-op"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Run Vale
+      - name: Install Vale
         if: steps.guard.outputs.skip == 'false'
-        uses: errata-ai/vale-action@d89dee975228ae261d22c15adcd03578634d429c  # v2.1.1
-        with:
-          files: 'docs/spec/ VISION.md'
-          fail_on_error: false
-          reporter: github-pr-check
+        run: |
+          VALE_VERSION=3.13.0
+          curl -sSL "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
+            | sudo tar -xz -C /usr/local/bin vale
+          vale --version
+      - name: Run ratcheted Vale check
+        if: steps.guard.outputs.skip == 'false'
+        run: python3 scripts/check_vale_baseline.py

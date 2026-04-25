@@ -1,0 +1,96 @@
+{
+  "VISION.md": {
+    "AgentSpec.Quantifierless": 1,
+    "AgentSpec.WeaselWords": 2
+  },
+  "docs/spec/00-overview.md": {
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/00.5-foundations.md": {
+    "AgentSpec.Hedging": 1,
+    "AgentSpec.Quantifierless": 3,
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/01-glossary.md": {
+    "AgentSpec.Quantifierless": 1,
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/02-hypothesis-format.md": {
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/03-architecture.md": {
+    "AgentSpec.Quantifierless": 1,
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/05-validator.md": {
+    "AgentSpec.Hedging": 1,
+    "AgentSpec.Quantifierless": 1,
+    "AgentSpec.WeaselWords": 4
+  },
+  "docs/spec/06-scoring.md": {
+    "AgentSpec.Quantifierless": 1
+  },
+  "docs/spec/07-incentive.md": {
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/08-experiment-runtime.md": {
+    "AgentSpec.Quantifierless": 1,
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/09-protocol.md": {
+    "AgentSpec.Quantifierless": 2,
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/10-repo-layout.md": {
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/12-implementation-constraints.md": {
+    "AgentSpec.Hedging": 1,
+    "AgentSpec.Quantifierless": 4,
+    "AgentSpec.WeaselWords": 2
+  },
+  "docs/spec/13-agent-integration.md": {
+    "AgentSpec.Quantifierless": 1
+  },
+  "docs/spec/14-cli.md": {
+    "AgentSpec.WeaselWords": 2
+  },
+  "docs/spec/15-ci-cd.md": {
+    "AgentSpec.WeaselWords": 2
+  },
+  "docs/spec/16-threat-model.md": {
+    "AgentSpec.Quantifierless": 10,
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/17-hypothesis-lifecycle.md": {
+    "AgentSpec.Quantifierless": 1,
+    "AgentSpec.WeaselWords": 7
+  },
+  "docs/spec/18-oracle.md": {
+    "AgentSpec.Quantifierless": 6,
+    "AgentSpec.WeaselWords": 4
+  },
+  "docs/spec/19-operations.md": {
+    "AgentSpec.Quantifierless": 4,
+    "AgentSpec.WeaselWords": 10
+  },
+  "docs/spec/20-economic-model.md": {
+    "AgentSpec.Hedging": 1,
+    "AgentSpec.Quantifierless": 6,
+    "AgentSpec.WeaselWords": 6
+  },
+  "docs/spec/21-adversarial-simulator.md": {
+    "AgentSpec.Quantifierless": 2,
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/22-security-bounty.md": {
+    "AgentSpec.Quantifierless": 3,
+    "AgentSpec.WeaselWords": 1
+  },
+  "docs/spec/README.md": {
+    "AgentSpec.Quantifierless": 1
+  },
+  "docs/spec/invariants.md": {
+    "AgentSpec.WeaselWords": 1
+  }
+}
