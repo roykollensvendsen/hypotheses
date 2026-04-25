@@ -58,6 +58,10 @@ Read in order:
 23. [21 — Adversarial simulator](21-adversarial-simulator.md) —
     contract for the coalition-level attack simulator that catches
     every threat in 16 (Phase 2+ implementation; Phase 0 contract)
+24. [22 — Security bounty](22-security-bounty.md) — white-hat
+    program; vulnerability disclosures are first-class hypotheses
+    on the registry; HM-REQ-0100 embargo gate; F1 and F6 are the
+    canonical targets
 
 Cross-cutting references:
 
