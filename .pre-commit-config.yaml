@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
+#
+# Pre-commit hooks for the hypotheses repo.
+#
+# Install: `make precommit-install` (requires `pip install pre-commit` or
+# `pipx install pre-commit`). Hooks run locally before each commit; the
+# CI workflows are the authoritative gate.
+#
+# Hooks land incrementally as the documentation-quality sprint
+# progresses; see docs/CONTRIBUTING-DOCS.md for the full layout.
+
+repos:
+  - repo: local
+    hooks:
+      - id: spdx-headers
+        name: SPDX headers
+        entry: python3 scripts/check_spdx_headers.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: spec-consistency
+        name: Spec cross-reference consistency
+        entry: python3 scripts/check_spec_consistency.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+        files: '\.md$'
+
+      - id: requirements
+        name: HM-REQ tag consistency
+        entry: python3 scripts/check_requirements.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+        files: '\.md$'
+
+      - id: prompt-injection
+        name: Spec prompt-injection scan
+        entry: python3 scripts/check_prompt_injection.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+        files: '\.md$'
