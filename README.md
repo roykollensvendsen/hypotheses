@@ -44,7 +44,7 @@ template) are in the navigation table below.
 | understand the *foundations* (threats / defences / assumptions / what we give up) | [`docs/spec/00.5-foundations.md`](docs/spec/00.5-foundations.md) |
 | read the full spec | [`docs/spec/`](docs/spec/README.md) |
 | draft a hypothesis | [`hypotheses/HYPOTHESIS_TEMPLATE.md`](hypotheses/HYPOTHESIS_TEMPLATE.md) |
-| see example hypotheses | [`hypotheses/`](hypotheses/) — H-0001 (connectivity-first fixture), H-0002 (oracle-backed), H-0003 (refutation pathway), H-0004/H-0005/H-0006 (depends_on family) |
+| see example hypotheses | [`hypotheses/`](hypotheses/) — [H-0001](hypotheses/H-0001-connectivity-first-training.md) (connectivity-first fixture), [H-0002](hypotheses/H-0002-oracle-verified-distillation.md) (oracle-backed), [H-0003](hypotheses/H-0003-sgd-matches-adam-on-mlp.md) (refutation pathway), [H-0004](hypotheses/H-0004-snip-vs-edge-decay.md) / [H-0005](hypotheses/H-0005-l1-vs-edge-decay.md) / [H-0006](hypotheses/H-0006-rigl-vs-edge-decay.md) (depends_on family) |
 | recognise antipatterns | [`docs/spec/antipatterns/`](docs/spec/antipatterns/) |
 | trace a normative requirement | [`docs/spec/requirements.md`](docs/spec/requirements.md) (HM-REQ index) |
 | trace a property invariant | [`docs/spec/invariants.md`](docs/spec/invariants.md) (HM-INV index) |
