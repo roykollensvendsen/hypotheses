@@ -122,6 +122,12 @@ Token estimates come from the `tokens:` front matter and are rough
 always follow `depends_on:` chains when the load above doesn't
 cover a concept you need.
 
+For the *reverse* mapping — every `load_for:` tag and the docs that
+declare it, with per-tag token totals — see
+[`docs/spec/load-for-index.md`](docs/spec/load-for-index.md). That
+file is generated from the per-doc front-matter and is
+snapshot-checked in CI.
+
 The routing map is referenced from
 [`docs/implementation-handoff.md`](docs/implementation-handoff.md)
 so the Phase 1 implementing agent can budget context per task
