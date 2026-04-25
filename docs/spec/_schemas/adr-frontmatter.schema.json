@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roykollensvendsen/hypotheses/docs/spec/_schemas/adr-frontmatter.schema.json",
+  "title": "ADR doc front-matter",
+  "description": "YAML front matter for files under docs/adr/. NNNN-*.md files are decisions (kind: decision); the directory README is a reference index (kind: reference). Validated by scripts/check_frontmatter.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "description", "kind"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "enum": ["decision", "reference"]
+    },
+    "status": {
+      "enum": ["proposed", "accepted", "superseded", "deprecated"],
+      "description": "Decision lifecycle state. Required when kind: decision."
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Date the decision was accepted (ISO 8601). Required when kind: decision."
+    },
+    "deciders": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "description": "GitHub handles of the deciders. Required when kind: decision."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": { "const": "decision" }
+        },
+        "required": ["kind"]
+      },
+      "then": {
+        "required": ["status", "date", "deciders"]
+      }
+    }
+  ]
+}

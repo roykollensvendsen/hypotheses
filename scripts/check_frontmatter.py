@@ -44,6 +44,7 @@ Exit codes:
 
 from __future__ import annotations
 
+import datetime as dt
 import json
 import re
 import sys
@@ -53,17 +54,21 @@ from typing import Any
 import yaml
 from jsonschema import Draft202012Validator
 
-SCHEMA_PATH = Path("docs/spec/_schemas/spec-frontmatter.schema.json")
+SPEC_SCHEMA_PATH = Path("docs/spec/_schemas/spec-frontmatter.schema.json")
+ADR_SCHEMA_PATH = Path("docs/spec/_schemas/adr-frontmatter.schema.json")
 FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---", re.DOTALL)
 
-SCAN_GLOBS: tuple[str, ...] = (
-    "docs/spec/*.md",
-    "docs/spec/formal/*.md",
+# (glob, schema_path) pairs; first match wins. Order matters when a
+# file would match more than one glob.
+SCAN_RULES: tuple[tuple[str, Path], ...] = (
+    ("docs/spec/*.md", SPEC_SCHEMA_PATH),
+    ("docs/spec/formal/*.md", SPEC_SCHEMA_PATH),
+    ("docs/adr/*.md", ADR_SCHEMA_PATH),
 )
 
-# Files matching these names are not part of the spec-frontmatter
-# system. Antipatterns carry their own line-1 marker; ADR/_schema
-# directories live alongside the spec but do not host prose.
+# Files matching these path parts are not part of the front-matter
+# system. Antipatterns carry their own line-1 marker; _schemas hosts
+# JSON Schema files, not prose.
 EXCLUDE_DIRS: frozenset[str] = frozenset(
     {
         "antipatterns",
@@ -72,17 +77,18 @@ EXCLUDE_DIRS: frozenset[str] = frozenset(
 )
 
 
-def iter_files() -> list[Path]:
+def iter_files() -> list[tuple[Path, Path]]:
+    """Yield (path, schema_path) for every file under the scan rules."""
     seen: set[Path] = set()
-    out: list[Path] = []
-    for glob in SCAN_GLOBS:
+    out: list[tuple[Path, Path]] = []
+    for glob, schema in SCAN_RULES:
         for path in sorted(Path().glob(glob)):
             if any(part in EXCLUDE_DIRS for part in path.parts):
                 continue
             if path in seen:
                 continue
             seen.add(path)
-            out.append(path)
+            out.append((path, schema))
     return out
 
 
@@ -121,6 +127,10 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, Any] | None, str]:
         return None, f"front-matter must be a mapping, got {type(data).__name__}"
     if isinstance(data.get("depends_on"), list):
         data["depends_on"] = [normalize_depends_on(v) for v in data["depends_on"]]
+    # YAML parses ISO-8601 dates into datetime.date; the schemas
+    # require ISO strings, so coerce here.
+    if isinstance(data.get("date"), (dt.date, dt.datetime)):
+        data["date"] = data["date"].isoformat()
     return data, ""
 
 
@@ -131,31 +141,36 @@ def resolve_depends_on(value: str) -> Path | None:
 
 
 def main() -> int:
-    if not SCHEMA_PATH.exists():
-        print(f"error: schema not found at {SCHEMA_PATH}", file=sys.stderr)
-        return 2
-    schema = json.loads(SCHEMA_PATH.read_text())
-    validator = Draft202012Validator(schema)
+    validators: dict[Path, Draft202012Validator] = {}
+    for _, schema_path in SCAN_RULES:
+        if schema_path in validators:
+            continue
+        if not schema_path.exists():
+            print(f"error: schema not found at {schema_path}", file=sys.stderr)
+            return 2
+        validators[schema_path] = Draft202012Validator(
+            json.loads(schema_path.read_text())
+        )
 
     files = iter_files()
     if not files:
-        print("error: no spec files matched scan globs", file=sys.stderr)
+        print("error: no files matched scan globs", file=sys.stderr)
         return 2
 
     errors: list[str] = []
 
-    for path in files:
+    for path, schema_path in files:
         data, parse_err = parse_frontmatter(path)
         if data is None:
             errors.append(f"{path}: {parse_err}")
             continue
+        validator = validators[schema_path]
         schema_errors = sorted(validator.iter_errors(data), key=lambda e: e.path)
         for err in schema_errors:
             location = "/".join(str(p) for p in err.path) or "<root>"
             errors.append(f"{path}: schema: {location}: {err.message}")
         for dep in data.get("depends_on", []):
             if not isinstance(dep, str):
-                # Schema error already raised above.
                 continue
             if resolve_depends_on(dep) is None:
                 errors.append(
