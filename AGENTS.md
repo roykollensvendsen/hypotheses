@@ -108,7 +108,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 |------|---------------------------|-------|
 | **Implement a scoring component** (e.g. composite, rigor) | 06 (~1500) + 18 (~2300) + invariants (~600) + antipatterns/ap-0002 | ≈ 4800 |
 | **Implement errors.py** (T-P1-002) | 12 (~3400) + 16 (~3800) | ≈ 7200 |
-| **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~500) | ≈ 4700 |
+| **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~1000) | ≈ 5200 |
 | **Implement the validator pipeline** (T-P1-015) | 05 (~1400) + 06 (~1500) + 16 (~3800) + 18 (~2300) | ≈ 9000 |
 | **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
 | **Review a validator-side PR** | 05 (~1400) + 06 (~1500) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8200 |

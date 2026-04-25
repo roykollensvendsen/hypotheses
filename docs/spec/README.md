@@ -2,7 +2,7 @@
 name: spec index
 description: entry point for the full subnet specification
 kind: reference
-tokens: 200
+tokens: 700
 load_for: [agent-operator, governance, implementation, proposal, review]
 depends_on: []
 ---

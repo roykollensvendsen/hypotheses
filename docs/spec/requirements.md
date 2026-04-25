@@ -1,7 +1,7 @@
 ---
 name: requirements index
 description: catalogue of normative HM-REQ statements and the spec section that defines each
-tokens: 500
+tokens: 1000
 load_for: [implementation, review]
 depends_on: []
 kind: reference
