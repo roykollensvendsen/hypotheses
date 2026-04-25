@@ -12,7 +12,7 @@ depends_on: [01]
 
 One hypothesis per file under `hypotheses/`:
 
-```
+```text
 hypotheses/H-0001-connectivity-first-training.md
 hypotheses/H-0002-gradient-decay-edge-pruning.md
 ```

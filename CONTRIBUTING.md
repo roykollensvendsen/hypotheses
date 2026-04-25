@@ -36,8 +36,8 @@ A good hypothesis is:
 
 - **Falsifiable** — someone running your protocol could make the
   claim fail.
-- **Relational** — "better than <declared baseline>" or "equivalent
-  to <declared baseline>", not an absolute accuracy number.
+- **Relational** — "better than `<declared baseline>`" or "equivalent
+  to `<declared baseline>`", not an absolute accuracy number.
 - **Runnable on `cpu-small`** for your first one — save the big
   hypotheses for after you've settled a small one.
 - **Not a paper-mill restatement** — if the answer is already in the

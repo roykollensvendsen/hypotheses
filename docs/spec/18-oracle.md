@@ -24,7 +24,7 @@ validator or scoring logic.
 
 An oracle turns a pair `(task_ref, declared_answer)` into a verdict:
 
-```
+```text
 query(task_ref, declared_answer, tolerance) -> OracleVerdict
 ```
 
@@ -297,7 +297,7 @@ before the Phase 2 exit; the Phase 1 exit does NOT require it.
 From [06 § oracles](06-scoring.md#oracles), the scoring pipeline's
 oracle step is a **hard gate**:
 
-```
+```python
 if oracle.subnet is set:
     verdict = adapter.query(task_ref, declared_answer, tolerance)
     if not verdict.final:
@@ -323,8 +323,8 @@ pointers:
   around this; the oracle answer is the ground truth.
 - **T-061 — oracle disagrees with itself across cycles.** Mitigated
   by the consistency requirement (N consecutive matching verdicts)
-  + operator-layer alerting on persistent disagreement. The former
-  defers attribution; the latter surfaces the spec bug.
+  plus operator-layer alerting on persistent disagreement. The
+  former defers attribution; the latter surfaces the spec bug.
 - **T-062 — oracle subnet outage.** Fail-fast: submission stays
   `pending`; no degraded scoring. Aligns with
   [12 § fail-fast](12-implementation-constraints.md#fail-fast-policy).

@@ -25,7 +25,7 @@ allocate their own compute.
 Miner operations are surfaced through the unified `hypo` command (see
 [14](14-cli.md)):
 
-```
+```bash
 hypo register miner        # register hotkey on the subnet
 hypo propose <path>        # validate and scaffold a hypothesis spec
 hypo run <id>              # run an accepted hypothesis locally
@@ -59,7 +59,7 @@ impossible and a dishonest submission is penalised.
 An artifact bundle is a directory that hashes to a single CID. Required
 layout:
 
-```
+```text
 run.manifest.json          # top-level manifest (signed)
 spec.md                    # exact copy of the spec at submission time
 spec.cid                   # CID of spec.md

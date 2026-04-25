@@ -15,7 +15,7 @@ Executable fixture for the `H-0001` hypothesis (see
 Not runnable until the `hypotheses` runtime package is implemented.
 Invocation contract (from Phase 1 onward):
 
-```
+```bash
 hypo run H-0001 --seed 0
 ```
 

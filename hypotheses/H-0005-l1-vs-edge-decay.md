@@ -131,7 +131,7 @@ in `model.yaml`):
   at the threshold; the threshold is sweep-tuned per seed during
   development, not at scoring time.
 - **`edge_decay` condition**: identical to H-0001's fully-connected
-  + gradient-decay condition.
+  plus gradient-decay condition.
 
 FLOPs accounting per `08-experiment-runtime.md`: for the
 `l1_then_mask` condition, all edges are active during training (the

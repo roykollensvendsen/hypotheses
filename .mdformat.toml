@@ -1,0 +1,14 @@
+# mdformat configuration.
+#
+# `wrap = "keep"` is load-bearing: spec docs are hand-wrapped with
+# semantic line breaks; reflow would destroy that signal.
+# `number = true` keeps consecutive numbering on ordered lists; the
+# spec README's index relies on that.
+#
+# Plugins: mdformat-gfm (GFM tables in AGENTS.md, README.md),
+# mdformat-frontmatter (preserves YAML blocks unchanged so the
+# token/load_for/depends_on metadata is not reflowed),
+# mdformat-footnote.
+wrap = "keep"
+number = true
+end_of_line = "lf"

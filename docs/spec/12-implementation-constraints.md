@@ -163,7 +163,7 @@ has one place to update."
 Every tracked `.py` and `.sh` file under `src/`, `scripts/`, `tests/`,
 and `experiments/` MUST carry both markers within the first 10 lines:
 
-```
+```text
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: <year> <holder>
 ```
@@ -393,73 +393,87 @@ A module is done when:
 Module-specific acceptance:
 
 ### `errors.py`
+
 - One exception class per row of the fail-fast table.
 - All inherit from a single `HypothesisError`.
 - Each accepts `**details` and exposes `.details` dict.
 
 ### `spec/`
+
 - Parses `hypotheses/*.md` via front-matter + body split.
 - JSON Schema at `src/hypotheses/spec/schema/hypothesis.schema.json`.
 - Round-trip: parse → serialise → parse equal.
 - Tests: `H-0001` pass + ≥ 5 malformed fixtures fail correctly.
 
 ### `protocol/signing.py`
+
 - Canonical JSON via `rfc8785`.
 - Ed25519 sign/verify via `cryptography`.
 - Known-answer test vectors.
 
 ### `protocol/synapses.py`
+
 - One pydantic model per synapse in 09-protocol.
 - Unknown `schema_version` raises `UnsupportedSchema`.
 
 ### `storage/`
+
 - Interface: `put(bytes) -> cid`, `get(cid) -> bytes`, `has(cid) -> bool`.
 - Local cache: SHA-256 CIDv1 ∷ `sha2-256`.
 - IPFS: use kubo HTTP API; CID is whatever kubo returns.
 - Tests: missing cid, corrupt cid, over-cap size.
 
 ### `runtime/metrics.py`
+
 - `metrics.report(name, value)` appends one JSONL line to
   `/artifacts/metrics.jsonl`.
 - Summariser returns median + n per metric.
 
 ### `runtime/data/`
+
 - Hugging Face adapter only in Phase 1.
 - Hash-pinned by `dataset_revision`, cache keyed by hash.
 - Tests use a tiny fixture dataset, not CIFAR-10.
 
 ### `runtime/sandbox/`
+
 - podman invocation with: egress allow-list, wallclock timeout,
   memory cap, readonly code layer, writable `/artifacts`.
 - Tests: happy path, wallclock-kill, egress-kill.
 
 ### `runtime/run.py`
+
 - `Run.from_env().execute(main)` emits a manifest per 04-miner.
 - Determinism: two runs with same seed produce byte-identical
   `metrics.jsonl`.
 
 ### `scoring/stats/`
+
 - `welch_t`, `bootstrap` (BCa, 10k resamples), `mann_whitney`.
 - Compared against `scipy.stats` reference outputs within tolerance.
 
 ### `scoring/`
+
 - Each component a pure function matching 06-scoring signatures.
 - `composite.score()` returns a `ScoreVector` dataclass.
 - Tests include the worked example (composite = 0.992 ± 0.001).
 
 ### `miner/`
+
 - `propose` runs schema validation + dry-run entrypoint on
   `cpu-small`.
 - `run` emits artifact bundle matching 04-miner exactly.
 - `submit` signs and uploads, returns announcement.
 
 ### `validator/`
+
 - Pipeline processes a submission against `H-0001` end-to-end.
 - Rerun sample deterministic in
   `(validator_hotkey, epoch, spec_id, version)`.
 - Weight vector sums to 1 (± float eps).
 
 ### `cli/`
+
 - Single `hypo` entry point per [14](14-cli.md). Subcommands match
   04-miner, 05-validator, and 13-agent-integration exactly.
 - CLI is a thin dispatcher; no business logic here.
@@ -472,6 +486,7 @@ Module-specific acceptance:
   surface discoverability) and with a happy-path invocation.
 
 ### `client/`
+
 - Public typed SDK per 13-agent-integration.
 - `Client` (sync) and `AsyncClient` mirror each other method-for-method.
 - Models in `client/models.py` are the single source of truth for the
@@ -479,6 +494,7 @@ Module-specific acceptance:
 - Tests: a fake backend exercising every public method.
 
 ### `mcp/`
+
 - Implements the tool surface in 13-agent-integration.
 - Read-only tools in Phase 1; write tools behind `--allow-writes` in
   Phase 2.
@@ -488,6 +504,7 @@ Module-specific acceptance:
   write gating enforced in tests.
 
 ### `oracle/`
+
 - Base class: `query(task_ref, declared_answer) -> OracleVerdict`.
 - `sn42` stub raises `NotImplementedError` in Phase 1; real adapter
   before Phase 2 exit.
@@ -543,7 +560,7 @@ No `[skip ci]` shortcuts, no bypassing hooks.
 
 Format (enforced by both the local hook and the CI workflow):
 
-```
+```text
 <type>[(scope)]: <subject>
 ```
 

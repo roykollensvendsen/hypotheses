@@ -31,7 +31,7 @@ Why one command (when humans do use it):
 Commands are `hypo <verb> [object] [args]`. Verbs are the primary axis;
 nouns cluster under verbs where it helps.
 
-```
+```bash
 hypo                                # welcome screen (tty) / help (non-tty)
 hypo help [topic]                   # long-form help per topic
 hypo version

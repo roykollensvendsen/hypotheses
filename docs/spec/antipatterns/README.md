@@ -13,7 +13,7 @@ a test incidentally passes.
 
 Every file in this directory opens with the comment
 
-```
+```markdown
 <!-- antipattern-content -->
 ```
 

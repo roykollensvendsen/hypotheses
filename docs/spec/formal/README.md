@@ -42,7 +42,7 @@ Not worthwhile for:
 Quint is optional tooling. A sketch of the CLI flow once the
 container image is stable:
 
-```
+```bash
 docker run --rm -v $PWD:/w informalsystems/quint:latest \
   typecheck /w/docs/spec/formal/lifecycle.qnt
 docker run --rm -v $PWD:/w informalsystems/quint:latest \

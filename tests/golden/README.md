@@ -18,7 +18,7 @@ by ad-hoc mutation of the fixture.
 
 ## Layout
 
-```
+```text
 tests/golden/
 ├── scoring/
 │   ├── worked-example.json

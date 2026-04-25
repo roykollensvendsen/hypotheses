@@ -24,7 +24,7 @@ pipeline can evaluate both success and falsification criteria.
 
 Not runnable until Phase 1. When the runtime exists:
 
-```
+```bash
 hypo run H-0003 --seeds all
 ```
 

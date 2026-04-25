@@ -71,7 +71,7 @@ behaviour are made in `src/hypotheses/miner/` or
 
 ### Invocation
 
-```
+```bash
 hypo mcp serve [--hotkey NAME] [--allow-writes] [--transport stdio|http]
 ```
 
@@ -204,7 +204,7 @@ for hyp in client.list_hypotheses(status="accepted"):
 
 The repo ships a small set of starter agents under `agents/`:
 
-```
+```text
 agents/
 ├── README.md                       # overview, model choices, safety notes
 ├── prompts/

@@ -8,7 +8,7 @@ depends_on: [12]
 
 # 10 — Repo layout
 
-```
+```text
 .
 ├── README.md                       # project intro, pointer to VISION/spec
 ├── VISION.md                       # canonical vision + mission
