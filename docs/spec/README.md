@@ -55,6 +55,9 @@ Read in order:
     alerts, runbooks, disaster recovery
 22. [20 — Economic model](20-economic-model.md) — emission flow,
     parameter inventory, stake, Sybil cost, governance
+23. [21 — Adversarial simulator](21-adversarial-simulator.md) —
+    contract for the coalition-level attack simulator that catches
+    every threat in 16 (Phase 2+ implementation; Phase 0 contract)
 
 Cross-cutting references:
 

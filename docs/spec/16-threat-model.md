@@ -101,6 +101,13 @@ threat framing:
 Threat IDs are stable (`T-NNN`). New threats get the next free
 number; resolved threats keep their ID with `status: mitigated`.
 
+Per [HM-REQ-0090](21-adversarial-simulator.md), every row below
+must have at least one fixture under
+[`tests/golden/adversarial/`](../../tests/golden/adversarial/) by
+end of Phase 2; the column is implicit until the simulator lands.
+A `simulator_fixture` column will be added to these tables in the
+PR that ships the simulator.
+
 ### A. Economic attacks — dishonest rewards
 
 | id | threat | mitigation | spec section | status |
