@@ -1,18 +1,18 @@
 name: Zizmor (workflow security lint)
 
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/**'
-      - '.github/actions/**'
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/**'
-      - '.github/actions/**'
   schedule:
     - cron: "0 7 * * 1"   # Monday 07:00 UTC
   workflow_dispatch:
+
+# Per-PR / per-push triggers were dropped because zizmor's
+# `known-vulnerable-actions` audit queries the GitHub Advisories
+# API once per action SHA. With the project's many SHA-pinned
+# actions, a busy day collectively exhausts the 1,000 req/hr
+# Actions installation quota and unrelated PR jobs start
+# 403-ing. The weekly run is sufficient for advisory drift,
+# and `action-pin-check.yml` already enforces SHA pinning on
+# every PR independently.
 
 permissions:
   contents: read
@@ -20,7 +20,7 @@ permissions:
 
 concurrency:
   group: zizmor-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: false
 
 jobs:
   zizmor:
