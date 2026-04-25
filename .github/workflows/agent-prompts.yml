@@ -1,0 +1,39 @@
+name: Agent role-prompt audit
+
+on:
+  pull_request:
+    paths:
+      - 'agents/prompts/**'
+      - 'scripts/check_agent_prompts.py'
+      - '.github/workflows/agent-prompts.yml'
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-prompts-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: prompt length and model neutrality
+    steps:
+      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Skip if checker absent
+        id: guard
+        run: |
+          if [ ! -f scripts/check_agent_prompts.py ]; then
+            echo "checker not present; no-op"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Run prompt audit
+        if: steps.guard.outputs.skip == 'false'
+        run: python3 scripts/check_agent_prompts.py
