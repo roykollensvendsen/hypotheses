@@ -23,34 +23,37 @@ implementation, see
 Read in order:
 
 1. [00 — Overview](00-overview.md) — operational mechanics (vision is in /VISION.md)
-2. [01 — Glossary](01-glossary.md) — terms used throughout
-3. [02 — Hypothesis format](02-hypothesis-format.md) — the preregistration schema
-4. [03 — Architecture](03-architecture.md) — components, data flow, trust model
-5. [04 — Miner](04-miner.md) — miner responsibilities and interfaces
-6. [05 — Validator](05-validator.md) — validator pipeline
-7. [06 — Scoring](06-scoring.md) — rubric, baselines, oracles
-8. [07 — Incentive](07-incentive.md) — weight setting, anti-gaming
-9. [08 — Experiment runtime](08-experiment-runtime.md) — sandbox, reproducibility
-10. [09 — Protocol](09-protocol.md) — wire format, synapses, versioning
-11. [10 — Repo layout](10-repo-layout.md) — target code structure
-12. [11 — Roadmap](11-roadmap.md) — phased plan to ship
-13. [12 — Implementation constraints](12-implementation-constraints.md) —
+2. [00.5 — Foundations](00.5-foundations.md) — adversarial-first
+   threats / defences / assumptions / what we give up; the *why*
+   behind every other doc
+3. [01 — Glossary](01-glossary.md) — terms used throughout
+4. [02 — Hypothesis format](02-hypothesis-format.md) — the preregistration schema
+5. [03 — Architecture](03-architecture.md) — components, data flow, trust model
+6. [04 — Miner](04-miner.md) — miner responsibilities and interfaces
+7. [05 — Validator](05-validator.md) — validator pipeline
+8. [06 — Scoring](06-scoring.md) — rubric, baselines, oracles
+9. [07 — Incentive](07-incentive.md) — weight setting, anti-gaming
+10. [08 — Experiment runtime](08-experiment-runtime.md) — sandbox, reproducibility
+11. [09 — Protocol](09-protocol.md) — wire format, synapses, versioning
+12. [10 — Repo layout](10-repo-layout.md) — target code structure
+13. [11 — Roadmap](11-roadmap.md) — phased plan to ship
+14. [12 — Implementation constraints](12-implementation-constraints.md) —
     rules for the autonomous implementing agent
-14. [13 — Agent integration](13-agent-integration.md) — MCP server,
+15. [13 — Agent integration](13-agent-integration.md) — MCP server,
     typed SDK, and starter agents for LLM-driven miners
-15. [14 — CLI](14-cli.md) — the unified `hypo` command, one entry
+16. [14 — CLI](14-cli.md) — the unified `hypo` command, one entry
     point for humans and scripts
-16. [15 — CI / CD and repo automations](15-ci-cd.md) — catalog of
+17. [15 — CI / CD and repo automations](15-ci-cd.md) — catalog of
     `.github/` workflows, configs, templates, scripts
-17. [16 — Threat model](16-threat-model.md) — actors, assets,
+18. [16 — Threat model](16-threat-model.md) — actors, assets,
     threats, and mitigations; the security audit trail
-18. [17 — Hypothesis lifecycle](17-hypothesis-lifecycle.md) — states,
+19. [17 — Hypothesis lifecycle](17-hypothesis-lifecycle.md) — states,
     transitions, authorities, edge cases
-19. [18 — Oracle contract](18-oracle.md) — oracle interface,
+20. [18 — Oracle contract](18-oracle.md) — oracle interface,
     classes, composition, outage, SN42 adapter
-20. [19 — Operations](19-operations.md) — observability, SLIs,
+21. [19 — Operations](19-operations.md) — observability, SLIs,
     alerts, runbooks, disaster recovery
-21. [20 — Economic model](20-economic-model.md) — emission flow,
+22. [20 — Economic model](20-economic-model.md) — emission flow,
     parameter inventory, stake, Sybil cost, governance
 
 Cross-cutting references:

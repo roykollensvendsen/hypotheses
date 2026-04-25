@@ -62,13 +62,18 @@ so the Phase 1 implementing agent reads it on kickoff.
 ## Where to read, in order
 
 1. [`VISION.md`](VISION.md) — what and why.
-2. [`docs/spec/README.md`](docs/spec/README.md) — index of spec docs.
-3. [`docs/spec/12-implementation-constraints.md`](docs/spec/12-implementation-constraints.md)
+2. [`docs/spec/00.5-foundations.md`](docs/spec/00.5-foundations.md)
+   — the *why* behind every design decision: the six threats this
+   subnet must survive, the defences derived from them, the
+   assumptions those defences require, and what the mechanism
+   gives up. **Read before any other spec doc.**
+3. [`docs/spec/README.md`](docs/spec/README.md) — index of spec docs.
+4. [`docs/spec/12-implementation-constraints.md`](docs/spec/12-implementation-constraints.md)
    — the rules you operate under when writing code. This is
    **addressed to you**. Obey it.
-4. [`docs/spec/13-agent-integration.md`](docs/spec/13-agent-integration.md)
+5. [`docs/spec/13-agent-integration.md`](docs/spec/13-agent-integration.md)
    — the agent-surface spec (MCP tools, SDK surface, starter agents).
-5. [`docs/spec/11-roadmap.md`](docs/spec/11-roadmap.md) — what phase
+6. [`docs/spec/11-roadmap.md`](docs/spec/11-roadmap.md) — what phase
    we're in and what phase-exit looks like.
 
 Read the rest of the spec as needed; it's in numbered order.
