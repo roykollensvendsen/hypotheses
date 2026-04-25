@@ -6,7 +6,7 @@ SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
 # Adversarial-simulator fixtures
 
 Hand-written attack scenarios consumed by the Phase 2+ adversarial
-simulator (see [`docs/spec/21-adversarial-simulator.md`](../../docs/spec/21-adversarial-simulator.md)).
+simulator (see [`docs/spec/21-adversarial-simulator.md`](../../../docs/spec/21-adversarial-simulator.md)).
 Each file declares a coalition of validators and miners with named
 behaviour profiles, the inputs they see, and the outcome the
 deterministic core MUST produce.
@@ -16,10 +16,10 @@ deterministic core MUST produce.
 A fixture is required for:
 
 - Every `T-NNN` row in
-  [`docs/spec/16-threat-model.md`](../../docs/spec/16-threat-model.md)
+  [`docs/spec/16-threat-model.md`](../../../docs/spec/16-threat-model.md)
   (HM-REQ-0090 — required by end of Phase 2).
 - Every `F1`–`F6` foundation threat in
-  [`docs/spec/00.5-foundations.md`](../../docs/spec/00.5-foundations.md)
+  [`docs/spec/00.5-foundations.md`](../../../docs/spec/00.5-foundations.md)
   (required *before* the simulator ships in Phase 2).
 - Every newly-discovered attack a reviewer or agent reports as
   plausible against the current spec.
@@ -37,7 +37,7 @@ Examples:
 ## File format
 
 Specified in
-[`docs/spec/21-adversarial-simulator.md § scenario fixture format`](../../docs/spec/21-adversarial-simulator.md#scenario-fixture-format).
+[`docs/spec/21-adversarial-simulator.md § scenario fixture format`](../../../docs/spec/21-adversarial-simulator.md#scenario-fixture-format).
 Quick-reference: every file is a JSON object with `name`, `threat`,
 `source`, `actors`, `inputs`, `expected_outcome`, `tolerance`, and
 optional `notes`.
@@ -66,7 +66,7 @@ behaviour.
 ## "Acceptable damage" fixtures
 
 Some threats are partially mitigated, not fully defended (see the
-"status" column in [`16-threat-model.md`](../../docs/spec/16-threat-model.md)).
+"status" column in [`16-threat-model.md`](../../../docs/spec/16-threat-model.md)).
 Their fixtures document the *residual* harm: how much novelty does
 a colluding bloc still extract before the deferred 30% claws back?
 What's the expected lag between a bad settlement and a T-OVR
