@@ -15,7 +15,7 @@ Anything here must match that spec; if it doesn't, the spec wins.
 
 ## Layout
 
-```
+```text
 agents/
 ├── README.md                         # this file
 ├── prompts/                          # system prompts per role

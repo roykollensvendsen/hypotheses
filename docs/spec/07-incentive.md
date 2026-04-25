@@ -12,7 +12,7 @@ depends_on: [06]
 
 Each validator, at the end of its cycle, holds a score vector:
 
-```
+```text
 V = { miner_hotkey → composite_score in [0, 1] }
 ```
 

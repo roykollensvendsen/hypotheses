@@ -74,10 +74,9 @@ hypothesis cheap to state, run, and score.
 ### 2. Mechanism — preregistered falsifiable hypotheses
 
 Spec before results. Reproducibility before novelty. Validators
-spot-check every submission. Composite scoring: rigor + reproduction
-+ improvement + novelty − cost. Honest nulls score; paper mills
-don't. No leaderboard games, no closed methods, no post-hoc threshold
-tuning.
+spot-check every submission. Composite scoring: rigor + reproduction +
+improvement + novelty − cost. Honest nulls score; paper mills don't.
+No leaderboard games, no closed methods, no post-hoc threshold tuning.
 
 ### 3. Ethos — bottom-up, AGPL, permissionless
 

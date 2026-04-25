@@ -1,0 +1,40 @@
+name: Markdown lint
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - '.markdownlint.jsonc'
+      - '.markdownlintignore'
+      - '.github/workflows/markdownlint.yml'
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: markdownlint-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    name: markdownlint-cli2
+    steps:
+      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Skip if config absent
+        id: guard
+        run: |
+          if [ ! -f .markdownlint.jsonc ]; then
+            echo ".markdownlint.jsonc absent; no-op"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Run markdownlint-cli2
+        if: steps.guard.outputs.skip == 'false'
+        run: npx --yes markdownlint-cli2@0.14.0 "**/*.md"

@@ -26,7 +26,7 @@ be yet.
 
 ## Emission flow
 
-```
+```text
   Bittensor chain
         │  (global emission schedule; subnet-agnostic)
         │
@@ -190,7 +190,7 @@ calibration run (see [Known open questions](#known-open-questions)).
 
 A miner's expected emission per submission breaks down as:
 
-```
+```text
 E = emission_per_epoch
   × composite_score / total_network_composite
 ```
@@ -224,7 +224,7 @@ hopes to capture novelty on N hypotheses at once.
 
 **Cost to capture novelty on K hypotheses:**
 
-```
+```text
 cost ≈ K × (registration_fee_per_hotkey + compute_per_submission)
 expected revenue ≈ K × (emission × novelty_bonus / total_network_composite)
 ```
@@ -284,7 +284,7 @@ empirical.
 
 For a miner with a working, well-formed hypothesis:
 
-```
+```text
 E_honest =
   emission × (rigor + reproduction + improvement + novelty - cost_penalty)
           / total_network_composite
@@ -293,7 +293,7 @@ E_honest =
 For typical good submissions (rigor=1.0, reproduction=1.0,
 improvement=0.7, novelty=1.0 on first, cost_penalty=0.05):
 
-```
+```text
 composite = 0.20 + 0.35 + 0.7*0.30 + 1.0*0.15 - 0.10*0.05 ≈ 0.91
 ```
 
@@ -302,7 +302,7 @@ composite = 0.20 + 0.35 + 0.7*0.30 + 1.0*0.15 - 0.10*0.05 ≈ 0.91
 For a miner trying to shortcut reproduction (e.g., cherry-picking
 seeds):
 
-```
+```text
 composite =
   if rerun agrees (probability ≈ 0.4 in a single 5-seed attempt,
                    much lower on repeated attempts):
@@ -350,7 +350,7 @@ All parameters in the inventory are maintainer-controlled in Phase
   path exists — but would be a governance incident).
 - Modify the 82/18 emission split beyond Bittensor's own mechanism
   (currently subnet-configurable; a large swing would trigger ADR
-  + public discussion before PR).
+  - public discussion before PR).
 
 Phase 3+ transitions governance to multi-maintainer or staked-voting
 per [07 § governance](07-incentive.md#governance). Until then, the

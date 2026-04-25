@@ -132,7 +132,7 @@ re-announcing.
 Validator operations live under the unified `hypo` command (see
 [14](14-cli.md)):
 
-```
+```bash
 hypo register validator
 hypo validate serve                    # long-running validator loop
 hypo validate rescore <ann-cid>        # debug single submission

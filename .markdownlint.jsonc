@@ -1,0 +1,27 @@
+// markdownlint-cli2 configuration.
+//
+// Disables: MD013 (line length — repo is hand-wrapped with semantic
+// line breaks); MD025 (multi-H1 — hypothesis files use a second
+// `# Discussion` section by template); MD028 (blanks-in-blockquote
+// — used for Discord-quote pacing in initial-discord-conversation.md);
+// MD034 (bare URLs — `mailto:` emails are intentional in SECURITY.md
+// and GOVERNANCE.md).
+//
+// Enables: MD040 (fenced-code language required); MD033 with
+// allow-list for `details`/`summary`/`br`; MD024 siblings-only so
+// duplicate H2/H3 across sections do not trip; MD009 br_spaces 2 to
+// honour the `.editorconfig` `trim_trailing_whitespace = false`
+// rule for markdown.
+{
+  "default": true,
+  "MD009": { "br_spaces": 2 },
+  "MD012": false,
+  "MD013": false,
+  "MD024": { "siblings_only": true },
+  "MD025": false,
+  "MD028": false,
+  "MD033": { "allowed_elements": ["details", "summary", "br"] },
+  "MD034": false,
+  "MD040": true,
+  "MD041": false
+}

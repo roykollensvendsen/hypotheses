@@ -52,6 +52,11 @@ CHECKS: tuple[Check, ...] = (
     Check("links", ["lychee", "--no-progress", "."], optional=True),
     Check("vale", ["vale", "docs/spec/", "VISION.md"], optional=True),
     Check("typos", ["typos"], optional=True),
+    Check(
+        "markdownlint",
+        ["npx", "--yes", "markdownlint-cli2@0.14.0", "**/*.md"],
+        optional=True,
+    ),
 )
 
 

@@ -18,7 +18,7 @@ depends_on: [02, 18]
 
 For a submission `s` against spec `H` at version `v`:
 
-```
+```text
 S(s) = w_rigor        * rigor(s)
      + w_reproduction * reproduction(s)
      + w_improvement  * improvement(s, H)
@@ -73,7 +73,7 @@ Rigor is identical for all miners submitting against the same spec version
 Fraction of sampled rerun seeds whose metrics agree with the
 miner-declared metrics within tolerance:
 
-```
+```text
 reproduction = (# seeds reproduced) / (# seeds sampled)
 ```
 
@@ -91,7 +91,7 @@ dishonest miners.
 Evaluated from the full miner-declared metric set, one value per declared
 success criterion:
 
-```
+```text
 improvement = min(1.0, observed_effect / target_effect)
 ```
 
@@ -115,7 +115,7 @@ First miner to settle a hypothesis (pass reproduction + either
 `success_criteria` or `falsification_criteria` at the current
 version):
 
-```
+```text
 novelty = 1.0 for the first settling submission
         = 0.5 for the second
         = 0.0 thereafter
@@ -158,7 +158,7 @@ scores first, so validators agree on novelty without coordination.
 
 Computed from the manifest's `wallclock_seconds` sum + artifact storage:
 
-```
+```text
 cost_penalty = min(1.0,
   wallclock_cost_usd / budget_wallclock +
   storage_cost_usd   / budget_storage)
@@ -205,7 +205,7 @@ scoring (`src/hypotheses/scoring/`) implements the explicit check.
 When a hypothesis declares `oracle.subnet`, the scoring pipeline adds a
 hard gate:
 
-```
+```python
 if oracle.subnet is set:
     oracle_answer = query_oracle(oracle.subnet, oracle.task_ref)
     if abs(declared_answer - oracle_answer) > oracle.tolerance:

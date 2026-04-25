@@ -40,7 +40,7 @@ and surface the intent to the operator.
 
 ## Operating loop
 
-```
+```text
 1. list_hypotheses(status="accepted")
 2. filter: skip hypotheses where list_submissions(id, hotkey=you)
    already has a passing submission at the current version

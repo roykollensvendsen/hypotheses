@@ -18,7 +18,7 @@ Executable experiment for the `H-0006` hypothesis (see
 Not runnable until the `hypotheses` runtime package is implemented.
 Invocation contract (from Phase 1 onward):
 
-```
+```bash
 hypo run H-0006 --seed 0
 ```
 

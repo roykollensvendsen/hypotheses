@@ -134,7 +134,7 @@ in `model.yaml`):
   decays `drop_fraction` over training so late-training topology
   changes are smaller.
 - **`edge_decay` condition**: identical to H-0001's fully-connected
-  + gradient-decay condition.
+  plus gradient-decay condition.
 
 FLOPs accounting per `08-experiment-runtime.md`: dense gradient
 computations during grow steps count fully. The active subnetwork's

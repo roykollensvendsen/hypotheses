@@ -104,8 +104,8 @@ doc carries a `tokens:`, `load_for:`, and `depends_on:` front-matter
 block (see any file under `docs/spec/NN-*.md`); this table names the
 minimum load-set for common tasks, ordered by expected frequency.
 
-| task | load (approx tokens) |
-|------|----------------------|
+| task | load (summands, ≈ tokens) | total |
+|------|---------------------------|-------|
 | **Implement a scoring component** (e.g. composite, rigor) | 06 (~1500) + 18 (~2300) + invariants (~600) + antipatterns/ap-0002 | ≈ 4800 |
 | **Implement errors.py** (T-P1-002) | 12 (~3400) + 16 (~3800) | ≈ 7200 |
 | **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~500) | ≈ 4700 |
@@ -150,6 +150,7 @@ ones you hit most:
   ([`pr-title.yml`](.github/workflows/pr-title.yml)).
 
 Before opening a PR, run locally:
+
 - `ruff check . && ruff format --check .`
 - `pytest` (once there's code)
 - `bash scripts/check_action_pins.sh`

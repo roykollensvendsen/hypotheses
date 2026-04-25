@@ -8,7 +8,7 @@
 # Additional targets land incrementally with the documentation-quality
 # sprint; see docs/CONTRIBUTING-DOCS.md for the catalog.
 
-.PHONY: help docs-check links vale typos precommit-install
+.PHONY: help docs-check links vale typos markdownlint precommit-install
 
 help:
 	@echo "Available targets:"
@@ -16,6 +16,7 @@ help:
 	@echo "  links               run lychee link checker"
 	@echo "  vale                run vale prose linter"
 	@echo "  typos               run typos spell-checker"
+	@echo "  markdownlint        run markdownlint-cli2 (requires npm)"
 	@echo "  precommit-install   install pre-commit and commit-msg hooks"
 
 docs-check:
@@ -29,6 +30,9 @@ vale:
 
 typos:
 	@typos
+
+markdownlint:
+	@npx --yes markdownlint-cli2@0.14.0 "**/*.md"
 
 precommit-install:
 	@pre-commit install --hook-type pre-commit --hook-type commit-msg

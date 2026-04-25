@@ -121,7 +121,7 @@ Both conditions train at the same final density `d` (set in
   `d * |W|` by score; mask is fixed for training; standard SGD on
   the survivors.
 - **`edge_decay` condition**: identical to the H-0001 fully-connected
-  + gradient-decay condition, masked to the same `d` via threshold.
+  plus gradient-decay condition, masked to the same `d` via threshold.
 
 FLOPs accounting is per `08-experiment-runtime.md`: masked edges
 count zero. SNIP's one-shot gradient batch is included in

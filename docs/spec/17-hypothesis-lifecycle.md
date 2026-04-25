@@ -44,7 +44,7 @@ T-OVR fires).
 
 ## Transitions
 
-```
+```text
                                     +------------+
                                     | withdrawn  |   (terminal, across all versions)
                                     +------------+
