@@ -113,7 +113,7 @@ agent-facing defaults; the CLI is the escape hatch humans use for
 policy changes, incident response, and one-off tasks. The agent path
 must never be less capable than the CLI path.
 
-## Four ways to contribute
+## Five ways to contribute
 
 1. **Mine** — propose a hypothesis, run it, submit. Entry tier runs
    on `cpu-small`; a laptop is enough to start. The `hypo` command
@@ -127,6 +127,12 @@ must never be less capable than the CLI path.
 4. **Develop** — improve the spec, the SDK, the MCP server, starter
    agents, the runtime. Contribute new hypothesis templates, new stat
    tests, new dataset adapters, new oracle adapters.
+5. **Red-team** — find unmitigated coalition-level attacks against
+   the spec; submit them as security-hypotheses through the
+   coordinated-disclosure embargo. The mechanism is recursive: a
+   vulnerability disclosure IS a hypothesis on the registry, paid
+   the standard scoring components when it settles. See the bounty
+   contract in the spec.
 
 ## Accessibility promises
 

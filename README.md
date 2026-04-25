@@ -49,9 +49,8 @@ for the ordered task graph the Phase 1 implementing agent walks.
   and the role prompt at
   [`agents/prompts/red-team-system.md`](agents/prompts/red-team-system.md).
 
-See [`VISION.md`](VISION.md#four-ways-to-contribute) for the
-longer version of the original four; red-team was added later via
-doc 22 and isn't in VISION.md yet.
+See [`VISION.md`](VISION.md#five-ways-to-contribute) for the
+longer version.
 
 ## Finding your way around
 
