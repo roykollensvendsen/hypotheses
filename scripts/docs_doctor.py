@@ -51,6 +51,7 @@ CHECKS: tuple[Check, ...] = (
     Check("agents-routing", ["python3", "scripts/check_agents_routing.py"]),
     Check("token-budget", ["python3", "scripts/check_token_budget.py"]),
     Check("orphan-docs", ["python3", "scripts/check_orphan_docs.py"]),
+    Check("glossary-links", ["python3", "scripts/check_glossary_links.py"]),
     Check("hypothesis-status", ["python3", "scripts/check_hypothesis_status.py"]),
     Check("agent-prompts", ["python3", "scripts/check_agent_prompts.py"]),
     Check("prompt-injection", ["python3", "scripts/check_prompt_injection.py"]),

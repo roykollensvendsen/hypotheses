@@ -876,7 +876,7 @@ This doc is done when:
 ---
 name: glossary
 description: definitions of terms used across the specification
-tokens: 500
+tokens: 700
 load_for: [implementation, agent-operator, proposal, review]
 depends_on: []
 kind: reference
@@ -884,68 +884,122 @@ kind: reference
 
 # 01 — Glossary
 
-**Hypothesis**
-  A preregistered, falsifiable claim about an ML training or model behaviour,
-  plus the protocol to test it. See [02](02-hypothesis-format.md).
+Each term is a heading; the heading slug is the term's anchor
+(e.g. [`#hypothesis`](#hypothesis), [`#spec-cid`](#spec-cid)).
+Other spec docs link first-use back to the canonical definition;
+[`scripts/check_glossary_links.py`](../../scripts/check_glossary_links.py)
+ratchets that discipline.
 
-**Spec**
-  The machine-readable front matter of a hypothesis (YAML).
+## Terms
 
-**Body**
-  The free-form markdown discussion attached to a hypothesis.
+### Hypothesis
 
-**Experiment**
-  A concrete execution of a hypothesis's protocol. One hypothesis has many
-  experiments (one per seed, per submitter, per rerun).
+A preregistered, falsifiable claim about an ML training or model
+behaviour, plus the protocol to test it. See
+[02](02-hypothesis-format.md).
 
-**Artifact**
-  Any file produced by an experiment: metrics log, weights, stdout, env lock,
-  rng state. Content-addressed.
+### Spec
 
-**Spec CID**
-  Content identifier (hash) of a hypothesis spec at a given version. Changes
-  when any field in the front matter changes.
+The machine-readable front matter of a hypothesis (YAML).
 
-**Artifact CID**
-  Content identifier of an artifact bundle.
+### Body
 
-**Miner**
-  A Bittensor neuron that proposes hypotheses and/or submits experimental
-  results against them.
+The free-form markdown discussion attached to a hypothesis.
 
-**Validator**
-  A Bittensor neuron that verifies submissions, reruns a sample, scores, and
-  sets weights.
+### Experiment
 
-**Oracle**
-  A trusted source of ground truth for a claim. Canonical example: SN42
-  (known-answer subnet). A hypothesis without an oracle is scored on
-  reproducibility + baseline comparison only.
+A concrete execution of a hypothesis's protocol. One hypothesis
+has many experiments (one per seed, per submitter, per rerun).
 
-**Baseline**
-  A named reference run, declared in the spec, against which the candidate
-  method is compared. Every hypothesis must declare at least one baseline.
+### Artifact
 
-**Preregistration**
-  Committing a hypothesis spec to the repo *before* results are submitted, so
-  success/falsification criteria are frozen and cannot be tuned post-hoc.
+Any file produced by an experiment: metrics log, weights, stdout,
+env lock, rng state. Content-addressed.
 
-**Rerun tolerance**
-  Numerical bounds within which a validator's rerun of a miner-declared seed
-  must fall for the submission to count as reproduced.
+### Spec CID
 
-**Rigor score / reproducibility score / improvement score / novelty score /
-cost score**
-  The five scalar components of the composite hypothesis score; see
-  [06](06-scoring.md).
+Content identifier (hash) of a hypothesis spec at a given version.
+Changes when any field in the front matter changes.
 
-**Topology evolution**
-  The research frame motivating this subnet: training as a coupled
-  construction/destruction dynamical system over a connectivity graph.
+### Artifact CID
 
-**Connectivity dynamics**
-  Rules — usually local — governing how edges are added, removed, or reweighted
-  during training.
+Content identifier of an artifact bundle.
+
+### Miner
+
+A Bittensor neuron that proposes hypotheses and/or submits
+experimental results against them.
+
+### Validator
+
+A Bittensor neuron that verifies submissions, reruns a sample,
+scores, and sets weights.
+
+### Oracle
+
+A trusted source of ground truth for a claim. Canonical example:
+SN42 (known-answer subnet). A hypothesis without an oracle is
+scored on reproducibility + baseline comparison only.
+
+### Baseline
+
+A named reference run, declared in the spec, against which the
+candidate method is compared. Every hypothesis must declare at
+least one baseline.
+
+### Preregistration
+
+Committing a hypothesis spec to the repo *before* results are
+submitted, so success/falsification criteria are frozen and cannot
+be tuned post-hoc.
+
+### Rerun tolerance
+
+Numerical bounds within which a validator's rerun of a
+miner-declared seed must fall for the submission to count as
+reproduced.
+
+### Rigor score
+
+The component measuring whether the hypothesis is well-formed
+(declared analysis plan, statistical test, sample size). One of
+the five scalar components of the composite score; see
+[06](06-scoring.md).
+
+### Reproducibility score
+
+The fraction of validator reruns that fell within
+[rerun tolerance](#rerun-tolerance). One of the five scalar
+components of the composite score; see [06](06-scoring.md).
+
+### Improvement score
+
+The component measuring observed improvement over the declared
+[baseline](#baseline). One of the five scalar components of the
+composite score; see [06](06-scoring.md).
+
+### Novelty score
+
+The component rewarding the first miner to settle a hypothesis at
+a given version. One of the five scalar components of the
+composite score; see [06](06-scoring.md).
+
+### Cost score
+
+The negative component penalising compute and storage spend. One
+of the five scalar components of the composite score; see
+[06](06-scoring.md).
+
+### Topology evolution
+
+The research frame motivating this subnet: training as a coupled
+construction/destruction dynamical system over a connectivity
+graph.
+
+### Connectivity dynamics
+
+Rules — usually local — governing how edges are added, removed,
+or reweighted during training.
 
 ## Self-audit
 
@@ -7031,13 +7085,13 @@ load-sets — see that table for per-task curated bundles.
 
 ## `agent-operator`
 
-Total declared tokens: **29600**.
+Total declared tokens: **29800**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 500 |
+| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
@@ -7073,13 +7127,13 @@ Total declared tokens: **20900**.
 
 ## `implementation`
 
-Total declared tokens: **49400**.
+Total declared tokens: **49600**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 500 |
+| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
@@ -7110,13 +7164,13 @@ Total declared tokens: **49400**.
 
 ## `proposal`
 
-Total declared tokens: **10300**.
+Total declared tokens: **10500**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 500 |
+| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
 | [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
@@ -7124,13 +7178,13 @@ Total declared tokens: **10300**.
 
 ## `review`
 
-Total declared tokens: **49400**.
+Total declared tokens: **49600**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 500 |
+| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |

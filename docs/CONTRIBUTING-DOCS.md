@@ -128,9 +128,10 @@ by joining metadata (llms.txt, load-for-index). They carry
 snapshot-checked in CI (`git diff --exit-code`). Edit the
 generator, not the output.
 
-`.vale/baseline.json` records pre-existing offence counts the
-project has agreed to live with; it is data, not spec content,
-and is monotonically non-increasing.
+`.vale/baseline.json` and `.vale/glossary-baseline.json` record
+pre-existing offence counts the project has agreed to live
+with; both are data (not spec content) and monotonically
+non-increasing.
 
 ## Adding a new spec doc
 
@@ -162,6 +163,7 @@ Doc-quality gates that block merge:
 | `orphan-docs.yml` | every `.md` reachable from a root |
 | `hypothesis-status.yml` | `hypotheses/H-*.md` `status:` is in the lifecycle enum |
 | `agent-prompts.yml` | role prompts ≤200 lines and model-neutral |
+| `glossary-links.yml` | first-mention of glossary terms is linked (per-doc per-term ratchet against `.vale/glossary-baseline.json`) |
 | `vale.yml` | prose-style ratchet against `.vale/baseline.json` |
 | `markdownlint.yml` | markdown syntax (per `.markdownlint.jsonc`) |
 | `link-check.yml` | lychee link validation |
@@ -197,8 +199,6 @@ Open improvements that are spec'd but not yet implemented:
 - **ADR `kind:` field** — ADRs need YAML front-matter introduced.
 - **Hypothesis `kind:` field** — `hypothesis.schema.json` needs to
   allow/require `kind: hypothesis`.
-- **Glossary-link enforcement** — depends on the glossary
-  acquiring per-term heading anchors.
 - **Docs-impact PR comment bot** — `scripts/docs_impact_comment.py`
   needs git-diff context that is awkward to test outside a real
   PR runtime. Lands in a follow-up.
