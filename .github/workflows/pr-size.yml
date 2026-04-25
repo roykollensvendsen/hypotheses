@@ -42,3 +42,4 @@ jobs:
             llms-full.txt
             docs/spec/load-for-index.md
             .vale/baseline.json
+            .vale/glossary-baseline.json
