@@ -38,3 +38,7 @@ jobs:
             uv.lock
             LICENSE
             CHANGELOG.md
+            llms.txt
+            llms-full.txt
+            docs/spec/load-for-index.md
+            .vale/baseline.json
