@@ -17,11 +17,11 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-      - name: Skip if src/ absent
+      - name: Skip if Phase 1 prerequisites absent
         id: guard
         run: |
-          if [ ! -d src/hypotheses ]; then
-            echo "no src/ yet; mutation job is a no-op until Phase 1"
+          if [ ! -f pyproject.toml ] || ! find src/hypotheses -name '*.py' 2>/dev/null | grep -q .; then
+            echo "pyproject.toml or src/hypotheses python sources missing; mutation job is a no-op until Phase 1"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
