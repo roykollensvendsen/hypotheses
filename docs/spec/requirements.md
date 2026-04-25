@@ -41,6 +41,7 @@ checker enforces one-way invariants:
 | HM-REQ-0050 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis MUST declare an `analysis_plan` (pre-processing, exclusion criteria, multiple-comparisons correction, missing-seed policy); generic preregistration without analysis-plan detail does not reduce p-hacking | normative |
 | HM-REQ-0060 | [06](06-scoring.md) | External-verifiability anchor | Every scored hypothesis must have at least one external anchor — mechanical (metrics from artifacts), oracle, or public_benchmark — to foreclose closed-system validator-consensus collusion | normative |
 | HM-REQ-0070 | [17](17-hypothesis-lifecycle.md) | Two-tier settlement | Settlement is tentative; 70% of novelty + improvement at first settled-* transition, 30% deferred 6 months pending no T-OVR overturn; defends against long-latency rent extraction | normative |
+| HM-REQ-0080 | [18](18-oracle.md) | Composition | When `oracle.oracles` array length ≥ 2, `oracle.composition` (one of `all_agree` / `majority` / `weighted_majority`) MUST be declared and must resolve disagreement deterministically; defends against single-oracle corruption | normative |
 
 ## How to add
 

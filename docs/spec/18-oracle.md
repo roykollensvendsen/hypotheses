@@ -141,27 +141,73 @@ behaviour: a validator running an older CLI that encounters a
 newer-oracle hypothesis refuses to score rather than silently
 skipping the oracle check.
 
-## Composition: one oracle per hypothesis (for now)
+## Composition
 
-The hypothesis spec currently allows exactly one oracle per
-hypothesis (the singular `oracle` field in
-[02](02-hypothesis-format.md#spec-fields)). This is intentional for
-Phase 0–2: single-oracle semantics are easier to reason about,
-easier to score, and easier to debug.
+> **HM-REQ-0080** When a hypothesis declares an `oracle.oracles`
+> array of length ≥ 2, it MUST also declare `oracle.composition`.
+> Composition rules MUST resolve disagreement deterministically —
+> no LLM judgment, no timing-dependent ordering, no per-validator
+> tiebreaks.
 
-**Multi-oracle composition is deferred** to a future spec PR. When
-it lands it will specify:
+The `oracle` field admits two shapes:
 
-- AND composition (all oracles must agree) — the conservative
-  default.
-- MAJORITY composition (≥ 2/3 agree) — for consensus-answer
-  oracles where disagreement is expected.
-- How partial agreement affects the improvement vs. oracle
-  components of the score.
+- **Single oracle** (the `oracle_single` form, equivalent to the
+  legacy singular block). One oracle, mandatory agreement. Scores
+  zero on disagreement; stays `pending` on outage.
+- **Composed oracles** (the `oracle_composed` form: an `oracles`
+  array plus a `composition` rule). Defends against single-oracle
+  corruption (cf. [00.5 § F3](00.5-foundations.md#f3--oracle-corruption)).
 
-Hypotheses needing multi-oracle evidence today should phrase the
-claim as multiple hypotheses with `depends_on` links, each with its
-own single oracle.
+### Composition rules
+
+| rule | semantics | passes when | scores zero when | stays pending when |
+|------|-----------|-------------|------------------|---------------------|
+| `all_agree` | logical AND | every oracle agrees within its own tolerance | any oracle disagrees | any oracle is unavailable |
+| `majority` | simple majority | > 50% of oracles agree | ≥ 50% disagree | < 50% have responded |
+| `weighted_majority` | stake-weighted | weighted sum of agreeing oracles > 0.5 | weighted sum of disagreeing > 0.5 | weighted sum of responded ≤ 0.5 |
+
+Outage is *never* silently treated as agreement or disagreement.
+Per HM-REQ-0070's two-tier settlement, oracle-pending submissions
+remain `pending` until either the oracle returns or the rerun
+window expires.
+
+### When to use which
+
+- `all_agree` is the conservative default for high-stakes claims
+  where any single corrupted oracle would mislead the score. Use
+  when 2–3 oracles cover the *same* underlying truth (mirror
+  oracles, redundant data sources). Cost: brittle to outage.
+- `majority` is appropriate when oracles are independent estimators
+  of a noisy ground truth (different model families on the same
+  task, different data slices). Tolerates one outlier or one
+  outage among 3+ oracles.
+- `weighted_majority` is for when oracles have *known* differing
+  reliability — e.g., a trusted on-chain oracle weighted higher
+  than a community-run mirror. Weights are declared per-oracle in
+  the hypothesis spec; they MUST sum to a value where 0.5 is the
+  effective threshold (no implicit normalisation).
+
+### Backwards compatibility
+
+Existing hypotheses (H-0001…H-0006) keep the singular `oracle`
+form. The schema's `oneOf` admits both shapes; validators dispatch
+on shape at scoring time. A hypothesis MAY upgrade from singular
+to composed via a `version` bump (HM-INV-0002 invalidates the prior
+version's settlements as usual).
+
+### Why these three and not others
+
+- **Why no `unanimous` separate from `all_agree`?** Same semantics;
+  `all_agree` is the canonical name.
+- **Why no `quorum` (e.g., "any 2-of-3")?** `weighted_majority`
+  with equal weights subsumes it; explicit quorum can land later
+  if a hypothesis needs it without weights.
+- **Why no `trust_root` (one oracle is authoritative, the rest
+  advisory)?** This collapses to `single` with the others as
+  metadata; we don't need a new composition mode for it.
+
+Adding a fourth composition rule requires a spec PR + ADR +
+acceptance scenarios in this section.
 
 ## Disagreement handling (same-oracle, cross-cycle)
 
@@ -343,6 +389,57 @@ Scenario: Oracle outage — submission stays pending, never silently skipped
   Then the submission's status is pending (not rejected, not settled)
   And the pipeline retries on the next cycle
   And at no point does the validator compute a composite without the oracle check
+```
+
+```gherkin
+Scenario: all_agree composition — one disagreeing oracle zeros the score
+  # spec: HM-REQ-0080
+  Given hypothesis H declares oracle.composition = "all_agree"
+  And oracle.oracles is [{sn:42}, {sn:43}]
+  And the miner submits declared_answer = 0.710
+  And oracle 42 returns 0.712 (within tolerance)
+  And oracle 43 returns 0.795 (outside tolerance)
+  When the validator runs the scoring pipeline
+  Then the composite score vector is zero
+  And the rejection is logged as "OracleDisagreement(all_agree)"
+```
+
+```gherkin
+Scenario: majority composition — one disagreeing oracle does not zero the score
+  # spec: HM-REQ-0080
+  Given hypothesis H declares oracle.composition = "majority"
+  And oracle.oracles is [{sn:42}, {sn:43}, {sn:44}]
+  And oracles 42 and 44 agree within tolerance
+  And oracle 43 disagrees
+  When the validator runs the scoring pipeline
+  Then 2 of 3 oracles agreed → majority threshold met
+  And the deterministic core proceeds to composite scoring
+```
+
+```gherkin
+Scenario: weighted_majority composition — high-weight oracle decides
+  # spec: HM-REQ-0080
+  Given hypothesis H declares oracle.composition = "weighted_majority"
+  And oracle.oracles is [{sn:42, weight:0.6}, {sn:43, weight:0.4}]
+  And oracle 42 agrees within tolerance
+  And oracle 43 disagrees
+  When the validator runs the scoring pipeline
+  Then weighted-agreement = 0.6 > 0.5 threshold
+  And the deterministic core proceeds to composite scoring
+  And the rejection log notes oracle 43 disagreed but did not block
+```
+
+```gherkin
+Scenario: weighted_majority — partial outage stays pending when threshold unreachable
+  # spec: HM-REQ-0080
+  Given hypothesis H declares oracle.composition = "weighted_majority"
+  And oracle.oracles is [{sn:42, weight:0.6}, {sn:43, weight:0.4}]
+  And oracle 42 is unavailable
+  And oracle 43 agrees within tolerance
+  When the validator runs the scoring pipeline
+  Then responded weight = 0.4 ≤ 0.5 threshold
+  And the submission stays pending (not zeroed, not settled)
+  And at no point does the validator silently skip the unresponded oracle
 ```
 
 ## Self-audit

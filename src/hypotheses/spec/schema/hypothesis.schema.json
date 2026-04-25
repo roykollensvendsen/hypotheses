@@ -240,14 +240,57 @@
     "oracle": {
       "oneOf": [
         { "type": "null" },
+        { "$ref": "#/$defs/oracle_single" },
+        { "$ref": "#/$defs/oracle_composed" }
+      ]
+    },
+
+    "oracle_single": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subnet", "task_ref", "tolerance"],
+      "properties": {
+        "subnet": { "type": ["integer", "null"], "minimum": 0 },
+        "task_ref": { "type": ["string", "null"] },
+        "tolerance": { "type": ["number", "null"] },
+        "weight": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Used only inside oracle_composed.oracles[]; ignored at the singular top-level."
+        }
+      }
+    },
+
+    "oracle_composed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["composition", "oracles"],
+      "properties": {
+        "composition": {
+          "type": "string",
+          "enum": ["all_agree", "majority", "weighted_majority"]
+        },
+        "oracles": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/oracle_single" }
+        }
+      },
+      "allOf": [
         {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["subnet", "task_ref", "tolerance"],
-          "properties": {
-            "subnet": { "type": ["integer", "null"], "minimum": 0 },
-            "task_ref": { "type": ["string", "null"] },
-            "tolerance": { "type": ["number", "null"] }
+          "if": {
+            "properties": { "composition": { "const": "weighted_majority" } }
+          },
+          "then": {
+            "properties": {
+              "oracles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["subnet", "task_ref", "tolerance", "weight"]
+                }
+              }
+            }
           }
         }
       ]
