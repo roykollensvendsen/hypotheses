@@ -89,10 +89,12 @@ control.
 
 ### 4. Operating mode — agent-first, CLI as escape hatch
 
-All three active roles — **developing**, **mining**, and
-**validating** — are designed to be driven by autonomous agents as
-the default mode. Humans drop into direct CLI interaction as the
-*escape hatch*, not the primary path.
+The active operational roles — **developing**, **mining**, and
+**validating**, plus the opt-in **red-team** role on top — are
+designed to be driven by autonomous agents as the default mode.
+Humans drop into direct CLI interaction as the *escape hatch*,
+not the primary path. The full role catalogue lives in
+[`AGENTS.md`](AGENTS.md).
 
 - **Mining** — an LLM agent (via MCP or SDK) reads the registry,
   picks an open hypothesis, runs it, submits. The operator's job is

@@ -93,6 +93,64 @@ The subnet is agent-first (see
 - Public API is what `__all__` declares. Anything else is private.
 - Docstrings on public classes and functions only; one-line summary.
 
+## Documentation discipline
+
+> **HM-REQ-0110** Every fact, contract, parameter, or list in this
+> repository has exactly one canonical home. Other documents that
+> need it MUST link to the canonical home rather than restate it.
+> Drift between a canonical statement and a restatement is a bug
+> in the restatement.
+
+This applies recursively, not only to spec docs. The pattern shows
+up everywhere this repo carries information twice:
+
+- **Schema vs prose.** The JSON Schema files under
+  `src/hypotheses/spec/schema/` are canonical for structure; spec
+  docs link to them and explain *why* but never re-encode field
+  lists. Enforced by [`scripts/check_schema_matches_doc.py`](../../scripts/check_schema_matches_doc.py).
+- **Canonical constants.** Numerical values that appear in multiple
+  docs (`rerun_fraction=0.4`, `mutation_floor_pct=75`, etc.) carry
+  a `<!-- canonical:KEY=VALUE -->` marker at their canonical home;
+  [`scripts/check_spec_consistency.py`](../../scripts/check_spec_consistency.py)
+  flags any inline mention of `KEY` that disagrees.
+- **Vision vs implementation.** [VISION.md](../../VISION.md) opens
+  with: *"Any other document that talks about why the subnet
+  exists, cites the vision, or cites the mission links back here;
+  it does not restate these statements."* The "five ways to
+  contribute" list is in VISION.md; READMEs and CONTRIBUTING.md
+  link to it and don't re-list it.
+- **Security timeline.** [SECURITY.md](../../SECURITY.md) is
+  canonical for the disclosure timeline (7-day ack, 14-day triage,
+  90-day default embargo). [`docs/spec/22-security-bounty.md`](22-security-bounty.md)
+  layers the bounty mechanism on top and explicitly refuses to
+  duplicate the numbers — if SECURITY.md changes, doc 22 still
+  reads correctly.
+- **Role catalogue vs contribution paths.** AGENTS.md is canonical
+  for the *agent role catalogue* (six roles with prompt files);
+  VISION.md is canonical for the *contribution paths* (five ways).
+  These are different abstractions; the README links to both.
+
+### How to apply this
+
+When writing a new spec doc or editing an existing one:
+
+1. **Check first.** Before writing a fact, search the repo for
+   existing canonical statements (`grep -rn "<key concept>" docs/
+   *.md`). If a canonical home exists, link.
+2. **If you must restate** for readability (e.g., a one-sentence
+   summary in a navigation table), keep the restatement short
+   enough that drift is obvious and link to the canonical home.
+3. **When updating a fact**, update only the canonical home.
+   Restatements either auto-pick-up the link (if they linked) or
+   need to be hunted down (if they didn't — that's the bug
+   HM-REQ-0110 prevents).
+4. **No mechanical enforcement** exists today for prose duplication
+   beyond the canonical-constant checker. The defence is review
+   discipline; flag duplication in PR review.
+
+The principle is not "documentation is short." It's "every fact
+has one place to update."
+
 ## License headers
 
 > **HM-REQ-0042** Every tracked `.py` or `.sh` file under `src/`,

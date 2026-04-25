@@ -44,6 +44,7 @@ checker enforces one-way invariants:
 | HM-REQ-0080 | [18](18-oracle.md) | Composition | When `oracle.oracles` array length ≥ 2, `oracle.composition` (one of `all_agree` / `majority` / `weighted_majority`) MUST be declared and must resolve disagreement deterministically; defends against single-oracle corruption | normative |
 | HM-REQ-0090 | [21](21-adversarial-simulator.md) | Coverage requirement | Every threat in 16 must have at least one fixture under `tests/golden/adversarial/` by end of Phase 2; simulator runs nightly and failures block release | normative |
 | HM-REQ-0100 | [22](22-security-bounty.md) | Embargo before public disclosure | A security-hypothesis whose first appearance on `main` was NOT preceded by a private SECURITY.md advisory has its `improvement` component zeroed at scoring time; rigor + reproduction still pay (the public fixture is still useful coverage) | normative |
+| HM-REQ-0110 | [12](12-implementation-constraints.md) | Documentation discipline | Every fact, contract, parameter, or list in this repository has exactly one canonical home; other docs link rather than restate; drift between a canonical statement and a restatement is a bug in the restatement | normative |
 
 ## How to add
 

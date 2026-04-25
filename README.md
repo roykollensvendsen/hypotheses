@@ -59,11 +59,13 @@ template) are in the navigation table below.
 
 ## Agent-first
 
-This subnet's three active roles — **developing**, **mining**,
-**validating** — are designed to be driven by autonomous agents.
-Humans drop into the CLI as the escape hatch. The agent-surface
-contract — MCP server + typed Python SDK + `hypo` CLI with full
-parity across all three — is specified in
+The active operational roles — **developing**, **mining**,
+**validating** — are designed to be driven by autonomous agents,
+with **red-team** as an opt-in adversarial role on top. Humans
+drop into the CLI as the escape hatch. The full role catalogue
+lives in [`AGENTS.md`](AGENTS.md). The agent-surface contract —
+MCP server + typed Python SDK + `hypo` CLI with full parity —
+is specified in
 [`docs/spec/13-agent-integration.md`](docs/spec/13-agent-integration.md);
 implementation lands in Phase 1 (tasks T-P1-016 / T-P1-017 /
 T-P1-018 in [`docs/tasks/phase-1.yml`](docs/tasks/phase-1.yml)).
