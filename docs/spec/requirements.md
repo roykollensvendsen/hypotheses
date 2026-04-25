@@ -38,6 +38,8 @@ checker enforces one-way invariants:
 | HM-REQ-0040 | [12](12-implementation-constraints.md) | Test-driven development | Each module's first `test:` commit precedes its first `feat:`/`fix:` commit; the `test:` is red on its own | normative |
 | HM-REQ-0041 | [15](15-ci-cd.md) | Pinning policy | Every `uses:` in `.github/workflows/**` is a 40-char SHA | normative |
 | HM-REQ-0042 | [12](12-implementation-constraints.md) | License headers | Every new `.py`/`.sh` under `src/`, `scripts/`, `tests/`, `experiments/` carries SPDX identifier + copyright lines in the first 10 lines | normative |
+| HM-REQ-0050 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis MUST declare an `analysis_plan` (pre-processing, exclusion criteria, multiple-comparisons correction, missing-seed policy); generic preregistration without analysis-plan detail does not reduce p-hacking | normative |
+| HM-REQ-0060 | [06](06-scoring.md) | External-verifiability anchor | Every scored hypothesis must have at least one external anchor — mechanical (metrics from artifacts), oracle, or public_benchmark — to foreclose closed-system validator-consensus collusion | normative |
 
 ## How to add
 

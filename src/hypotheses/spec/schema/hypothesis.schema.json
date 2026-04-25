@@ -102,6 +102,15 @@
     "contradicts": {
       "type": "array",
       "items": { "type": "string", "pattern": "^H-\\d{4}$" }
+    },
+
+    "analysis_plan": {
+      "$ref": "#/$defs/analysis_plan",
+      "description": "Optional pre-analysis plan. HM-REQ-0050 makes this effectively required for Phase 1+ scoring; the schema keeps it optional so Phase 0 fixtures grandfather. Generic preregistration without analysis-plan detail does not reduce p-hacking (JPE 2024)."
+    },
+    "external_anchor": {
+      "$ref": "#/$defs/external_anchor",
+      "description": "Optional explicit external-verifiability anchor. HM-REQ-0060 requires every hypothesis to have at least one of: (a) a mechanical anchor (numeric outcome computable from artifacts; this is the implicit default for any spec with metrics), (b) an oracle reference (already covered by the `oracle` field), or (c) a public_benchmark reference declared here. Pure validator-consensus settlement is rejected at scoring time."
     }
   },
 
@@ -240,6 +249,73 @@
             "task_ref": { "type": ["string", "null"] },
             "tolerance": { "type": ["number", "null"] }
           }
+        }
+      ]
+    },
+
+    "analysis_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pre_processing",
+        "exclusion_criteria",
+        "multiple_comparisons",
+        "missing_seed_policy"
+      ],
+      "properties": {
+        "pre_processing": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Free-text description of every pre-processing step applied to artifacts before metrics are computed. 'none' is acceptable; silence is not."
+        },
+        "exclusion_criteria": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Rules under which a seed or run is excluded from the analysis. Empty array means no exclusion is permitted; absent runs fail per `missing_seed_policy`."
+        },
+        "multiple_comparisons": {
+          "type": "string",
+          "enum": ["none", "bonferroni", "holm", "fdr_bh", "fdr_by"],
+          "description": "Correction applied when more than one statistical test backs the success or falsification criteria. 'none' is admissible only when exactly one test is declared."
+        },
+        "missing_seed_policy": {
+          "type": "string",
+          "enum": ["fail", "exclude", "impute_median"],
+          "description": "Policy for handling a seed whose metrics are absent in the manifest. 'fail' rejects the submission; 'exclude' drops the seed (still subject to `seeds_required`); 'impute_median' substitutes the median across present seeds."
+        }
+      }
+    },
+
+    "external_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["mechanical", "oracle", "public_benchmark"]
+        },
+        "subnet": { "type": "integer", "minimum": 0 },
+        "task_ref": { "type": "string", "minLength": 1 },
+        "tolerance": { "type": "number" },
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^(sha256:[0-9a-f]{64}|bafy[A-Za-z0-9]+|Qm[1-9A-HJ-NP-Za-km-z]{44})$"
+        },
+        "metric": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "oracle" } } },
+          "then": { "required": ["type", "subnet", "task_ref", "tolerance"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "public_benchmark" } } },
+          "then": { "required": ["type", "url", "content_hash", "metric"] }
         }
       ]
     }

@@ -129,12 +129,77 @@ depends_on: []
 contradicts: []
 ```
 
+## Optional fields
+
+The schema admits two further optional fields. Both default to "absent
+= mechanical default applies"; agents and parsers treat missing values
+as no-op rather than as schema errors. They become *effectively
+required* under [HM-REQ-0050](#schema-validation) and
+[HM-REQ-0060](#schema-validation) at scoring time once Phase 1 ships.
+
+### `analysis_plan`
+
+A pre-analysis plan, in the [JPE 2024 sense](https://www.journals.uchicago.edu/doi/10.1086/730455):
+generic preregistration without an analysis plan does not reduce
+p-hacking; detailed analysis plans do. Every analytic decision the
+miner will make is preregistered here.
+
+```yaml
+analysis_plan:
+  pre_processing: "metrics computed from the last evaluation step only; no smoothing"
+  exclusion_criteria:
+    - "any seed whose run was sandbox-killed before reaching max_steps is excluded"
+  multiple_comparisons: bonferroni      # none | bonferroni | holm | fdr_bh | fdr_by
+  missing_seed_policy: fail             # fail | exclude | impute_median
+```
+
+### `external_anchor`
+
+An explicit external-verifiability anchor. Defaults to the implicit
+mechanical case (the metrics in `success_criteria` are computable
+from artifacts alone). Declare explicitly only when the anchor is
+an oracle reference or a public benchmark.
+
+```yaml
+# implicit default; equivalent to no field
+external_anchor:
+  type: mechanical
+```
+
+```yaml
+# oracle reference (mirrors the existing `oracle` block)
+external_anchor:
+  type: oracle
+  subnet: 42
+  task_ref: "sn42:0"
+  tolerance: 0.05
+```
+
+```yaml
+# public benchmark with content-hash pinning
+external_anchor:
+  type: public_benchmark
+  url: "https://paperswithcode.com/sota/image-classification-on-cifar-10"
+  content_hash: "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  metric: top1_accuracy
+```
+
 ## Schema validation
 
 > **HM-REQ-0001** Hypothesis front matter is governed by
 > [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
 > The schema is the contract; a hypothesis that does not validate
 > does not merge.
+
+> **HM-REQ-0050** A hypothesis MUST declare an `analysis_plan`
+> object specifying every analytic decision the miner will make
+> (pre-processing, exclusion criteria, multiple-comparisons
+> correction, missing-seed policy). Generic preregistration without
+> analysis-plan detail does not reduce p-hacking
+> ([JPE 2024](https://www.journals.uchicago.edu/doi/10.1086/730455));
+> the analysis plan operationalises the finding. Phase 0 hypotheses
+> grandfather without the field; Phase 1 scoring rejects submissions
+> against hypotheses that lack one.
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).

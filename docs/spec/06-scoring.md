@@ -179,6 +179,27 @@ Wallclock cost is priced at a spot-market reference set in
 `src/hypotheses/scoring/cost.py` (MANDATORY: a single constant table,
 not per-call lookups). Storage is priced per GiB-month.
 
+## External-verifiability anchor
+
+> **HM-REQ-0060** Every scored hypothesis MUST have at least one
+> external-verifiability anchor: (a) a *mechanical* anchor — a numeric
+> outcome computable from artifacts alone via the `metrics` →
+> `success_criteria` path (this is the implicit default for any
+> spec with `metrics`), (b) an *oracle* reference (the existing
+> `oracle` block, equivalent to `external_anchor.type=oracle`), or
+> (c) a *public_benchmark* reference declared via
+> `external_anchor.type=public_benchmark` with a stable URL and
+> content hash. A hypothesis whose entire score depends on validator
+> consensus — no mechanical, no oracle, no public benchmark — is
+> rejected at scoring time. This forecloses the closed-system
+> collusion vector documented in
+> [00.5 § F1](00.5-foundations.md#f1--stake-concentrated-validator-collusion).
+
+The schema admits all three anchor types as optional; the
+*scoring-time check* enforces that at least one is present. Phase 0
+hypotheses grandfather under the implicit mechanical default. Phase 1
+scoring (`src/hypotheses/scoring/`) implements the explicit check.
+
 ## Oracles
 
 When a hypothesis declares `oracle.subnet`, the scoring pipeline adds a
