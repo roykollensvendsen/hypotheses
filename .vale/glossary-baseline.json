@@ -1,0 +1,217 @@
+{
+  "docs/spec/00-overview.md": {
+    "Baseline": 1,
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Preregistration": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/00.5-foundations.md": {
+    "Artifact": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Preregistration": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/02-hypothesis-format.md": {
+    "Baseline": 1,
+    "Body": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Preregistration": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/03-architecture.md": {
+    "Artifact": 1,
+    "Artifact CID": 1,
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Rerun tolerance": 1,
+    "Spec": 1
+  },
+  "docs/spec/04-miner.md": {
+    "Artifact": 1,
+    "Baseline": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/05-validator.md": {
+    "Artifact": 1,
+    "Baseline": 1,
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/06-scoring.md": {
+    "Artifact": 1,
+    "Baseline": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/07-incentive.md": {
+    "Baseline": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/08-experiment-runtime.md": {
+    "Artifact": 1,
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Spec": 1
+  },
+  "docs/spec/09-protocol.md": {
+    "Artifact": 1,
+    "Body": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Spec": 1,
+    "Spec CID": 1,
+    "Validator": 1
+  },
+  "docs/spec/10-repo-layout.md": {
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Spec": 1
+  },
+  "docs/spec/11-roadmap.md": {
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/12-implementation-constraints.md": {
+    "Artifact": 1,
+    "Body": 1,
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/13-agent-integration.md": {
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/14-cli.md": {
+    "Miner": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/15-ci-cd.md": {
+    "Baseline": 1,
+    "Hypothesis": 1,
+    "Spec": 1
+  },
+  "docs/spec/16-threat-model.md": {
+    "Artifact": 1,
+    "Baseline": 1,
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Preregistration": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/17-hypothesis-lifecycle.md": {
+    "Artifact": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Preregistration": 1,
+    "Spec": 1,
+    "Spec CID": 1,
+    "Validator": 1
+  },
+  "docs/spec/18-oracle.md": {
+    "Baseline": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/19-operations.md": {
+    "Artifact": 1,
+    "Baseline": 1,
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/20-economic-model.md": {
+    "Artifact": 1,
+    "Baseline": 1,
+    "Experiment": 1,
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Rerun tolerance": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/21-adversarial-simulator.md": {
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/22-security-bounty.md": {
+    "Artifact": 1,
+    "Hypothesis": 1,
+    "Oracle": 1,
+    "Spec": 1
+  },
+  "docs/spec/README.md": {
+    "Preregistration": 1,
+    "Spec": 1
+  },
+  "docs/spec/invariants.md": {
+    "Experiment": 1,
+    "Preregistration": 1,
+    "Spec": 1
+  },
+  "docs/spec/load-for-index.md": {
+    "Spec": 1
+  },
+  "docs/spec/requirements.md": {
+    "Hypothesis": 1,
+    "Miner": 1,
+    "Oracle": 1,
+    "Preregistration": 1,
+    "Spec": 1,
+    "Validator": 1
+  },
+  "docs/spec/traceability.md": {
+    "Hypothesis": 1,
+    "Oracle": 1,
+    "Spec": 1,
+    "Validator": 1
+  }
+}

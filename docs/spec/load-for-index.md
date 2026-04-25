@@ -22,13 +22,13 @@ load-sets — see that table for per-task curated bundles.
 
 ## `agent-operator`
 
-Total declared tokens: **29600**.
+Total declared tokens: **29800**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 500 |
+| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
@@ -64,13 +64,13 @@ Total declared tokens: **20900**.
 
 ## `implementation`
 
-Total declared tokens: **49400**.
+Total declared tokens: **49600**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 500 |
+| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
@@ -101,13 +101,13 @@ Total declared tokens: **49400**.
 
 ## `proposal`
 
-Total declared tokens: **10300**.
+Total declared tokens: **10500**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 500 |
+| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
 | [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
@@ -115,13 +115,13 @@ Total declared tokens: **10300**.
 
 ## `review`
 
-Total declared tokens: **49400**.
+Total declared tokens: **49600**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 500 |
+| [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |

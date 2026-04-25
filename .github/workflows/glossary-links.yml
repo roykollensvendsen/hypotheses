@@ -1,0 +1,40 @@
+name: Glossary-link ratchet
+
+on:
+  pull_request:
+    paths:
+      - 'docs/spec/**/*.md'
+      - 'scripts/check_glossary_links.py'
+      - '.vale/glossary-baseline.json'
+      - '.github/workflows/glossary-links.yml'
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: glossary-links-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: first-mention links to glossary anchor
+    steps:
+      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Skip if checker absent
+        id: guard
+        run: |
+          if [ ! -f scripts/check_glossary_links.py ] || [ ! -f .vale/glossary-baseline.json ]; then
+            echo "checker or baseline absent; no-op"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Run glossary-link ratchet
+        if: steps.guard.outputs.skip == 'false'
+        run: python3 scripts/check_glossary_links.py
