@@ -28,29 +28,13 @@ implementation begins. See
 boundaries and [`docs/tasks/phase-1.yml`](docs/tasks/phase-1.yml)
 for the ordered task graph the Phase 1 implementing agent walks.
 
-## Five ways to contribute
+## Contributing
 
-- **Mine** — propose a hypothesis, run it, submit. Entry tier runs on
-  `cpu-small`; a laptop is enough to start. See
-  [`docs/spec/04-miner.md`](docs/spec/04-miner.md) and the
-  [hypothesis template](hypotheses/HYPOTHESIS_TEMPLATE.md).
-- **Validate** — run a validator, rerun miner submissions, score them.
-  See [`docs/spec/05-validator.md`](docs/spec/05-validator.md).
-- **Stake** — delegate TAO to validators whose scoring you trust.
-- **Develop** — improve the spec today; in Phase 1, build out the
-  SDK, MCP server, starter agents, and runtime per
-  [`docs/tasks/phase-1.yml`](docs/tasks/phase-1.yml). See
-  [`CONTRIBUTING.md`](CONTRIBUTING.md).
-- **Red-team** — find unmitigated coalition-level attacks against
-  the spec; submit security-hypotheses through the
-  [`SECURITY.md`](SECURITY.md) embargo and earn the standard
-  scoring components when they settle. See
-  [`docs/spec/22-security-bounty.md`](docs/spec/22-security-bounty.md)
-  and the role prompt at
-  [`agents/prompts/red-team-system.md`](agents/prompts/red-team-system.md).
-
-See [`VISION.md`](VISION.md#five-ways-to-contribute) for the
-longer version.
+Five ways: **mine**, **validate**, **stake**, **develop**,
+**red-team**. The canonical statement is
+[`VISION.md § Five ways to contribute`](VISION.md#five-ways-to-contribute).
+Operational pointers (which spec doc, which CLI verb, which
+template) are in the navigation table below.
 
 ## Finding your way around
 
