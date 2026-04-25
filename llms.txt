@@ -1,0 +1,79 @@
+<!-- generated:by=scripts/gen_llms_txt.py from=VISION.md, AGENTS.md, docs/spec/README.md; do not edit by hand. See docs/CONTRIBUTING-DOCS.md. -->
+
+# hypotheses
+
+> A permissionless scientific hypothesis market on Bittensor. Miners preregister falsifiable claims about machine learning, run the experiments themselves, and earn TAO when validators confirm their results reproduce and improve on declared baselines. Agent-first by design, with a human CLI as the escape hatch.
+
+Phase 0 — spec freeze. The runtime under `src/hypotheses/` is not yet implemented; only the JSON Schema contracts and the spec/CI/collaboration infrastructure ship today.
+
+## Read first
+
+- [VISION.md](VISION.md): canonical statement of mission and design pillars.
+- [AGENTS.md](AGENTS.md): entry point for autonomous agents; trust boundary, role catalogue, context routing.
+- [docs/spec/README.md](docs/spec/README.md): the spec index.
+- [docs/spec/00.5-foundations.md](docs/spec/00.5-foundations.md): the why behind every design decision.
+
+## Spec docs
+
+- [docs/spec/00-overview.md](docs/spec/00-overview.md): mechanics overview — what the subnet does operationally and what it is not.
+- [docs/spec/00.5-foundations.md](docs/spec/00.5-foundations.md): adversarial-first foundation — threats, defences, assumptions, and what we give up.
+- [docs/spec/01-glossary.md](docs/spec/01-glossary.md): definitions of terms used across the specification.
+- [docs/spec/02-hypothesis-format.md](docs/spec/02-hypothesis-format.md): preregistration-style schema for hypothesis specs stored in hypotheses/.
+- [docs/spec/03-architecture.md](docs/spec/03-architecture.md): components, data flow, and trust model for the subnet.
+- [docs/spec/04-miner.md](docs/spec/04-miner.md): miner responsibilities, CLI, synapse interfaces, artifact contract.
+- [docs/spec/05-validator.md](docs/spec/05-validator.md): validator pipeline, rerun policy, score commitment.
+- [docs/spec/06-scoring.md](docs/spec/06-scoring.md): composite score rubric, statistical tests, oracle integration.
+- [docs/spec/07-incentive.md](docs/spec/07-incentive.md): weight setting, emission flow, anti-gaming countermeasures.
+- [docs/spec/08-experiment-runtime.md](docs/spec/08-experiment-runtime.md): sandbox, determinism, resource limits, hardware profiles.
+- [docs/spec/09-protocol.md](docs/spec/09-protocol.md): on-chain synapses, storage contract, versioning.
+- [docs/spec/10-repo-layout.md](docs/spec/10-repo-layout.md): target directory structure for the full subnet codebase.
+- [docs/spec/11-roadmap.md](docs/spec/11-roadmap.md): phased plan from spec freeze to mainnet.
+- [docs/spec/12-implementation-constraints.md](docs/spec/12-implementation-constraints.md): rules for an autonomous Claude agent implementing the subnet from this spec.
+- [docs/spec/13-agent-integration.md](docs/spec/13-agent-integration.md): agent-first operating mode — mcp server, typed sdk, and starter agents.
+- [docs/spec/14-cli.md](docs/spec/14-cli.md): the single hypo command — unified entry point for humans and scripts.
+- [docs/spec/15-ci-cd.md](docs/spec/15-ci-cd.md): catalog of `.github/` workflows, configs, templates, and scripts.
+- [docs/spec/16-threat-model.md](docs/spec/16-threat-model.md): actors, assets, threats, and mitigations for the subnet.
+- [docs/spec/17-hypothesis-lifecycle.md](docs/spec/17-hypothesis-lifecycle.md): states, transitions, authorities, and edge cases for hypothesis status.
+- [docs/spec/18-oracle.md](docs/spec/18-oracle.md): interface, composition, outage semantics, and SN42 adapter for ground-truth oracles.
+- [docs/spec/19-operations.md](docs/spec/19-operations.md): observability, alerting, runbooks, and disaster recovery for operators.
+- [docs/spec/20-economic-model.md](docs/spec/20-economic-model.md): emission flow, parameter inventory, stake, sybil cost, governance over economic parameters.
+- [docs/spec/21-adversarial-simulator.md](docs/spec/21-adversarial-simulator.md): contract for the coalition-level attack simulator that must catch every threat in 16.
+- [docs/spec/22-security-bounty.md](docs/spec/22-security-bounty.md): white-hat program — vulnerability disclosures are first-class hypotheses on the registry.
+- [docs/spec/invariants.md](docs/spec/invariants.md): catalogue of HM-INV properties the implementation must preserve.
+- [docs/spec/load-for-index.md](docs/spec/load-for-index.md): reverse index of `load_for:` tags to spec docs and token totals.
+- [docs/spec/requirements.md](docs/spec/requirements.md): catalogue of normative HM-REQ statements and the spec section that defines each.
+
+## Hypotheses (preregistered claims)
+
+- [hypotheses/H-0001-connectivity-first-training.md](hypotheses/H-0001-connectivity-first-training.md): Connectivity-first training: pruning beats sparse init on a 2-layer MLP.
+- [hypotheses/H-0002-oracle-verified-distillation.md](hypotheses/H-0002-oracle-verified-distillation.md): Distilled 2-layer MLP preserves SN42 task-0 accuracy within oracle tolerance.
+- [hypotheses/H-0003-sgd-matches-adam-on-mlp.md](hypotheses/H-0003-sgd-matches-adam-on-mlp.md): Plain SGD matches AdamW's FLOPs-to-target on a 2-layer MLP.
+- [hypotheses/H-0004-snip-vs-edge-decay.md](hypotheses/H-0004-snip-vs-edge-decay.md): SNIP-pruned init beats gradient-magnitude edge decay at matched final density on a 2-layer MLP.
+- [hypotheses/H-0005-l1-vs-edge-decay.md](hypotheses/H-0005-l1-vs-edge-decay.md): L1-induced sparsification matches gradient-magnitude edge decay at matched final density on a 2-layer MLP.
+- [hypotheses/H-0006-rigl-vs-edge-decay.md](hypotheses/H-0006-rigl-vs-edge-decay.md): RigL-style coupled grow/drop edge dynamics beat gradient-magnitude edge decay at matched final density on a 2-layer MLP.
+
+## Antipatterns (do NOT do this)
+
+- [docs/spec/antipatterns/ap-0001-oracle-fallback.md](docs/spec/antipatterns/ap-0001-oracle-fallback.md)
+- [docs/spec/antipatterns/ap-0002-llm-in-scoring.md](docs/spec/antipatterns/ap-0002-llm-in-scoring.md)
+- [docs/spec/antipatterns/ap-0003-bare-except.md](docs/spec/antipatterns/ap-0003-bare-except.md)
+- [docs/spec/antipatterns/ap-0004-skip-tdd.md](docs/spec/antipatterns/ap-0004-skip-tdd.md)
+- [docs/spec/antipatterns/ap-0005-synthesize-spec-field.md](docs/spec/antipatterns/ap-0005-synthesize-spec-field.md)
+- [docs/spec/antipatterns/ap-0006-cli-only-path.md](docs/spec/antipatterns/ap-0006-cli-only-path.md)
+- [docs/spec/antipatterns/ap-0007-floating-action-ref.md](docs/spec/antipatterns/ap-0007-floating-action-ref.md)
+
+## Agent role prompts
+
+- [agents/prompts/implementer-system.md](agents/prompts/implementer-system.md): system prompt for the implementer role.
+- [agents/prompts/miner-system.md](agents/prompts/miner-system.md): system prompt for the miner role.
+- [agents/prompts/proposer-system.md](agents/prompts/proposer-system.md): system prompt for the proposer role.
+- [agents/prompts/red-team-system.md](agents/prompts/red-team-system.md): system prompt for the red-team role.
+- [agents/prompts/reviewer-system.md](agents/prompts/reviewer-system.md): system prompt for the reviewer role.
+- [agents/prompts/validator-operator-system.md](agents/prompts/validator-operator-system.md): system prompt for the validator-operator role.
+
+## Governance and contributing
+
+- [GOVERNANCE.md](GOVERNANCE.md): decision authority and process.
+- [CONTRIBUTING.md](CONTRIBUTING.md): four contribution tracks.
+- [SECURITY.md](SECURITY.md): private vulnerability disclosure.
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Contributor Covenant 2.1.
