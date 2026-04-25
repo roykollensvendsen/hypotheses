@@ -48,6 +48,8 @@ CHECKS: tuple[Check, ...] = (
     Check("schema-matches-doc", ["python3", "scripts/check_schema_matches_doc.py"]),
     Check("validate-hypotheses", ["python3", "scripts/validate_hypotheses.py"]),
     Check("frontmatter", ["python3", "scripts/check_frontmatter.py"]),
+    Check("agents-routing", ["python3", "scripts/check_agents_routing.py"]),
+    Check("token-budget", ["python3", "scripts/check_token_budget.py"]),
     Check("prompt-injection", ["python3", "scripts/check_prompt_injection.py"]),
     Check("spdx-headers", ["python3", "scripts/check_spdx_headers.py"]),
     Check("links", ["lychee", "--no-progress", "."], optional=True),
