@@ -1,0 +1,26 @@
+# Lychee link-check configuration.
+# Used by .github/workflows/link-check.yml.
+
+# Increase from default 20s; publisher CDNs are slow.
+timeout = 30
+max_retries = 3
+retry_wait_time = 5
+
+# Domains whose servers reject the lychee user-agent (403/429) but
+# whose URLs are real and citable. We deliberately keep these citations
+# in the docs and exclude them from automated link-checking.
+exclude = [
+    # Academic publishers with anti-scraping walls (DOIs resolve in a
+    # browser; CI cannot reach them).
+    '^https?://(www\.)?journals\.uchicago\.edu/',
+    '^https?://(www\.)?science\.org/doi/',
+    '^https?://(www\.)?nature\.com/articles/',
+
+    # Blog platforms that intermittently 5xx or time out.
+    '^https?://blog\.inferencelabs\.com/',
+    '^https?://(www\.)?medium\.com/',
+]
+
+# Accept these status codes as success (in addition to 2xx) for any
+# URL not already excluded. 999 is LinkedIn / Cloudflare anti-bot.
+accept = [200, 206, 999]
