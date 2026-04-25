@@ -13,7 +13,7 @@ Before anything else, read [`VISION.md`](VISION.md). If you disagree
 with the vision, open a Discussion rather than a PR; we'd rather
 argue about direction in the open than merge-and-revert.
 
-## Three contribution tracks
+## Four contribution tracks
 
 ### 1. Propose a hypothesis (primary on-ramp)
 
@@ -74,6 +74,32 @@ are binding:
 - **The spec and code never diverge** — update the spec in the same
   PR.
 
+### 4. Disclose a security finding (paid)
+
+Coalition-level attacks against the spec — the kind of finding that
+would normally lose its value the moment it's public — can be
+submitted as **security-hypotheses** under the white-hat program in
+[`docs/spec/22-security-bounty.md`](docs/spec/22-security-bounty.md).
+
+1. **File a private GitHub Security Advisory** per
+   [`SECURITY.md`](SECURITY.md). Include a hypothesis spec draft
+   and an adversarial fixture (per the format in
+   [`docs/spec/21-adversarial-simulator.md`](docs/spec/21-adversarial-simulator.md)).
+2. **Wait for triage** (7-day ack, 14-day triage per SECURITY.md).
+   The maintainer either confirms or closes `not-applicable`.
+3. **Wait for the embargo to lift** (fix lands or 90-day default
+   elapses). The hypothesis becomes public on `main`.
+4. **Standard lifecycle proceeds.** Validators reproduce the
+   fixture; the hypothesis settles per the standard two-tier
+   mechanism; you earn rigor + reproduction + novelty + improvement.
+
+**Skip the private embargo and HM-REQ-0100 zeros the bounty** —
+only rigor + reproduction pay. The dedicated agent role is
+[`agents/prompts/red-team-system.md`](agents/prompts/red-team-system.md).
+This track is distinct from a normal `bug.yml` bug report; use the
+bug template for typos and obvious bugs, this track for
+coalition-level attacks worth a coordinated disclosure.
+
 ## Commit messages
 
 Conventional commits, lowercase subject, ≤ 72 chars, no
@@ -123,22 +149,9 @@ maintainer's job; see [`GOVERNANCE.md`](GOVERNANCE.md).
 
 ## Security
 
-Report privately via GitHub's security advisory flow. See
-[`SECURITY.md`](SECURITY.md).
-
-### Security findings (paid)
-
-Coalition-level attacks against the spec — the kind of finding
-that would normally lose its value the moment it's public — can
-be submitted as **security-hypotheses** under the white-hat
-program in [`docs/spec/22-security-bounty.md`](docs/spec/22-security-bounty.md).
-The flow is the same private SECURITY.md advisory as above; once
-the embargo lifts, the disclosure becomes a public hypothesis on
-the registry and earns the discoverer the standard scoring
-components (rigor + reproduction + novelty + improvement). Skip
-the embargo and HM-REQ-0100 zeros the bounty (only rigor +
-reproduction pay). The dedicated agent role is
-[`agents/prompts/red-team-system.md`](agents/prompts/red-team-system.md).
+For ordinary vulnerability reports: file a private GitHub Security
+Advisory per [`SECURITY.md`](SECURITY.md). For coalition-level
+attacks worth a paid coordinated disclosure: see track 4 above.
 
 ## Agents
 
