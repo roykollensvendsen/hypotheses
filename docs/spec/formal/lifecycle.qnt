@@ -13,6 +13,7 @@ module hypothesis_lifecycle {
   type Version = int
 
   type Status =
+    | Embargoed         // security-hypothesis variant; private until embargo lifts
     | Proposed
     | Accepted
     | Running
@@ -130,6 +131,42 @@ module hypothesis_lifecycle {
     withdrawnIds' = withdrawnIds.union(Set(id)),
   }
 
+  // T-DISC-EMBARGO: discoverer files a private security advisory
+  // containing the security-hypothesis draft. Visibility limited to
+  // discoverer + maintainer. The id does not yet exist on main; this
+  // action models the registry entry being created in Embargoed
+  // status (the GitHub Security Advisory is the off-chain hand-off
+  // not modelled here).
+  action discloseEmbargo(id: HypothesisId): bool = all {
+    not(id.in(withdrawnIds)),
+    not(registry.exists(e => e.id == id)),
+    registry' = registry.union(Set({id: id, version: 1, status: Embargoed})),
+    withdrawnIds' = withdrawnIds,
+  }
+
+  // T-DISC-LIFT: embargo lifts (fix landed OR 90-day SECURITY.md
+  // default elapsed). The hypothesis becomes a normal Proposed
+  // entry; the standard lifecycle proceeds from there.
+  action discloseLift(id: HypothesisId, version: Version, who: Authority): bool = all {
+    who == Maintainer,
+    registry.exists(e => e.id == id and e.version == version and e.status == Embargoed),
+    registry' = registry.map(e =>
+      if (e.id == id and e.version == version) { ...e, status: Proposed } else e
+    ),
+    withdrawnIds' = withdrawnIds,
+  }
+
+  // T-DISC-WITHDRAW: discoverer or maintainer determines the finding
+  // is not a real vulnerability. No public registry trace.
+  action discloseWithdraw(id: HypothesisId, who: Authority): bool = all {
+    (who == Author or who == Maintainer),
+    registry.exists(e => e.id == id and e.status == Embargoed),
+    registry' = registry.map(e =>
+      if (e.id == id) { ...e, status: Withdrawn } else e
+    ),
+    withdrawnIds' = withdrawnIds.union(Set(id)),
+  }
+
   // --- Helpers for invariants ---
 
   def isTerminalPerVersion(s: Status): bool =
@@ -195,5 +232,28 @@ module hypothesis_lifecycle {
       .then(settle("H-0002", 1, true, Validators))   // tentative
       .then(overturn("H-0002", 1, Validators))       // a fresh submission flips it
       // Entry is back at Running; either a new settle direction or a withdrawal follows.
+  }
+
+  // Security-hypothesis trace — discovery during embargo, fix lands,
+  // hypothesis becomes public and proceeds through the standard
+  // settlement path.
+  run exampleSecurity = {
+    init
+      .then(discloseEmbargo("H-0099"))                  // private SECURITY.md advisory
+      .then(discloseLift("H-0099", 1, Maintainer))      // fix landed; hypothesis goes public
+      .then(accept("H-0099", 1, Maintainer))            // standard merge
+      .then(run("H-0099", 1, Validators))
+      .then(settle("H-0099", 1, true, Validators))      // tentative SettledSupported
+      .then(confirm("H-0099", 1))                       // 6 months no overturn
+      // Discoverer collects rigor + reproduction + novelty + improvement
+      // (improvement pays because embargo was honoured per HM-REQ-0100).
+  }
+
+  // Security-hypothesis trace — false alarm, withdrawn during embargo.
+  run exampleSecurityWithdrawn = {
+    init
+      .then(discloseEmbargo("H-0098"))
+      .then(discloseWithdraw("H-0098", Maintainer))
+      // No public registry trace; advisory closed not-applicable.
   }
 }

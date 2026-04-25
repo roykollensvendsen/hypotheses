@@ -120,6 +120,62 @@ metrics, evaluated under the *original* preregistered analysis plan,
 flip the settlement direction; it is not enough for one validator to
 disagree.
 
+## Security-hypothesis variant
+
+A **security-hypothesis** is a hypothesis whose claim is "attack X
+succeeds against the spec at version Y." The artifact is an
+adversarial-simulator fixture per
+[HM-REQ-0090](21-adversarial-simulator.md). The full mechanism is
+specified in [22 — Security bounty](22-security-bounty.md); this
+section describes only the lifecycle differences from a normal
+hypothesis.
+
+### One additional state
+
+| state | meaning |
+|-------|---------|
+| `embargoed` | a security-hypothesis filed privately via the [SECURITY.md](../../SECURITY.md) GitHub Security Advisory flow. Visible only to the maintainer + discoverer. Not yet on `main`. Awaiting either a fix-PR landing or the SECURITY.md default 90-day embargo elapsing. |
+
+### Three additional transitions
+
+| id | from | to | trigger | who | side effects |
+|----|------|----|---------|-----|--------------|
+| **T-DISC-EMBARGO** | (none) | `embargoed` | discoverer files a private GitHub Security Advisory containing the security-hypothesis draft + adversarial fixture | discoverer + maintainer | advisory ID linked to the draft; visibility limited to the two parties; no public registry trace yet |
+| **T-DISC-LIFT** | `embargoed` | `proposed` | the fix PR for the underlying threat lands on `main` OR the SECURITY.md default 90-day embargo elapses, whichever comes first | maintainer | the security-hypothesis becomes a normal `hypotheses/H-NNNN-...md` file on `main`; the GitHub Security Advisory is published; the standard lifecycle proceeds from `proposed` |
+| **T-DISC-WITHDRAW** | `embargoed` | `withdrawn` | the discoverer or the maintainer determines the finding is not a real vulnerability (false alarm) | author OR maintainer | the GitHub Security Advisory is closed `not-applicable`; no public registry trace; no payout |
+
+### Embargo gate at scoring time
+
+Once a security-hypothesis lifts to `proposed` and proceeds through
+the standard lifecycle, the only difference from a normal
+hypothesis is at scoring time:
+
+- HM-REQ-0100 ([22 § E](22-security-bounty.md#e-hm-req-0100--embargo-before-public-disclosure))
+  zeros the `improvement` component if the hypothesis was NOT
+  preceded by a SECURITY.md advisory.
+- The `rigor` and `reproduction` components pay normally — the
+  fixture is still useful coverage even if the embargo wasn't
+  honoured.
+- The `novelty` component pays normally — first-honest-disclosure
+  still wins novelty per HM-REQ-0021 tiebreak.
+
+### Why a separate `embargoed` state and not a flag
+
+Putting embargo in the lifecycle makes it auditable. The state
+machine in [`formal/lifecycle.qnt`](formal/lifecycle.qnt) is the
+mechanical contract; mechanically distinguishing `embargoed` from
+`proposed` makes the SECURITY.md handoff explicit rather than a
+soft convention.
+
+### Cross-references
+
+- [22 — Security bounty](22-security-bounty.md) — the full bounty
+  mechanism and HM-REQ-0100 specification.
+- [SECURITY.md](../../SECURITY.md) — the private-disclosure
+  timeline this variant is layered on top of.
+- [16 § T-076](16-threat-model.md#h-governance--process-attacks)
+  — the threat HM-REQ-0100 mitigates.
+
 ## Invariants
 
 > **HM-INV-0001** No on-chain `ResultsAnnouncement` for `(id,
