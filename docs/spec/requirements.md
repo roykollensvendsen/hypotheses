@@ -20,6 +20,8 @@ checker enforces one-way invariants:
 
 - Every ID in this index has an inline definition in a spec doc.
 - Every inline ID in a spec doc has a row here.
+- Every ID in this index has a row in
+  [`traceability.md`](traceability.md), and vice versa.
 - IDs are unique.
 
 ## Index

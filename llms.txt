@@ -42,6 +42,7 @@ Phase 0 — spec freeze. The runtime under `src/hypotheses/` is not yet implemen
 - [docs/spec/invariants.md](docs/spec/invariants.md): catalogue of HM-INV properties the implementation must preserve.
 - [docs/spec/load-for-index.md](docs/spec/load-for-index.md): reverse index of `load_for:` tags to spec docs and token totals.
 - [docs/spec/requirements.md](docs/spec/requirements.md): catalogue of normative HM-REQ statements and the spec section that defines each.
+- [docs/spec/traceability.md](docs/spec/traceability.md): HM-REQ-NNNN to test-id mapping; populated as Phase 1 ships tests.
 
 ## Hypotheses (preregistered claims)
 

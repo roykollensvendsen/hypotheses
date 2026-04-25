@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: hypotheses
+message: >-
+  If you use this software, please cite it using the metadata
+  below. If you cite a specific hypothesis-spec or settled
+  hypothesis from this repository, also cite it directly via
+  its preregistration commit and version.
+type: software
+authors:
+  - name: "The hypotheses subnet contributors"
+abstract: >-
+  A permissionless scientific hypothesis market on Bittensor.
+  Miners preregister falsifiable claims about machine learning,
+  run the experiments themselves, and earn TAO when validators
+  confirm their results reproduce and improve on declared
+  baselines. Agent-first by design, with a human CLI as the
+  escape hatch.
+keywords:
+  - bittensor
+  - subnet
+  - machine learning
+  - reproducibility
+  - preregistration
+  - hypothesis
+  - falsification
+  - autonomous agents
+license: AGPL-3.0-or-later
+repository-code: "https://github.com/roykollensvendsen/hypotheses"
+url: "https://github.com/roykollensvendsen/hypotheses"
