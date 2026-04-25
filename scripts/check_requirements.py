@@ -34,9 +34,12 @@ from pathlib import Path
 TAG_RE = re.compile(r"\bHM-(?P<kind>REQ|INV)-(?P<num>\d{4})\b")
 INDEX_PATH = Path("docs/spec/requirements.md")
 INVARIANTS_INDEX_PATH = Path("docs/spec/invariants.md")
+TRACEABILITY_PATH = Path("docs/spec/traceability.md")
 SPEC_DOCS_ROOT = Path("docs/spec")
 CODE_ROOTS = (Path("src"), Path("tests"))
 CODE_REF_RE = re.compile(r"#\s*spec:\s*HM-(?:REQ|INV)-\d{4}")
+TRACEABILITY_PLACEHOLDER = "TBD-Phase-1"
+TESTS_GLOB = "tests/test_*.py"
 
 
 def parse_index_ids(path: Path) -> dict[str, tuple[str, int]]:
@@ -81,6 +84,27 @@ def find_inline_definitions() -> dict[str, list[tuple[Path, int, str]]]:
                     tag = f"HM-{match.group('kind')}-{match.group('num')}"
                     defs.setdefault(tag, []).append((p, i, line.strip()[:200]))
     return defs
+
+
+def parse_traceability() -> dict[str, tuple[str, int]]:
+    """Return {HM-REQ: (test_id, line_no)} from traceability.md table rows."""
+    if not TRACEABILITY_PATH.exists():
+        return {}
+    out: dict[str, tuple[str, int]] = {}
+    for i, line in enumerate(TRACEABILITY_PATH.read_text().splitlines(), start=1):
+        stripped = line.lstrip()
+        if not stripped.startswith("| HM-REQ-"):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        if len(cells) < 4:
+            continue
+        m = TAG_RE.match(cells[0])
+        if not m or m.group("kind") != "REQ":
+            continue
+        tag = f"HM-REQ-{m.group('num')}"
+        test_id = cells[2]
+        out[tag] = (test_id, i)
+    return out
 
 
 def find_code_references() -> dict[str, list[tuple[Path, int]]]:
@@ -136,6 +160,40 @@ def main() -> int:
             f"::error file={p},line={i}::{tag} is defined inline but is "
             f"not listed in docs/spec/requirements.md or docs/spec/invariants.md."
         )
+
+    # Traceability matrix: every HM-REQ has a row, and vice versa.
+    traceability = parse_traceability()
+    req_set = {t for t in indexed_set if t.startswith("HM-REQ-")}
+    trace_set = set(traceability)
+    for tag in sorted(req_set - trace_set):
+        errors.append(
+            f"::error file={TRACEABILITY_PATH}::{tag} is in requirements.md "
+            f"but missing from traceability.md."
+        )
+    for tag in sorted(trace_set - req_set):
+        _, line_no = traceability[tag]
+        errors.append(
+            f"::error file={TRACEABILITY_PATH},line={line_no}::{tag} is in "
+            f"traceability.md but not in requirements.md."
+        )
+
+    # When tests/ exposes real test files, TBD-Phase-1 is no longer the
+    # only valid value — every traceability row must point at a real
+    # test. Until then it is the only valid value.
+    tests_present = any(Path().glob(TESTS_GLOB))
+    for tag, (test_id, line_no) in sorted(traceability.items()):
+        if tests_present and test_id == TRACEABILITY_PLACEHOLDER:
+            errors.append(
+                f"::error file={TRACEABILITY_PATH},line={line_no}::{tag} "
+                f"still has test_id={TRACEABILITY_PLACEHOLDER}; tests/ now "
+                "exists, fill in the real test ID."
+            )
+        if not tests_present and test_id != TRACEABILITY_PLACEHOLDER:
+            errors.append(
+                f"::error file={TRACEABILITY_PATH},line={line_no}::{tag} has "
+                f"test_id={test_id} but no tests/ files exist yet; only "
+                f"{TRACEABILITY_PLACEHOLDER} is valid in Phase 0."
+            )
 
     # Informational: code back-references to missing IDs.
     code_refs = find_code_references()

@@ -64,7 +64,7 @@ Total declared tokens: **20900**.
 
 ## `implementation`
 
-Total declared tokens: **48600**.
+Total declared tokens: **49400**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -97,6 +97,7 @@ Total declared tokens: **48600**.
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
+| [docs/spec/traceability.md](traceability.md) | traceability matrix | 800 |
 
 ## `proposal`
 
@@ -114,7 +115,7 @@ Total declared tokens: **10300**.
 
 ## `review`
 
-Total declared tokens: **48600**.
+Total declared tokens: **49400**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -147,3 +148,4 @@ Total declared tokens: **48600**.
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
+| [docs/spec/traceability.md](traceability.md) | traceability matrix | 800 |
