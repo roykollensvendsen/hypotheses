@@ -85,7 +85,7 @@ Two artefacts per finding:
   (i.e., the threat is actually defended).
 - **An adversarial fixture** under
   `tests/golden/adversarial/<threat>-<slug>.json` per the format
-  in [21 § C](../../docs/spec/21-adversarial-simulator.md#c-scenario-fixture-format).
+  in [21 § Scenario fixture format](../../docs/spec/21-adversarial-simulator.md#scenario-fixture-format).
   Honest about whether the attack succeeds — "acceptable damage"
   is a valid finding shape; see the seed fixture for the pattern.
 
