@@ -18,6 +18,7 @@ module hypothesis_lifecycle {
     | Running
     | SettledSupported
     | SettledRefuted
+    | Confirmed
     | Withdrawn
 
   type Authority =
@@ -81,6 +82,32 @@ module hypothesis_lifecycle {
     withdrawnIds' = withdrawnIds,
   }
 
+  // T-CON: tentative settlement promotes to Confirmed after the
+  // overturn window elapses. Time is abstract here; the prose spec
+  // uses 6 months. Mechanically: this action only fires when no
+  // T-OVR has cleared the entry.
+  action confirm(id: HypothesisId, version: Version): bool = all {
+    registry.exists(e => e.id == id and e.version == version and
+      (e.status == SettledSupported or e.status == SettledRefuted)),
+    registry' = registry.map(e =>
+      if (e.id == id and e.version == version) { ...e, status: Confirmed } else e
+    ),
+    withdrawnIds' = withdrawnIds,
+  }
+
+  // T-OVR: a fresh submission flips the settlement direction under
+  // the original analysis plan. Clears the tentative settlement and
+  // returns the entry to Running for fresh scoring.
+  action overturn(id: HypothesisId, version: Version, who: Authority): bool = all {
+    who == Validators,
+    registry.exists(e => e.id == id and e.version == version and
+      (e.status == SettledSupported or e.status == SettledRefuted)),
+    registry' = registry.map(e =>
+      if (e.id == id and e.version == version) { ...e, status: Running } else e
+    ),
+    withdrawnIds' = withdrawnIds,
+  }
+
   // T-VER: author bumps version (via PR). New version starts at
   // Proposed; old version's Settled-* record is preserved.
   action bumpVersion(id: HypothesisId, oldVer: Version, newVer: Version, who: Authority): bool = all {
@@ -106,10 +133,13 @@ module hypothesis_lifecycle {
   // --- Helpers for invariants ---
 
   def isTerminalPerVersion(s: Status): bool =
-    s == SettledSupported or s == SettledRefuted or s == Withdrawn
+    s == Confirmed or s == Withdrawn
+
+  def isTentativelySettled(s: Status): bool =
+    s == SettledSupported or s == SettledRefuted
 
   def isSettled(s: Status): bool =
-    s == SettledSupported or s == SettledRefuted
+    s == SettledSupported or s == SettledRefuted or s == Confirmed
 
   // --- Invariants ---
 
@@ -145,13 +175,25 @@ module hypothesis_lifecycle {
     withdrawnIds' = Set(),
   }
 
-  // Example trace — a minimal happy-path lifecycle.
+  // Example trace — a minimal happy-path lifecycle including
+  // tentative settlement and confirmation.
   run exampleHappyPath = {
     init
       .then(propose("H-0001"))
       .then(accept("H-0001", 1, Maintainer))
       .then(run("H-0001", 1, Validators))
-      .then(settle("H-0001", 1, true, Validators))
+      .then(settle("H-0001", 1, true, Validators))   // tentative SettledSupported
+      .then(confirm("H-0001", 1))                    // 6 months pass, no overturn
       .then(bumpVersion("H-0001", 1, 2, Author))
+  }
+
+  // Adversarial trace — settlement followed by overturn.
+  run exampleOverturn = {
+    init
+      .then(propose("H-0002"))
+      .then(accept("H-0002", 1, Maintainer))
+      .then(settle("H-0002", 1, true, Validators))   // tentative
+      .then(overturn("H-0002", 1, Validators))       // a fresh submission flips it
+      // Entry is back at Running; either a new settle direction or a withdrawal follows.
   }
 }

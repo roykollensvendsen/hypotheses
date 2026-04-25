@@ -30,13 +30,17 @@ A `status` field is always exactly one of:
 | `proposed` | draft is under PR review; not yet merged or merged with `proposed` status. Not yet eligible for mining. |
 | `accepted` | merged on `main`; miners may run it; validators score submissions against it. |
 | `running` | at least one miner has a live `ResultsAnnouncement` for the current version that hasn't settled. Informational. |
-| `settled-supported` | the hypothesis's `success_criteria` have been met by at least one miner whose submission passed rerun and oracle checks. Terminal for the current `version`. |
-| `settled-refuted` | the hypothesis's `falsification_criteria` have been met by at least one miner whose submission passed rerun and oracle checks. Terminal for the current `version`. |
+| `settled-supported` | the hypothesis's `success_criteria` have been met by at least one miner whose submission passed rerun and oracle checks. **Tentative** for the current `version`; pays 70% of novelty + improvement at this transition. |
+| `settled-refuted` | the hypothesis's `falsification_criteria` have been met by at least one miner whose submission passed rerun and oracle checks. **Tentative** for the current `version`; pays 70% of novelty (improvement is zero by definition) at this transition. |
+| `confirmed` | 6 months have elapsed since the first `settled-*` transition for this `(id, version)` and no `T-OVR` overturn event has fired. The remaining 30% of novelty + improvement is released to the original settling miner. Terminal. |
 | `withdrawn` | the author or maintainer has decided this hypothesis is dead. No further mining against it. Terminal across all versions. |
 
-Terminal-ness is per-version for `settled-*` (a new version reopens
-the hypothesis); permanent for `withdrawn` (a superseder opens a
-new file, not a new version).
+Terminal-ness is per-version for `confirmed` and `settled-*`-without-confirmation
+(a new version reopens the hypothesis); permanent for `withdrawn`
+(a superseder opens a new file, not a new version). `settled-*`
+is a *tentative* state that resolves to either `confirmed` (after
+6 months no overturn) or back to a non-settled state (after a
+T-OVR fires).
 
 ## Transitions
 
@@ -71,6 +75,8 @@ new file, not a new version).
 | **T-RUN** | `accepted` | `running` | first valid `ResultsAnnouncement` for current `version` observed by validators | validators (consensus) | informational only; registry `status` update is eventual-consistent via a spec PR **or** can be inferred at read time from on-chain announcements |
 | **T-SUP** | `running` or `accepted` | `settled-supported` | a miner's submission passes all gates and meets every `success_criterion` under validator consensus | validators (consensus) | novelty bonus attributed per [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements); further submissions allowed at this version but score novelty = 0 |
 | **T-REF** | `running` or `accepted` | `settled-refuted` | a miner's submission passes all gates and meets every `falsification_criterion` under validator consensus | validators (consensus) | same as T-SUP; an honest null is a settlement |
+| **T-CON** | `settled-supported` or `settled-refuted` | `confirmed` | 6 months elapsed since the settlement and no `T-OVR` has fired | system (time-triggered) | releases the deferred 30% of novelty + improvement to the original settling miner; `(id, version)` becomes terminal |
+| **T-OVR** | `settled-supported` or `settled-refuted` | back to `running` | a fresh submission against the same `(id, version)` reproduces with metrics that flip the settlement under the original analysis plan | validators (consensus) + maintainer-confirmed | clears the tentative settlement, claws back the original 70% from the settler, makes both miners eligible for fresh novelty under the new settlement |
 | **T-VER** | any non-terminal | `proposed` *(new file version)* | author bumps `version` via PR | author + maintainer | all prior `(spec_id, old_version)` submissions are invalidated for scoring; on-chain announcements against the old version remain readable for audit |
 | **T-WDP** | `proposed` | `withdrawn` | author closes their own PR, or maintainer closes a stale proposal | author OR maintainer | PR closed; no registry impact (never merged) |
 | **T-WDA** | `accepted` or `running` | `withdrawn` | author or maintainer opens a PR setting `status: withdrawn` | author OR maintainer | merged with `status: withdrawn`; mining against it stops scoring; prior `settled-*` records for earlier versions are preserved |
@@ -92,6 +98,28 @@ up with [`GOVERNANCE.md`](../../GOVERNANCE.md):
   withdrawals where either the drafter or the gatekeeper should be
   able to shut it down without drama.
 
+## Two-tier settlement
+
+> **HM-REQ-0070** Settlement is two-tier. The first transition into
+> `settled-supported` or `settled-refuted` is **tentative**: 70% of
+> novelty + improvement is paid out at this point. The remaining 30%
+> is deferred and released on transition to `confirmed`, which
+> requires that 6 months elapse with no `T-OVR` overturn event for
+> this `(id, version)`. The deferred portion blunts long-latency
+> rent extraction (see [00.5 § F6](00.5-foundations.md#f6--long-latency-rent-extraction)
+> and [16 § T-075](16-threat-model.md#h-governance--process-attacks)):
+> a validator who confirmed in good faith collects both portions; a
+> validator who extracted the early payout and exited loses the
+> deferred 30% if a fresh submission overturns the settlement.
+
+The 70/30 split is governed; current values are normative for Phase 2
+onward. Any change requires a spec PR + ADR. The 6-month window is
+likewise governed and mirrors the median ML-research settlement
+latency. An overturn event (T-OVR) requires a fresh submission whose
+metrics, evaluated under the *original* preregistered analysis plan,
+flip the settlement direction; it is not enough for one validator to
+disagree.
+
 ## Invariants
 
 > **HM-INV-0001** No on-chain `ResultsAnnouncement` for `(id,
@@ -104,8 +132,10 @@ up with [`GOVERNANCE.md`](../../GOVERNANCE.md):
 
 > **HM-INV-0003** `version` is strictly increasing per `id`.
 
-> **HM-INV-0004** `settled-*` is terminal for its own `(id, version)`;
-> new versions re-enter the lifecycle at `proposed`.
+> **HM-INV-0004** `settled-*` is *tentative*; `confirmed` is the
+> only positively-terminal state for an `(id, version)`. `withdrawn`
+> is terminal across all versions. New versions re-enter the
+> lifecycle at `proposed`.
 
 > **HM-INV-0005** `withdrawn` is terminal across every version of
 > that `id`.
