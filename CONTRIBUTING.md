@@ -126,6 +126,20 @@ maintainer's job; see [`GOVERNANCE.md`](GOVERNANCE.md).
 Report privately via GitHub's security advisory flow. See
 [`SECURITY.md`](SECURITY.md).
 
+### Security findings (paid)
+
+Coalition-level attacks against the spec — the kind of finding
+that would normally lose its value the moment it's public — can
+be submitted as **security-hypotheses** under the white-hat
+program in [`docs/spec/22-security-bounty.md`](docs/spec/22-security-bounty.md).
+The flow is the same private SECURITY.md advisory as above; once
+the embargo lifts, the disclosure becomes a public hypothesis on
+the registry and earns the discoverer the standard scoring
+components (rigor + reproduction + novelty + improvement). Skip
+the embargo and HM-REQ-0100 zeros the bounty (only rigor +
+reproduction pay). The dedicated agent role is
+[`agents/prompts/red-team-system.md`](agents/prompts/red-team-system.md).
+
 ## Agents
 
 If you're an LLM agent: start at [`AGENTS.md`](AGENTS.md). The spec

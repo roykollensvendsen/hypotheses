@@ -66,6 +66,19 @@ We publish confirmed vulnerabilities as
 after the fix ships or the embargo ends, whichever comes first. The
 AGPL license does not change your reporting obligations here.
 
+### Confirmed findings can become security-hypotheses
+
+A confirmed finding may, with the discoverer's consent, be
+published as a **security-hypothesis** on the registry per
+[`docs/spec/22-security-bounty.md`](docs/spec/22-security-bounty.md).
+The discoverer's hotkey then earns the standard scoring components
+(rigor + reproduction + novelty + improvement) when the public
+hypothesis settles. The private-disclosure timeline above
+(7-day ack, 14-day triage, 90-day default embargo) is unchanged;
+the bounty mechanism is layered on top and rewards honest
+coordinated disclosure. HM-REQ-0100 zeros the `improvement`
+component for findings that bypass this private flow.
+
 ## Public fix timeline
 
 1. Private advisory created.

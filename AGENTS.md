@@ -89,6 +89,7 @@ Pick one. Each has a prompt under [`agents/prompts/`](agents/prompts/):
 | **validator operator** | [`agents/prompts/validator-operator-system.md`](agents/prompts/validator-operator-system.md) | Run the validator loop. NEVER touches scoring — scoring is deterministic. |
 | **hypothesis proposer** | [`agents/prompts/proposer-system.md`](agents/prompts/proposer-system.md) | Draft new hypotheses from open research notes. |
 | **reviewer** | [`agents/prompts/reviewer-system.md`](agents/prompts/reviewer-system.md) | Review incoming spec / hypothesis PRs for rigor. |
+| **red team** | [`agents/prompts/red-team-system.md`](agents/prompts/red-team-system.md) | Find unmitigated coalition-level attacks against the spec; submit security-hypotheses through the SECURITY.md embargo. See [`docs/spec/22-security-bounty.md`](docs/spec/22-security-bounty.md). |
 
 If you're in plain Claude Code kicking off Phase 1 implementation,
 go to [`docs/implementation-handoff.md`](docs/implementation-handoff.md)
