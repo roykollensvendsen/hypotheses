@@ -1,0 +1,26 @@
+arch: mlp-2-layer
+input_dim: 3072
+hidden_dim: 256
+output_dim: 10
+activation: relu
+bias_on_hidden: false
+
+optimizer:
+  name: sgd
+  lr: 0.01
+  momentum: 0.9
+
+training:
+  batch_size: 128
+  max_steps: 20000
+  target_accuracy: 0.60
+
+connectivity:
+  target_final_density: 0.25
+  rigl:
+    update_interval: 100
+    drop_fraction_initial: 0.30
+    drop_fraction_decay: cosine
+  edge_decay:
+    eta: 1.0e-3
+    mask_threshold: 1.0e-4
