@@ -35,6 +35,26 @@ spec explicitly rejects.
 - **Enforce the Code of Conduct** per the ladder in
   [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
 
+## Recurring duties
+
+These are obligations, not capabilities — the maintainer is on the
+hook to do each one on its cadence.
+
+- **Foundation review.** Per
+  [`docs/spec/00.5-foundations.md § review cadence`](docs/spec/00.5-foundations.md#review-cadence):
+  every 6 months, OR sooner if a `C`-section assumption flips, the
+  maintainer reads `00.5 § C / D / E` end-to-end and either
+  confirms each item still holds or opens a foundation-review ADR
+  (`docs/adr/NNNN-foundation-review-YYYY-MM.md`). Skipping a
+  review without an ADR explaining why is itself an audit-flag at
+  the next review.
+- **Threat-model curation.** When new threats are surfaced
+  (security research, adversarial-simulator failures, real
+  incidents), they go into [`docs/spec/16-threat-model.md`](docs/spec/16-threat-model.md)
+  and get an adversarial fixture per
+  [HM-REQ-0090](docs/spec/21-adversarial-simulator.md) in the same
+  PR.
+
 ## What the maintainer cannot do unilaterally
 
 - **Change the license.** AGPL-3.0-or-later is fixed. Relicensing

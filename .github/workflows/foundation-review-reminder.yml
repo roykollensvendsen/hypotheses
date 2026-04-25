@@ -1,0 +1,30 @@
+name: Foundation review reminder
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"   # Monday 09:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    name: 00.5-foundations.md freshness
+    steps:
+      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          fetch-depth: 0
+      - name: Check foundation freshness
+        run: |
+          last=$(git log -1 --format=%ct -- docs/spec/00.5-foundations.md)
+          age_months=$(( ( $(date +%s) - last ) / 2592000 ))
+          if [ "$age_months" -ge 7 ]; then
+            echo "::warning::docs/spec/00.5-foundations.md last touched ${age_months} months ago. Review cadence is ≤6 months per 00.5 § review cadence — open a foundation-review ADR."
+          else
+            echo "Foundation freshness: ${age_months} months (cadence ≤6 months; healthy)."
+          fi
