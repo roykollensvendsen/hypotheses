@@ -1,0 +1,16 @@
+[project]
+name = "hypotheses-experiment-H-0004"
+version = "0.1.0"
+description = "Executable experiment for hypothesis H-0004 (SNIP vs edge decay)"
+requires-python = "==3.12.*"
+
+dependencies = [
+  "torch==2.5.*",
+  "numpy==2.1.*",
+  "datasets==3.*",
+]
+
+[tool.uv]
+# Hash-pinned versions are resolved into the accompanying uv.lock when the
+# implementing agent materialises this experiment. The entries above are the
+# semver constraints; uv.lock is the source of truth at install time.
