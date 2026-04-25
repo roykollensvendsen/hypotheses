@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roykollensvendsen/hypotheses/docs/spec/_schemas/spec-frontmatter.schema.json",
+  "title": "Spec doc front-matter",
+  "description": "YAML front matter for files under docs/spec/. Validated by scripts/check_frontmatter.py and enforced by .github/workflows/frontmatter.yml.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "description", "tokens", "load_for", "depends_on", "kind"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tokens": {
+      "type": "integer",
+      "minimum": 50,
+      "description": "Approximate token count of the prose body (front-matter excluded). Rough wc-based estimate; treat as planning guidance, not a hard cap. The token-budget auditor (scripts/check_token_budget.py) verifies the declared value is within tolerance of measurement."
+    },
+    "load_for": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "agent-operator",
+          "governance",
+          "implementation",
+          "proposal",
+          "review"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Task tags this doc is required for. AGENTS.md context routing references these to assemble per-task minimum load sets. New tags require a schema PR."
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]{2}(\\.5)?$"
+      },
+      "uniqueItems": true,
+      "description": "Numeric prerequisites — spec docs that must be loaded before this one is meaningful. Each entry resolves to docs/spec/NN-*.md (or docs/spec/NN.5-*.md). Cycles are rejected."
+    },
+    "kind": {
+      "enum": ["contract", "explanation", "reference"],
+      "description": "Documentation taxonomy. `contract` for normative spec (HM-REQ/HM-INV bearing); `explanation` for narrative why-docs; `reference` for catalogs, glossaries, and indexes. Diátaxis-derived; see docs/CONTRIBUTING-DOCS.md for the rationale."
+    }
+  }
+}

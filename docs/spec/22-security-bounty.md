@@ -4,6 +4,7 @@ description: white-hat program — vulnerability disclosures are first-class hyp
 tokens: 2500
 load_for: [implementation, agent-operator, governance, review]
 depends_on: [00.5, 16, 17, 21]
+kind: contract
 ---
 
 # 22 — Security bounty

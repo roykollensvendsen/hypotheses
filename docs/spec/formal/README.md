@@ -4,6 +4,7 @@ description: quint formalisations of hypothesis-subnet state machines and protoc
 tokens: 300
 load_for: [implementation, review]
 depends_on: [17]
+kind: reference
 ---
 
 # Formal specifications

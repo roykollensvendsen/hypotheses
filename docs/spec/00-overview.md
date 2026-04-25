@@ -4,6 +4,7 @@ description: mechanics overview — what the subnet does operationally and what 
 tokens: 500
 load_for: [implementation, agent-operator, proposal, governance, review]
 depends_on: []
+kind: explanation
 ---
 
 # 00 — Overview

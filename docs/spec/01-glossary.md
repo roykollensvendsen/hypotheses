@@ -4,6 +4,7 @@ description: definitions of terms used across the specification
 tokens: 500
 load_for: [implementation, agent-operator, proposal, review]
 depends_on: []
+kind: reference
 ---
 
 # 01 — Glossary

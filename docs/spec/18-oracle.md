@@ -4,6 +4,7 @@ description: interface, composition, outage semantics, and SN42 adapter for grou
 tokens: 2300
 load_for: [implementation, agent-operator, review]
 depends_on: [02, 06]
+kind: contract
 ---
 
 # 18 — Oracle contract

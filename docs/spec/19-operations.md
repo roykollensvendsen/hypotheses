@@ -4,6 +4,7 @@ description: observability, alerting, runbooks, and disaster recovery for operat
 tokens: 3800
 load_for: [agent-operator, implementation, review]
 depends_on: [12, 16]
+kind: reference
 ---
 
 # 19 — Operations: observability and runbook

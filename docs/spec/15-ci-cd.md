@@ -4,6 +4,7 @@ description: catalog of `.github/` workflows, configs, templates, and scripts
 tokens: 2700
 load_for: [implementation, review]
 depends_on: [12]
+kind: reference
 ---
 
 # 15 — CI / CD and repo automations

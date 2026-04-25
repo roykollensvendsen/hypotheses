@@ -4,6 +4,7 @@ description: catalogue of normative HM-REQ statements and the spec section that 
 tokens: 500
 load_for: [implementation, review]
 depends_on: []
+kind: reference
 ---
 
 # Requirements index

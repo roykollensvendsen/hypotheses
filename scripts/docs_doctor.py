@@ -47,6 +47,7 @@ CHECKS: tuple[Check, ...] = (
     Check("requirements", ["python3", "scripts/check_requirements.py"]),
     Check("schema-matches-doc", ["python3", "scripts/check_schema_matches_doc.py"]),
     Check("validate-hypotheses", ["python3", "scripts/validate_hypotheses.py"]),
+    Check("frontmatter", ["python3", "scripts/check_frontmatter.py"]),
     Check("prompt-injection", ["python3", "scripts/check_prompt_injection.py"]),
     Check("spdx-headers", ["python3", "scripts/check_spdx_headers.py"]),
     Check("links", ["lychee", "--no-progress", "."], optional=True),

@@ -4,6 +4,7 @@ description: rules for an autonomous Claude agent implementing the subnet from t
 tokens: 3400
 load_for: [implementation, review]
 depends_on: [10, 11, 16]
+kind: contract
 ---
 
 # 12 — Implementation constraints

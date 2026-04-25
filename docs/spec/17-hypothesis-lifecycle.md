@@ -4,6 +4,7 @@ description: states, transitions, authorities, and edge cases for hypothesis sta
 tokens: 2600
 load_for: [implementation, proposal, agent-operator, review]
 depends_on: [02, 06]
+kind: contract
 ---
 
 # 17 — Hypothesis lifecycle

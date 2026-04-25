@@ -4,6 +4,7 @@ description: weight setting, emission flow, anti-gaming countermeasures
 tokens: 800
 load_for: [implementation, governance, review]
 depends_on: [06]
+kind: contract
 ---
 
 # 07 — Incentive

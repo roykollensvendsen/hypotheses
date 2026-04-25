@@ -4,6 +4,7 @@ description: the single hypo command — unified entry point for humans and scri
 tokens: 900
 load_for: [implementation, agent-operator, review]
 depends_on: [04, 05, 13]
+kind: contract
 ---
 
 # 14 — `hypo` — the one command
