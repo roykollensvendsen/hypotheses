@@ -28,7 +28,7 @@ implementation begins. See
 boundaries and [`docs/tasks/phase-1.yml`](docs/tasks/phase-1.yml)
 for the ordered task graph the Phase 1 implementing agent walks.
 
-## Four ways to contribute
+## Five ways to contribute
 
 - **Mine** — propose a hypothesis, run it, submit. Entry tier runs on
   `cpu-small`; a laptop is enough to start. See
@@ -41,9 +41,17 @@ for the ordered task graph the Phase 1 implementing agent walks.
   SDK, MCP server, starter agents, and runtime per
   [`docs/tasks/phase-1.yml`](docs/tasks/phase-1.yml). See
   [`CONTRIBUTING.md`](CONTRIBUTING.md).
+- **Red-team** — find unmitigated coalition-level attacks against
+  the spec; submit security-hypotheses through the
+  [`SECURITY.md`](SECURITY.md) embargo and earn the standard
+  scoring components when they settle. See
+  [`docs/spec/22-security-bounty.md`](docs/spec/22-security-bounty.md)
+  and the role prompt at
+  [`agents/prompts/red-team-system.md`](agents/prompts/red-team-system.md).
 
-See [`VISION.md`](VISION.md#four-ways-to-contribute) for the longer
-version.
+See [`VISION.md`](VISION.md#four-ways-to-contribute) for the
+longer version of the original four; red-team was added later via
+doc 22 and isn't in VISION.md yet.
 
 ## Finding your way around
 
@@ -58,6 +66,8 @@ version.
 | trace a normative requirement | [`docs/spec/requirements.md`](docs/spec/requirements.md) (HM-REQ index) |
 | trace a property invariant | [`docs/spec/invariants.md`](docs/spec/invariants.md) (HM-INV index) |
 | read the formal lifecycle (Quint) | [`docs/spec/formal/`](docs/spec/formal/) |
+| understand the adversarial-simulator contract | [`docs/spec/21-adversarial-simulator.md`](docs/spec/21-adversarial-simulator.md) |
+| disclose a security finding (paid) | [`docs/spec/22-security-bounty.md`](docs/spec/22-security-bounty.md) + [`SECURITY.md`](SECURITY.md) |
 | see what Phase 1 will build | [`docs/tasks/phase-1.yml`](docs/tasks/phase-1.yml) |
 | contribute code or docs | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | report a security issue | [`SECURITY.md`](SECURITY.md) |
