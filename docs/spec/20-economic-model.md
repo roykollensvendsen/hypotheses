@@ -103,6 +103,11 @@ who can change it, how.
 | per-artifact cap | 500 MiB | same | maintainer | spec PR + ADR |
 | per-manifest cap | 1 MiB | same | maintainer | spec PR + ADR |
 | novelty-tier bonuses | 1.0 / 0.5 / 0.0 | [06 § novelty](06-scoring.md#novelty) | maintainer | spec PR + ADR |
+| [ideator](01-glossary.md#ideator) share % of sponsor pool when `inspired_by` non-empty | 5 % | [07 § sponsorship pool split](07-incentive.md#sponsorship-pool-split) | maintainer | spec PR + ADR |
+| ideator minimum stake (`ideator_min_stake`) | 0.1 TAO | [00.5 § D8.1](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | maintainer | spec PR + ADR |
+| ideator staleness threshold (`ideator_staleness_blocks`) | 7 200 blocks (~1 day) | [00.5 § D8.2](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | maintainer | spec PR + ADR |
+| ideator max cites per H-NNNN (`ideator_max_cites`) | 3 | [00.5 § D8.3](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | maintainer | spec PR + ADR |
+| ideator expiry (`ideator_expiry_blocks`) | 3 153 600 blocks (~12 months) | [02b](02b-informal-hypothesis-format.md) | maintainer | spec PR + ADR |
 
 Every parameter has an ADR requirement on change (enforced by
 [`adr-required.yml`](../../.github/workflows/adr-required.yml) for
@@ -392,6 +397,15 @@ expected to resolve:
 6. **Stake thresholds and Sybil arithmetic assume Bittensor
    dynamics that may change.** Re-validate when the chain updates
    its registration fee formula.
+7. **Ideator share is a guess (ADR 0024).** 5 % of sponsor pool
+   is the placeholder. Sensitivity bracket for Phase 2 simulation:
+   1 %–10 %. Below 1 %, ideators are unlikely to bother authoring
+   I-NNNN; above 10 %, miner break-even at heavy profiles
+   degrades materially even before c14-ideator-quality is
+   validated. Trigger for ADR revision: composite scores of
+   formal hypotheses with non-empty `inspired_by` show no
+   measurable improvement over those without after ≥ 20 settled
+   formal hypotheses with citations.
 
 Each open question will land as an ADR when it resolves — positive
 or negative. If Phase 2 simulation shows the weights are wrong in a

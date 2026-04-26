@@ -47,14 +47,14 @@ Total declared tokens: **38600**.
 
 ## `governance`
 
-Total declared tokens: **36100**.
+Total declared tokens: **36400**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 6000 |
 | [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
-| [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
+| [docs/spec/07-incentive.md](07-incentive.md) | incentive | 1100 |
 | [docs/spec/11-roadmap.md](11-roadmap.md) | roadmap | 900 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
@@ -71,7 +71,7 @@ Total declared tokens: **36100**.
 
 ## `implementation`
 
-Total declared tokens: **66300**.
+Total declared tokens: **66600**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -83,7 +83,7 @@ Total declared tokens: **66300**.
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
 | [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
-| [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
+| [docs/spec/07-incentive.md](07-incentive.md) | incentive | 1100 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
 | [docs/spec/09-protocol.md](09-protocol.md) | protocol | 800 |
 | [docs/spec/10-repo-layout.md](10-repo-layout.md) | repo layout | 1600 |
@@ -126,7 +126,7 @@ Total declared tokens: **17300**.
 
 ## `review`
 
-Total declared tokens: **78300**.
+Total declared tokens: **78600**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -139,7 +139,7 @@ Total declared tokens: **78300**.
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
 | [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
-| [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
+| [docs/spec/07-incentive.md](07-incentive.md) | incentive | 1100 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
 | [docs/spec/09-protocol.md](09-protocol.md) | protocol | 800 |
 | [docs/spec/10-repo-layout.md](10-repo-layout.md) | repo layout | 1600 |

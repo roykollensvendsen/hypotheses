@@ -122,7 +122,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
 | **Add a normative spec claim** | 25 (~2500) + references (~1000) + 00.5 (~6000) | ≈ 9500 |
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
-| **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
+| **Governance / weight change** | 06 (~2200) + 07 (~1100) + 20 (~3200) | ≈ 6500 |
 | **Articulate investment / revenue narrative** | 27 (~2400) + 20 (~3200) + references (~1000) | ≈ 6600 |
 | **Spec a treasury / fiduciary action** | 28 (~1800) + 27 (~2400) + 11 (~900) | ≈ 5100 |
 | **Quantitative survival analysis** | 29 (~3700) + 20 (~3200) + 06 (~2200) | ≈ 9100 |
