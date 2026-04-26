@@ -55,6 +55,7 @@ CHECKS: tuple[Check, ...] = (
     Check("hypothesis-status", ["python3", "scripts/check_hypothesis_status.py"]),
     Check("agent-prompts", ["python3", "scripts/check_agent_prompts.py"]),
     Check("citation", ["python3", "scripts/check_citation.py"]),
+    Check("staleness", ["python3", "scripts/check_staleness.py"]),
     Check("prompt-injection", ["python3", "scripts/check_prompt_injection.py"]),
     Check("spdx-headers", ["python3", "scripts/check_spdx_headers.py"]),
     Check("links", ["lychee", "--no-progress", "."], optional=True),

@@ -169,6 +169,7 @@ Doc-quality gates that block merge:
 | `hypothesis-status.yml` | `hypotheses/H-*.md` `status:` is in the lifecycle enum |
 | `agent-prompts.yml` | role prompts ≤200 lines and model-neutral |
 | `glossary-links.yml` | first-mention of glossary terms is linked (per-doc per-term ratchet against `.vale/glossary-baseline.json`) |
+| `staleness.yml` | optional `last_updated:` matches git within ±1 day; weekly schedule surfaces relational staleness signal in the job summary |
 | `vale.yml` | prose-style ratchet against `.vale/baseline.json` |
 | `markdownlint.yml` | markdown syntax (per `.markdownlint.jsonc`) |
 | `link-check.yml` | lychee link validation |
