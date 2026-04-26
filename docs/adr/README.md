@@ -125,3 +125,4 @@ What did we decide?
 - [0020 — Sponsor-gated heavy profiles](0020-sponsor-gated-heavy-profiles.md)
 - [0021 — Oracle-only verification](0021-oracle-only-verification.md)
 - [0022 — Community bounty pool](0022-community-bounty-pool.md)
+- [0023 — Multi-miner consensus](0023-multi-miner-consensus.md)

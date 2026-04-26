@@ -1,7 +1,7 @@
 ---
 name: hypothesis format
 description: preregistration-style schema for hypothesis specs stored in hypotheses/
-tokens: 2700
+tokens: 2900
 load_for: [implementation, proposal, review]
 depends_on: [01]
 kind: contract
@@ -120,6 +120,13 @@ falsification_criteria:
     statistical_test: welch_t
     p_max: 0.05
 
+# Optional: minimum independent miners required to flip status.
+# Default 1 (current behaviour: first settling submission wins).
+# Set higher for replication-class hypotheses that need
+# cross-miner consensus before the result is trusted.
+min_settling_miners: 1
+min_refuting_miners: 1
+
 # Optional: ground-truth oracle check. Null when no oracle applies.
 oracle:
   subnet: null                # e.g. 42
@@ -185,6 +192,67 @@ external_anchor:
   content_hash: "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
   metric: top1_accuracy
 ```
+
+### `min_settling_miners` / `min_refuting_miners`
+
+Minimum number of *independent* miners (distinct
+`miner_hotkey` values) whose submissions must individually
+pass every `success_criterion` (or `falsification_criterion`)
+before the hypothesis transitions to `settled-supported`
+(or `settled-refuted`). Default is `1` for both — the
+existing single-submission settlement behaviour.
+
+Set higher for replication-class hypotheses where one miner's
+result alone is not sufficient evidence:
+
+```yaml
+min_settling_miners: 3        # require 3 independent confirmations
+min_refuting_miners: 2        # 2 independent refutations to refute
+```
+
+Until the threshold is met the hypothesis stays in `running`
+status. Each individual settling submission still scores
+rigor + reproduction + improvement immediately; the **70 %
+first-settlement payout** from
+[HM-REQ-0070](#schema-validation) is attributed at the
+*threshold-met* moment and split equally among the qualifying
+miners. The deferred 30 % is held against
+[T-CON](17-hypothesis-lifecycle.md#transition-table) and
+distributed at the same proportional split.
+
+[Novelty](06-scoring.md#novelty) decays as today (1.0 / 0.5 /
+0.0 by settlement order), independent of the threshold —
+the first two qualifying miners earn novelty regardless of
+how subsequent confirmations follow. Validator-rerun applies
+to each individual submission as today (HM-REQ-0010); a
+submission that fails its rerun is zeroed and does not count
+toward the consensus threshold.
+
+**Sybil defence.** "Independent" means distinct on-chain
+`miner_hotkey`; the same registration cost + per-hotkey rate
+limit + cross-validator score check that defends F5 (per
+[`00.5 § F5`](00.5-foundations.md#f5--sybil-farming)) defends
+this mechanism against an operator running multiple hotkeys
+to manufacture fake consensus. Each hotkey still must pay
+registration, run the [experiment](01-glossary.md#experiment)
+honestly, and have its seeds reproduced by validators.
+
+**When to use.**
+
+- Replication-class hypotheses ("does this finding replicate
+  across labs?")
+- Statistical claims with cross-condition variance ("X works
+  on 60 % of the variable space")
+- High-stakes policy claims where one miner's result alone
+  shouldn't drive a settlement
+
+**When NOT to use.**
+
+- Pure prediction claims with an oracle (
+  `verification: oracle-only` already gives you the oracle's
+  verdict; consensus across miners adds nothing)
+- Single-condition computational claims where the protocol
+  pins determinism
 
 ### `verification`
 
@@ -348,6 +416,19 @@ profiles.
 > acceptance. Defends F7 (curation manipulation) per
 > [`00.5 § F7`](00.5-foundations.md#f7--curation-manipulation).
 > The single-sponsor form is unconstrained by HM-REQ-0140.
+
+> **HM-REQ-0150** When `min_settling_miners > 1` (or
+> `min_refuting_miners > 1`), the hypothesis transitions to
+> `settled-supported` (or `settled-refuted`) only after the
+> declared count of distinct `miner_hotkey` values have each
+> independently submitted a result that passes its
+> corresponding criteria under validator consensus. The 70 %
+> [first-settlement payout](17-hypothesis-lifecycle.md#two-tier-settlement)
+> per HM-REQ-0070 splits equally across the qualifying miners
+> at the threshold-met moment; the deferred 30 % follows the
+> same split. Validators MUST reject a candidate consensus
+> contributor whose `miner_hotkey` matches one already counted.
+> Operationalises ADR 0023's multi-miner replication mechanism.
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
