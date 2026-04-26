@@ -175,7 +175,7 @@ expected outcome is what the spec predicts.
 ## Cross-references
 
 - [`00.5-foundations.md`](00.5-foundations.md) § A and § E — every
-  F1–F6 threat will list its fixture(s) once written.
+  F1–F7 threat will list its fixture(s) once written.
 - [`16-threat-model.md`](16-threat-model.md) — every T-NNN row will
   list its fixture(s) once written.
 - [`12-implementation-constraints.md § testing strategy`](12-implementation-constraints.md#testing-strategy)

@@ -601,7 +601,7 @@ parameter ranges.
 ### What "viable" does NOT mean
 
 - **Not a guarantee under adversarial conditions.** The four
-  criteria assume honest play. F1–F6 adversarial scenarios are
+  criteria assume honest play. F1–F7 adversarial scenarios are
   covered by [`16-threat-model.md`](16-threat-model.md) and
   [`21-adversarial-simulator.md`](21-adversarial-simulator.md);
   adversarial viability is a separate question.
