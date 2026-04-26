@@ -204,6 +204,39 @@ def main() -> int:
                 f"but missing from index (informational until Phase 1 code lands)."
             )
 
+    # Phase-1-conditional bidirectional coverage: once tests/ has any
+    # `test_*.py`, every test file must annotate at least one HM-REQ
+    # via `# spec: HM-REQ-NNNN`, and every HM-REQ in the index must
+    # be referenced by at least one test file. Until then this block
+    # is a no-op — Phase 0 ships the spec, Phase 1 ships the tests.
+    if tests_present:
+        test_files = sorted(Path().glob(TESTS_GLOB))
+        files_with_refs: set[Path] = set()
+        for tag, sites in code_refs.items():
+            if not tag.startswith("HM-REQ-"):
+                continue
+            for path, _line in sites:
+                if path.match(TESTS_GLOB):
+                    files_with_refs.add(path)
+        for path in test_files:
+            if path not in files_with_refs:
+                errors.append(
+                    f"::error file={path}::test file has no `# spec: "
+                    f"HM-REQ-NNNN` comment; every test should annotate the "
+                    "requirement(s) it covers."
+                )
+        req_covered = {
+            tag
+            for tag, sites in code_refs.items()
+            if tag.startswith("HM-REQ-") and any(p.match(TESTS_GLOB) for p, _ in sites)
+        }
+        for tag in sorted(req_set - req_covered):
+            errors.append(
+                f"::error file={INDEX_PATH}::{tag} has no test reference; "
+                "add a `# spec: " + tag + "` comment to at least one "
+                "tests/test_*.py file that covers it."
+            )
+
     for w in warnings:
         print(w)
     for e in errors:

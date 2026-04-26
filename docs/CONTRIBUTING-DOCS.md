@@ -201,7 +201,21 @@ is missing.
 
 Open improvements that are spec'd but not yet implemented:
 
-- **Test-docstring → `HM-REQ` reverse scanner** — activates when
-  `tests/test_*.py` first ships in Phase 1.
 - **Static documentation site (mkdocs-material)** — explicitly
   deferred per the documentation-quality sprint scoping decision.
+
+## Phase-1-conditional checks (already wired)
+
+These checks are dormant in Phase 0 (because their preconditions
+do not yet exist) and activate automatically the moment the
+prerequisite ships:
+
+- **Test-docstring → `HM-REQ` coverage** — extension to
+  `scripts/check_requirements.py` (registered in `requirements.yml`).
+  Activates when `tests/test_*.py` becomes non-empty. Then enforces:
+  every test file annotates at least one `# spec: HM-REQ-NNNN`,
+  and every HM-REQ in the index has at least one test referencing it.
+- **`docs/spec/traceability.md` `test_id`** — same activation gate.
+  Until tests ship, every row's `test_id` MUST be `TBD-Phase-1`;
+  once a test file lands, `TBD-Phase-1` becomes a failure and rows
+  must point at real test IDs.
