@@ -195,6 +195,7 @@ The numbering is per-role, monotonic.
 | S-MINE-11 | External-anchor required: `propose` rejects a hypothesis whose front matter declares neither a mechanical metric, an oracle, nor a public benchmark | CLI | HM-REQ-0060 | `tests/system/mine/test_external_anchor_required.py` |
 | S-MINE-12 | Oracle composition required: `propose` rejects a hypothesis with `oracle.oracles` length ≥ 2 that omits `oracle.composition` | CLI | HM-REQ-0080 | `tests/system/mine/test_oracle_composition.py` |
 | S-MINE-13 | Gated-profile sponsorship required: `propose` rejects a hypothesis whose `hardware_profile` is gated-tier (per `06 § Profile tiers`) and lacks a `sponsorship` block | CLI | HM-REQ-0120 | `tests/system/mine/test_gated_profile_sponsorship.py` |
+| S-MINE-14 | Oracle-only requires oracle: `propose` rejects a hypothesis declaring `verification: oracle-only` that lacks an `oracle` block (or `external_anchor.type=oracle`) | CLI | HM-REQ-0130 | `tests/system/mine/test_oracle_only_requires_oracle.py` |
 
 ### Validate
 
