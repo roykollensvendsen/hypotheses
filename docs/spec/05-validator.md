@@ -109,6 +109,40 @@ epochs — revisit if an epoch changes length):
 10. **Commit weights.** Normalise scores per-miner-hotkey, set weights via
     YUMA.
 
+### Oracle-only branch
+
+Hypotheses declaring `verification: oracle-only` per
+[`02 § verification`](02-hypothesis-format.md#verification)
+take a shortened path:
+
+- **Discover, Fetch, Structural validate** — unchanged.
+- **Rerun sample, Rerun, Reconcile** — **skipped**. Validator
+  does no compute on the artifact's seeds. The artifact is
+  retained for audit / disclosure but not executed.
+- **Baseline compare** — collapses to direct success /
+  falsification evaluation against the declared
+  `claim`-target, since the oracle is the truth source.
+- **Oracle check** — **mandatory** for this verification
+  mode. Per HM-REQ-0130 the hypothesis MUST declare an oracle.
+  The oracle's verdict directly determines the reproduction
+  component per [`06 § Reproduction`](06-scoring.md#reproduction)
+  (1.0 if `agrees`, 0 if not, pending if outage).
+- **Score, Commit weights** — unchanged.
+
+The economic implication is captured in
+[`29 § D.1`](29-economic-survival.md#d1-validator-unit-economics)
+and ADR 0021: validator workload for oracle-only hypotheses
+is bounded by oracle-query overhead alone (~ $0.001 / submission)
+rather than scaling with `N_miners · rerun_fraction · c_compute`.
+The asymmetric break-even ceiling from ADR 0017 does not apply
+to this class.
+
+[HM-INV-0030](#coverage-under-thin-validator-sets) (D2.2
+coverage formula) applies only to the full-rerun path; for
+oracle-only submissions, F2 cherry-picking is structurally
+infeasible because the validator never reruns seeds — the
+oracle is the verification primitive.
+
 ## Coverage under thin validator sets
 
 The `(validator_hotkey, epoch, spec_id, version)` seed makes every

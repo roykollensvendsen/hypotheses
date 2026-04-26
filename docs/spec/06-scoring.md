@@ -72,16 +72,32 @@ Rigor is identical for all miners submitting against the same spec version
 
 ### Reproduction
 
-Fraction of sampled rerun seeds whose metrics agree with the
-miner-declared metrics within tolerance:
+For the default `verification: full-rerun` mode (per
+[`02 § verification`](02-hypothesis-format.md#verification)),
+reproduction is the fraction of sampled rerun seeds whose
+metrics agree with the miner-declared metrics within tolerance:
 
 ```text
 reproduction = (# seeds reproduced) / (# seeds sampled)
 ```
 
-A submission with even one out-of-tolerance seed receives a hard zero on
-this component. This is deliberate: partial reproduction rewards noisy or
-dishonest miners.
+A submission with even one out-of-tolerance seed receives a
+hard zero on this component. This is deliberate: partial
+reproduction rewards noisy or dishonest miners.
+
+For `verification: oracle-only` mode (per HM-REQ-0130),
+reproduction is determined by the oracle verdict directly:
+
+```text
+reproduction = 1.0    if oracle.agrees within tolerance
+             = 0.0    if oracle.disagrees
+             = pending if oracle.unavailable (per 18 § outage)
+```
+
+The oracle is the trust primitive — there is no "partial
+agreement" with an oracle; either the declared answer matches
+within `oracle.tolerance` or it does not. Validators do not
+rerun the artifact; the oracle's verdict is canonical.
 
 ### Improvement
 

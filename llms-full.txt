@@ -1392,6 +1392,47 @@ external_anchor:
   metric: top1_accuracy
 ```
 
+### `verification`
+
+Verification mode declares how validators check the
+submission. Two values:
+
+- **`full-rerun`** *(default)* — the standard model.
+  Validator reruns a `rerun_fraction` sample of the declared
+  seeds in its own sandbox and compares metrics within
+  tolerance. The reproduction component scores agreement.
+- **`oracle-only`** — the validator skips the rerun and
+  scores the reproduction component from a single oracle
+  query. Available only when the hypothesis declares an
+  `oracle` block (or `external_anchor.type=oracle`); the
+  oracle's verdict IS the ground truth, so reproducing
+  seeds adds nothing.
+
+```yaml
+verification: oracle-only
+```
+
+The mode trades two things for one. Lost: the validator's
+independent compute on the [artifact](01-glossary.md#artifact)
+(sampling + reruns); the ability to detect dishonest
+single-seed runs from the artifact alone. Gained: validator workload independent of
+`N_miners`, so the asymmetric break-even ceiling from
+[ADR 0017](../adr/0017-validator-unit-economics.md) does not
+apply to this class. The oracle is the trust boundary;
+[HM-REQ-0080](18-oracle.md#composition) (oracle composition)
+still applies, and a single-oracle declaration carries the
+F3 oracle-corruption risk per
+[`00.5 § F3`](00.5-foundations.md#f3--oracle-corruption).
+
+**When to use.** Hypotheses where the truth is externally
+observable and the oracle is the canonical source —
+prediction markets, sports outcomes, sensor measurements,
+public benchmarks with content-hash pinning. **When not
+to use.** Hypotheses about computational properties of an
+artifact (training-run efficiency, pruning ratio,
+loss-trajectory shape) — those need full rerun because the
+artifact's behaviour is the claim.
+
 ### `sponsorship`
 
 A counterparty-funded bounty paid on settlement. **Required**
@@ -1449,6 +1490,16 @@ profiles.
 > emission alone, so heavy profiles must carry their own
 > bounty per
 > [`27 § C.1`](27-economic-strategy.md#c1-sponsored-hypotheses).
+
+> **HM-REQ-0130** A hypothesis declaring `verification:
+> oracle-only` MUST declare an `oracle` block (or
+> `external_anchor.type=oracle`). A hypothesis with
+> `verification: oracle-only` and no oracle reference is
+> rejected at acceptance — the verification mode requires the
+> oracle that defines its trust boundary. The default
+> `verification: full-rerun` carries no such constraint.
+> Operationalises ADR 0021's third viability path beyond the
+> safe-tier and sponsor-gated tier.
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
@@ -1984,6 +2035,40 @@ epochs — revisit if an epoch changes length):
 10. **Commit weights.** Normalise scores per-miner-hotkey, set weights via
     YUMA.
 
+### Oracle-only branch
+
+Hypotheses declaring `verification: oracle-only` per
+[`02 § verification`](02-hypothesis-format.md#verification)
+take a shortened path:
+
+- **Discover, Fetch, Structural validate** — unchanged.
+- **Rerun sample, Rerun, Reconcile** — **skipped**. Validator
+  does no compute on the artifact's seeds. The artifact is
+  retained for audit / disclosure but not executed.
+- **Baseline compare** — collapses to direct success /
+  falsification evaluation against the declared
+  `claim`-target, since the oracle is the truth source.
+- **Oracle check** — **mandatory** for this verification
+  mode. Per HM-REQ-0130 the hypothesis MUST declare an oracle.
+  The oracle's verdict directly determines the reproduction
+  component per [`06 § Reproduction`](06-scoring.md#reproduction)
+  (1.0 if `agrees`, 0 if not, pending if outage).
+- **Score, Commit weights** — unchanged.
+
+The economic implication is captured in
+[`29 § D.1`](29-economic-survival.md#d1-validator-unit-economics)
+and ADR 0021: validator workload for oracle-only hypotheses
+is bounded by oracle-query overhead alone (~ $0.001 / submission)
+rather than scaling with `N_miners · rerun_fraction · c_compute`.
+The asymmetric break-even ceiling from ADR 0017 does not apply
+to this class.
+
+[HM-INV-0030](#coverage-under-thin-validator-sets) (D2.2
+coverage formula) applies only to the full-rerun path; for
+oracle-only submissions, F2 cherry-picking is structurally
+infeasible because the validator never reruns seeds — the
+oracle is the verification primitive.
+
 ## Coverage under thin validator sets
 
 The `(validator_hotkey, epoch, spec_id, version)` seed makes every
@@ -2237,16 +2322,32 @@ Rigor is identical for all miners submitting against the same spec version
 
 ### Reproduction
 
-Fraction of sampled rerun seeds whose metrics agree with the
-miner-declared metrics within tolerance:
+For the default `verification: full-rerun` mode (per
+[`02 § verification`](02-hypothesis-format.md#verification)),
+reproduction is the fraction of sampled rerun seeds whose
+metrics agree with the miner-declared metrics within tolerance:
 
 ```text
 reproduction = (# seeds reproduced) / (# seeds sampled)
 ```
 
-A submission with even one out-of-tolerance seed receives a hard zero on
-this component. This is deliberate: partial reproduction rewards noisy or
-dishonest miners.
+A submission with even one out-of-tolerance seed receives a
+hard zero on this component. This is deliberate: partial
+reproduction rewards noisy or dishonest miners.
+
+For `verification: oracle-only` mode (per HM-REQ-0130),
+reproduction is determined by the oracle verdict directly:
+
+```text
+reproduction = 1.0    if oracle.agrees within tolerance
+             = 0.0    if oracle.disagrees
+             = pending if oracle.unavailable (per 18 § outage)
+```
+
+The oracle is the trust primitive — there is no "partial
+agreement" with an oracle; either the declared answer matches
+within `oracle.tolerance` or it does not. Validators do not
+rerun the artifact; the oracle's verdict is canonical.
 
 ### Improvement
 
@@ -7572,6 +7673,7 @@ The numbering is per-role, monotonic.
 | S-MINE-11 | External-anchor required: `propose` rejects a hypothesis whose front matter declares neither a mechanical metric, an oracle, nor a public benchmark | CLI | HM-REQ-0060 | `tests/system/mine/test_external_anchor_required.py` |
 | S-MINE-12 | Oracle composition required: `propose` rejects a hypothesis with `oracle.oracles` length ≥ 2 that omits `oracle.composition` | CLI | HM-REQ-0080 | `tests/system/mine/test_oracle_composition.py` |
 | S-MINE-13 | Gated-profile sponsorship required: `propose` rejects a hypothesis whose `hardware_profile` is gated-tier (per `06 § Profile tiers`) and lacks a `sponsorship` block | CLI | HM-REQ-0120 | `tests/system/mine/test_gated_profile_sponsorship.py` |
+| S-MINE-14 | Oracle-only requires oracle: `propose` rejects a hypothesis declaring `verification: oracle-only` that lacks an `oracle` block (or `external_anchor.type=oracle`) | CLI | HM-REQ-0130 | `tests/system/mine/test_oracle_only_requires_oracle.py` |
 
 ### Validate
 
@@ -9405,15 +9507,61 @@ window aggressively; at `single-gpu-24gb` with 50 miners,
 > See [00.5 § c4a-emission-sufficient-steady-state](00.5-foundations.md#c4a-emission-sufficient-steady-state).
 
 This is the first criterion that fails the viability protocol
-in § E at reference numbers. The verdict ADR (forthcoming
-after PR-E.3 + E.4 + E.5 + ADR-0021 land) cannot return
+in § E at reference numbers. The verdict ADR cannot return
 "viable" without one of: (a) recalibration showing
 `c_overhead_validator` is dramatically lower than assumed,
 (b) `f_validator` raised under lever 2, (c) a
 [hypothesis](02-hypothesis-format.md)-mix restriction under
-lever 4 enforcing a cheap-profile floor,
-or (d) the simulator (ADR 0021) showing equilibrium dynamics
-the analytic ceiling here misses.
+lever 4 enforcing a cheap-profile floor, (d) the simulator
+showing equilibrium dynamics the analytic ceiling here misses,
+or (e) routing the workload through the
+[oracle](18-oracle.md)-only verification class introduced in
+[ADR 0021](../adr/0021-oracle-only-verification.md) (see
+[Oracle-only economics](#oracle-only-economics) below).
+
+#### Oracle-only economics
+
+The asymmetric break-even shape `(**)` rests on the assumption
+that validator cost scales with `N_miners · rerun_fraction ·
+c_compute` — every validator reruns sampled seeds for every
+submission. For hypotheses declaring `verification:
+oracle-only` per
+[`02 § verification`](02-hypothesis-format.md#verification),
+the validator skips the rerun step entirely
+([`05 § Oracle-only branch`](05-validator.md#oracle-only-branch)):
+
+```text
+C_val_epoch_oracle_only  =  N_subs_epoch · c_oracle_query
+                         ≈  k · N_miners · $0.001       (per query)
+```
+
+A typical oracle query costs `~ $0.001` (one Bittensor
+synapse + verdict normalisation). Substituting into `(**)`:
+
+```text
+N_validators_oracle_only ≤ (E_epoch · f_validator · t_TAO)
+                          / (k · N_miners · 0.001
+                             + c_overhead_validator)
+```
+
+Worked example at reference numbers (`E_epoch = 1`, `f_v = 0.18`,
+`t_TAO = $300`, `k = 3`):
+
+| `N_miners` | break-even `N_validators` (oracle-only) | break-even `N_validators` (`cpu-small` full-rerun, for comparison) |
+|-----------:|----------------------------------------:|-----------------------------------------------------------------:|
+| 50 | ≈ 216 | ≈ 9 |
+| 100 | ≈ 180 | ≈ 4 |
+| 500 | ≈ 36 | < 1 |
+| 1000 | ≈ 17 | < 1 |
+
+Read: at every plausible `N_miners`, oracle-only validator
+break-even comfortably exceeds the
+[HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets)
+floor of 6. The asymmetric ceiling that bounded full-rerun
+hypotheses does not bind here. ADR 0021 captures the design
+and the trade-off (single-oracle F3 risk per
+[`00.5 § F3`](00.5-foundations.md#f3--oracle-corruption);
+HM-REQ-0080 composition still required for ≥ 2 oracles).
 
 ### D.2 Participation equilibrium
 
@@ -10133,6 +10281,7 @@ checker enforces one-way invariants:
 | HM-REQ-0100 | [22](22-security-bounty.md) | Embargo before public disclosure | A security-hypothesis whose first appearance on `main` was NOT preceded by a private SECURITY.md advisory has its `improvement` component zeroed at scoring time; rigor + reproduction still pay (the public fixture is still useful coverage) | normative |
 | HM-REQ-0110 | [12](12-implementation-constraints.md) | Documentation discipline | Every fact, contract, parameter, or list in this repository has exactly one canonical home; other docs link rather than restate; drift between a canonical statement and a restatement is a bug in the restatement | normative |
 | HM-REQ-0120 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring a gated-tier `hardware_profile` (any `single-gpu-*` or `multi-gpu-*` profile) MUST include a `sponsorship` block; without it the hypothesis is rejected at acceptance. Operationalises ADR 0019's tier-2 pivot | normative |
+| HM-REQ-0130 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring `verification: oracle-only` MUST declare an `oracle` block (or `external_anchor.type=oracle`); without one the hypothesis is rejected at acceptance. Operationalises ADR 0021's third viability path | normative |
 
 ## How to add
 
@@ -10200,6 +10349,7 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0100 | [22](22-security-bounty.md) Embargo before public disclosure | tests/integration/test_meta_gates.py::test_security_bounty_embargo | pending |
 | HM-REQ-0110 | [12](12-implementation-constraints.md) Documentation discipline | tests/integration/test_meta_gates.py::test_single_source_principle | pending |
 | HM-REQ-0120 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_gated_profile_requires_sponsorship | pending |
+| HM-REQ-0130 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_oracle_only_requires_oracle | pending |
 
 ## System-test scenarios
 
@@ -10223,6 +10373,7 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-MINE-11 | HM-REQ-0060 | tests/system/mine/test_external_anchor_required.py::test_external_anchor_required | pending |
 | S-MINE-12 | HM-REQ-0080 | tests/system/mine/test_oracle_composition.py::test_oracle_composition | pending |
 | S-MINE-13 | HM-REQ-0120 | tests/system/mine/test_gated_profile_sponsorship.py::test_gated_profile_sponsorship | pending |
+| S-MINE-14 | HM-REQ-0130 | tests/system/mine/test_oracle_only_requires_oracle.py::test_oracle_only_requires_oracle | pending |
 | S-VAL-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_discover_score.py::test_discover_score | pending |
 | S-VAL-02 | HM-REQ-0010, HM-REQ-0011 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
 | S-VAL-03 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_rerun_tolerance.py::test_rerun_tolerance | pending |

@@ -186,6 +186,47 @@ external_anchor:
   metric: top1_accuracy
 ```
 
+### `verification`
+
+Verification mode declares how validators check the
+submission. Two values:
+
+- **`full-rerun`** *(default)* — the standard model.
+  Validator reruns a `rerun_fraction` sample of the declared
+  seeds in its own sandbox and compares metrics within
+  tolerance. The reproduction component scores agreement.
+- **`oracle-only`** — the validator skips the rerun and
+  scores the reproduction component from a single oracle
+  query. Available only when the hypothesis declares an
+  `oracle` block (or `external_anchor.type=oracle`); the
+  oracle's verdict IS the ground truth, so reproducing
+  seeds adds nothing.
+
+```yaml
+verification: oracle-only
+```
+
+The mode trades two things for one. Lost: the validator's
+independent compute on the [artifact](01-glossary.md#artifact)
+(sampling + reruns); the ability to detect dishonest
+single-seed runs from the artifact alone. Gained: validator workload independent of
+`N_miners`, so the asymmetric break-even ceiling from
+[ADR 0017](../adr/0017-validator-unit-economics.md) does not
+apply to this class. The oracle is the trust boundary;
+[HM-REQ-0080](18-oracle.md#composition) (oracle composition)
+still applies, and a single-oracle declaration carries the
+F3 oracle-corruption risk per
+[`00.5 § F3`](00.5-foundations.md#f3--oracle-corruption).
+
+**When to use.** Hypotheses where the truth is externally
+observable and the oracle is the canonical source —
+prediction markets, sports outcomes, sensor measurements,
+public benchmarks with content-hash pinning. **When not
+to use.** Hypotheses about computational properties of an
+artifact (training-run efficiency, pruning ratio,
+loss-trajectory shape) — those need full rerun because the
+artifact's behaviour is the claim.
+
 ### `sponsorship`
 
 A counterparty-funded bounty paid on settlement. **Required**
@@ -243,6 +284,16 @@ profiles.
 > emission alone, so heavy profiles must carry their own
 > bounty per
 > [`27 § C.1`](27-economic-strategy.md#c1-sponsored-hypotheses).
+
+> **HM-REQ-0130** A hypothesis declaring `verification:
+> oracle-only` MUST declare an `oracle` block (or
+> `external_anchor.type=oracle`). A hypothesis with
+> `verification: oracle-only` and no oracle reference is
+> rejected at acceptance — the verification mode requires the
+> oracle that defines its trust boundary. The default
+> `verification: full-rerun` carries no such constraint.
+> Operationalises ADR 0021's third viability path beyond the
+> safe-tier and sponsor-gated tier.
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).

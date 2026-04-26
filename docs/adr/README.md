@@ -123,3 +123,4 @@ What did we decide?
 - [0018 — Participation equilibrium](0018-participation-equilibrium.md)
 - [0019 — Viability verdict (not viable as designed)](0019-viability-verdict-not-viable-as-designed.md)
 - [0020 — Sponsor-gated heavy profiles](0020-sponsor-gated-heavy-profiles.md)
+- [0021 — Oracle-only verification](0021-oracle-only-verification.md)

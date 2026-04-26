@@ -358,15 +358,61 @@ window aggressively; at `single-gpu-24gb` with 50 miners,
 > See [00.5 § c4a-emission-sufficient-steady-state](00.5-foundations.md#c4a-emission-sufficient-steady-state).
 
 This is the first criterion that fails the viability protocol
-in § E at reference numbers. The verdict ADR (forthcoming
-after PR-E.3 + E.4 + E.5 + ADR-0021 land) cannot return
+in § E at reference numbers. The verdict ADR cannot return
 "viable" without one of: (a) recalibration showing
 `c_overhead_validator` is dramatically lower than assumed,
 (b) `f_validator` raised under lever 2, (c) a
 [hypothesis](02-hypothesis-format.md)-mix restriction under
-lever 4 enforcing a cheap-profile floor,
-or (d) the simulator (ADR 0021) showing equilibrium dynamics
-the analytic ceiling here misses.
+lever 4 enforcing a cheap-profile floor, (d) the simulator
+showing equilibrium dynamics the analytic ceiling here misses,
+or (e) routing the workload through the
+[oracle](18-oracle.md)-only verification class introduced in
+[ADR 0021](../adr/0021-oracle-only-verification.md) (see
+[Oracle-only economics](#oracle-only-economics) below).
+
+#### Oracle-only economics
+
+The asymmetric break-even shape `(**)` rests on the assumption
+that validator cost scales with `N_miners · rerun_fraction ·
+c_compute` — every validator reruns sampled seeds for every
+submission. For hypotheses declaring `verification:
+oracle-only` per
+[`02 § verification`](02-hypothesis-format.md#verification),
+the validator skips the rerun step entirely
+([`05 § Oracle-only branch`](05-validator.md#oracle-only-branch)):
+
+```text
+C_val_epoch_oracle_only  =  N_subs_epoch · c_oracle_query
+                         ≈  k · N_miners · $0.001       (per query)
+```
+
+A typical oracle query costs `~ $0.001` (one Bittensor
+synapse + verdict normalisation). Substituting into `(**)`:
+
+```text
+N_validators_oracle_only ≤ (E_epoch · f_validator · t_TAO)
+                          / (k · N_miners · 0.001
+                             + c_overhead_validator)
+```
+
+Worked example at reference numbers (`E_epoch = 1`, `f_v = 0.18`,
+`t_TAO = $300`, `k = 3`):
+
+| `N_miners` | break-even `N_validators` (oracle-only) | break-even `N_validators` (`cpu-small` full-rerun, for comparison) |
+|-----------:|----------------------------------------:|-----------------------------------------------------------------:|
+| 50 | ≈ 216 | ≈ 9 |
+| 100 | ≈ 180 | ≈ 4 |
+| 500 | ≈ 36 | < 1 |
+| 1000 | ≈ 17 | < 1 |
+
+Read: at every plausible `N_miners`, oracle-only validator
+break-even comfortably exceeds the
+[HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets)
+floor of 6. The asymmetric ceiling that bounded full-rerun
+hypotheses does not bind here. ADR 0021 captures the design
+and the trade-off (single-oracle F3 risk per
+[`00.5 § F3`](00.5-foundations.md#f3--oracle-corruption);
+HM-REQ-0080 composition still required for ≥ 2 oracles).
 
 ### D.2 Participation equilibrium
 
