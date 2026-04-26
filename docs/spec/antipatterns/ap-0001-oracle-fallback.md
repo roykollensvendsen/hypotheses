@@ -1,4 +1,5 @@
 <!-- antipattern-content -->
+<!-- protects: HM-REQ-0080 -->
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
