@@ -9235,9 +9235,10 @@ sponsorship-dependent per
 
 ### Decision protocol
 
-After PR-E.2 through PR-E.5 + the simulation infrastructure in
-[ADR 0021](../adr/0021-economic-survival-simulator.md) land,
-the maintainer publishes a **viability ADR** that:
+After PR-E.2 through PR-E.5 + the simulation infrastructure
+land (the simulator's contract is captured in a separate ADR
+when it ships), the maintainer publishes a **viability ADR**
+that:
 
 1. Reports each criterion's measured value.
 2. Returns one of three verdicts:
