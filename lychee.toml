@@ -19,6 +19,12 @@ exclude = [
     # Blog platforms that intermittently 5xx or time out.
     '^https?://blog\.inferencelabs\.com/',
     '^https?://(www\.)?medium\.com/',
+
+    # Contributor Covenant translations endpoint intermittently
+    # connection-resets; the homepage and version pages still
+    # respond. We keep the citation in CODE_OF_CONDUCT.md but skip
+    # link-checking the unstable subpath.
+    '^https?://(www\.)?contributor-covenant\.org/translations',
 ]
 
 # Accept these status codes as success (in addition to 2xx) for any
