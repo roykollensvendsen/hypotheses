@@ -245,6 +245,21 @@ The schema admits all three anchor types as optional; the
 hypotheses grandfather under the implicit mechanical default. Phase 1
 scoring (`src/hypotheses/scoring/`) implements the explicit check.
 
+## Attribution is not scored
+
+A formal hypothesis's
+[`inspired_by`](02-hypothesis-format.md#inspired_by) field
+(introduced by ADR 0024) carries no weight in the composite
+score. Attribution is deterministic and mechanical: the field's
+HM-REQ-0151 / HM-REQ-0153 syntactic checks at T-ACC pass or fail,
+and on settlement the 5 pp [ideator](01-glossary.md#ideator)
+slice routes to cited proposers per [07 § sponsorship pool split](07-incentive.md#sponsorship-pool-split).
+Validators do not score the *quality* of an attribution, the
+relevance of the cited I-NNNN to the formal claim, or the
+formal author's choice to cite or not. Scoring stays a
+deterministic pure function over artifacts — D1.2 holds — and
+attribution is a payment-routing concern, not a quality signal.
+
 ## Oracles
 
 When a hypothesis declares `oracle.subnet`, the scoring pipeline adds a

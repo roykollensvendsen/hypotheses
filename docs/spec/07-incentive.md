@@ -1,7 +1,7 @@
 ---
 name: incentive
 description: weight setting, emission flow, anti-gaming countermeasures
-tokens: 800
+tokens: 1100
 load_for: [implementation, governance, review]
 depends_on: [06]
 kind: contract
@@ -91,6 +91,29 @@ independently and the validator rerun cost is per-submission.
 Validators cannot score their own miner hotkey. Enforced: a validator's
 weight vector must have `0` for its own miner hotkey. Validators that
 violate this are anomalous and get down-weighted.
+
+### Sponsorship pool split
+
+Sponsor pools per
+[02 § sponsorship](02-hypothesis-format.md#sponsorship) split
+60 % miner / 30 % validators / 10 % treasury by default. When a
+formal hypothesis declares a non-empty
+[`inspired_by`](02-hypothesis-format.md#inspired_by) field, the
+split shifts to **55 % miner / 30 % validators / 10 % treasury /
+5 % [ideator](01-glossary.md#ideator)(s)** per ADR 0024. The
+5 pp ideator slice is
+partitioned across cited I-NNNN proposers by the declared
+weights and follows the same two-tier 70 / 30 schedule as miner
+pay (HM-REQ-0070): 70 % at settled-*, 30 % deferred 6 months
+pending no T-OVR overturn. Empty / absent `inspired_by` returns
+the 5 pp to the miner sub-pool. Citation is strictly optional;
+a formal author who is also the miner pays the slice from what
+would otherwise be theirs, while a formal author who is not the
+miner has no economic stake in the citation choice.
+
+The slice is sponsor-funded; no new emission is created. The 5 pp
+parameter is governance-tunable per
+[20 § parameter inventory](20-economic-model.md#parameter-inventory).
 
 ### Economic penalty for bad submissions
 
