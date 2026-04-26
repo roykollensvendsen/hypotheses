@@ -66,6 +66,9 @@ Read in order:
     program; vulnerability disclosures are first-class hypotheses
     on the registry; HM-REQ-0100 embargo gate; F1 and F6 are the
     canonical targets
+25. [23 — System tests](23-system-tests.md) — black-box harness
+    contract; role × surface × scenario matrix; local developer
+    workflow
 
 Cross-cutting references:
 
