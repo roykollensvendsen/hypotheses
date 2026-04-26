@@ -9539,6 +9539,17 @@ land (the simulator's contract is captured in a separate ADR
 when it ships), the maintainer publishes a **viability ADR**
 that:
 
+> **Early verdict (Phase 0):**
+> [ADR 0019](../adr/0019-viability-verdict-not-viable-as-designed.md)
+> applied the protocol's escape clause after
+> [ADRs 0017](../adr/0017-validator-unit-economics.md) and
+> [0018](../adr/0018-participation-equilibrium.md) showed
+> criteria 2 and 3 fail jointly at reference numbers, with
+> the failure structural rather than a sensitivity edge case.
+> The verdict triggers a tier-2 pivot (lever 4 + 5 combined,
+> ADR 0020 forthcoming). PR-E.4, PR-E.5, and PR-S still ship
+> before Phase 2 mid-point review.
+
 1. Reports each criterion's measured value.
 2. Returns one of three verdicts:
    - **Viable** — all four pass; proceed to Phase 2 testnet
