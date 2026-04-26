@@ -77,10 +77,11 @@ match how this project actually writes docs:
   (`docs/spec/_schemas/adr-frontmatter.schema.json`) which adds
   the `status` / `date` / `deciders` fields.
 
-One further kind is reserved for future use but not yet emitted:
-
-- `hypothesis` — for `hypotheses/H-*.md` once their schema
-  acquires a `kind:` field.
+- `hypothesis` — preregistered hypotheses
+  (`hypotheses/H-*.md`). The schema requires a fixed value
+  (`kind: hypothesis`) so the field acts as a uniformity
+  marker rather than a discriminator; validated by
+  `scripts/validate_hypotheses.py`.
 
 `tutorial` and `how-to` (the canonical Diátaxis pair) are not used
 yet because the project doesn't ship those genres at this phase.
@@ -200,8 +201,6 @@ Open improvements that are spec'd but not yet implemented:
 
 - **Antipattern `protects:` tags** — each `ap-*.md` should declare
   which `HM-REQ`/`HM-INV` it protects. Editorial work.
-- **Hypothesis `kind:` field** — `hypothesis.schema.json` needs to
-  allow/require `kind: hypothesis`.
 - **Docs-impact PR comment bot** — `scripts/docs_impact_comment.py`
   needs git-diff context that is awkward to test outside a real
   PR runtime. Lands in a follow-up.

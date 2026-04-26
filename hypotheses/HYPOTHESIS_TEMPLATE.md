@@ -1,5 +1,6 @@
 ---
 id: H-XXXX
+kind: hypothesis
 title: "short sentence describing the hypothesis"
 authors:
   - name: "your handle"

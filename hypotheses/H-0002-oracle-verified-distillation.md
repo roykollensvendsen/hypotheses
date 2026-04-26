@@ -1,5 +1,6 @@
 ---
 id: H-0002
+kind: hypothesis
 title: "Distilled 2-layer MLP preserves SN42 task-0 accuracy within oracle tolerance"
 authors:
   - name: "repo-maintainer"

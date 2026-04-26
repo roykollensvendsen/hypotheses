@@ -8,6 +8,7 @@
   "additionalProperties": false,
   "required": [
     "id",
+    "kind",
     "title",
     "authors",
     "status",
@@ -32,6 +33,10 @@
       "type": "string",
       "pattern": "^H-(\\d{4}|XXXX)$",
       "description": "H-NNNN where NNNN is four decimal digits; H-XXXX is reserved for the template."
+    },
+    "kind": {
+      "const": "hypothesis",
+      "description": "Always 'hypothesis'. Aligns hypothesis files with the kind: taxonomy used by spec docs and ADRs (see docs/CONTRIBUTING-DOCS.md)."
     },
     "title": { "type": "string", "minLength": 1 },
 

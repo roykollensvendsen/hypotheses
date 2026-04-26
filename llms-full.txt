@@ -1064,6 +1064,7 @@ All fields are required unless marked optional.
 
 ```yaml
 id: H-0001
+kind: hypothesis
 title: "Connectivity-first training: pruning as the generative act"
 authors:
   - name: "handle or real name"
