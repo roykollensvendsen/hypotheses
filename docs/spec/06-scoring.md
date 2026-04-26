@@ -5,6 +5,7 @@ tokens: 2200
 load_for: [implementation, review, governance]
 depends_on: [02, 18]
 kind: contract
+evidence: reasoned-design
 ---
 
 # 06 — Scoring
@@ -227,16 +228,21 @@ specifics — is in [18 — Oracle contract](18-oracle.md).
 
 ## Statistical tests
 
-Supported in v1:
+Supported in v1, each from established statistical literature:
 
-- `welch_t`: Welch's t-test across seeds. For metrics where higher or
-  lower is the target direction, the test is one-sided.
+- `welch_t`: Welch's t-test across seeds ({ref:welch-1947}). For
+  metrics where higher or lower is the target direction, the test
+  is one-sided.
 - `bootstrap`: nonparametric bootstrap on the difference of medians,
-  10k resamples, BCa CIs.
-- `mann_whitney`: for non-normal metric distributions.
+  10k resamples, BCa (bias-corrected and accelerated) confidence
+  intervals ({ref:efron-tibshirani-1993}).
+- `mann_whitney`: Mann–Whitney U for non-normal metric distributions
+  ({ref:mann-whitney-1947}).
 
 New tests require a spec update and a corresponding implementation in
-`src/hypotheses/scoring/stats/`.
+`src/hypotheses/scoring/stats/`. Implementations match scipy.stats
+reference outputs within 1e-9 (per
+[`docs/tasks/phase-1.yml`](../tasks/phase-1.yml) T-P1-012 DoD).
 
 ## Per-metric aggregation
 
