@@ -52,6 +52,15 @@
       "type": "string",
       "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
       "description": "Optional ISO date convenience marker. When present, scripts/check_staleness.py asserts it matches the file's actual git last-modified date within ±1 day. Run `python3 scripts/check_staleness.py --update` to auto-sync. Absent is fine — git is the source of truth."
+    },
+    "internal_only": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^HM-(REQ|INV)-[0-9]{4}$"
+      },
+      "uniqueItems": true,
+      "description": "Optional list of HM-REQ/HM-INV IDs whose enforcement is purely internal (CI gate, code-shape) and have no surface-observable manifestation. Used by scripts/check_system_test_traceability.py to exempt these IDs from the 'every requirement has a system-test scenario' rule. Only meaningful in docs/spec/requirements.md and docs/spec/invariants.md."
     }
   }
 }

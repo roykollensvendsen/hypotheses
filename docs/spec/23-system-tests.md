@@ -192,17 +192,21 @@ The numbering is per-role, monotonic.
 | S-MINE-08 | Unregistered hotkey: `propose` without a registered hotkey exits non-zero with a `hypo init` pointer | CLI | HM-REQ-0030 | `tests/system/mine/test_unregistered_hotkey.py` |
 | S-MINE-09 | SDK ↔ CLI parity: `client.propose_hypothesis(...)` produces the same on-disk artifacts as `hypo propose` for the same input | SDK | HM-REQ-0001 | `tests/system/mine/test_sdk_cli_parity.py` |
 | S-MINE-10 | MCP read-only listing: `list_hypotheses` returns the same set as `hypo ls`, with the same shape | MCP | HM-REQ-0001 | `tests/system/mine/test_mcp_list.py` |
+| S-MINE-11 | External-anchor required: `propose` rejects a hypothesis whose front matter declares neither a mechanical metric, an oracle, nor a public benchmark | CLI | HM-REQ-0060 | `tests/system/mine/test_external_anchor_required.py` |
+| S-MINE-12 | Oracle composition required: `propose` rejects a hypothesis with `oracle.oracles` length ≥ 2 that omits `oracle.composition` | CLI | HM-REQ-0080 | `tests/system/mine/test_oracle_composition.py` |
 
 ### Validate
 
 | ID | scenario | surface | HM-REQ | target test |
 |----|----------|---------|--------|-------------|
 | S-VAL-01 | Discover and score: `validate serve` picks up a fresh local submission, reruns it, and writes a score vector | CLI | HM-REQ-0010, HM-REQ-0020 | `tests/system/validate/test_discover_score.py` |
-| S-VAL-02 | Determinism: two independent runs over the same submission produce byte-identical score vectors | CLI | HM-REQ-0010 | `tests/system/validate/test_deterministic_score.py` |
+| S-VAL-02 | Determinism: two independent runs over the same submission produce byte-identical score vectors (any LLM in the path would break this, so HM-REQ-0011 is covered transitively) | CLI | HM-REQ-0010, HM-REQ-0011 | `tests/system/validate/test_deterministic_score.py` |
 | S-VAL-03 | Rerun-tolerance miss: a submission whose miner-declared metric falls outside the rerun band has its reproduction component zeroed; other components still pay | CLI | HM-REQ-0010, HM-REQ-0020 | `tests/system/validate/test_rerun_tolerance.py` |
 | S-VAL-04 | Anti-collusion: a validator's own miner hotkey is skipped at scoring time; the run leaves an audit-trail entry | CLI | HM-REQ-0012 | `tests/system/validate/test_no_self_score.py` |
 | S-VAL-05 | Novelty tiebreak: two submissions with identical composite are ordered by announcement block height, then in-block index, then SS58 lex | CLI | HM-REQ-0021 | `tests/system/validate/test_novelty_tiebreak.py` |
 | S-VAL-06 | MCP score query parity: `get_score_history(...)` returns the same records as `hypo scores` for the same hotkey/window | MCP | HM-REQ-0010 | `tests/system/validate/test_mcp_score_parity.py` |
+| S-VAL-07 | Two-tier settlement: a settling submission earns 70 % of novelty + improvement at the first `settled-*` transition, with the remaining 30 % deferred for the documented six-month T-OVR window | CLI | HM-REQ-0070 | `tests/system/validate/test_two_tier_settlement.py` |
+| S-VAL-08 | Security-embargo gate: a security-flavoured hypothesis whose first appearance on `main` was not preceded by a SECURITY.md advisory has its improvement component zeroed at scoring time; rigor and reproduction still pay | CLI | HM-REQ-0100 | `tests/system/validate/test_security_embargo.py` |
 
 ### Develop
 

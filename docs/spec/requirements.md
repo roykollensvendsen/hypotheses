@@ -5,6 +5,12 @@ tokens: 1000
 load_for: [implementation, review]
 depends_on: []
 kind: reference
+internal_only:
+  - HM-REQ-0040
+  - HM-REQ-0041
+  - HM-REQ-0042
+  - HM-REQ-0090
+  - HM-REQ-0110
 ---
 
 # Requirements index

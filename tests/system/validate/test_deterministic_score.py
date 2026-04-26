@@ -11,6 +11,7 @@ import pytest
 
 # spec: S-VAL-02
 # spec: HM-REQ-0010
+# spec: HM-REQ-0011
 @pytest.mark.system_local
 @pytest.mark.skip(reason="phase-1 implementation pending: S-VAL-02")
 def test_deterministic_score() -> None:
