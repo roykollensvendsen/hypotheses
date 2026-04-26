@@ -295,6 +295,43 @@ artifact (training-run efficiency, pruning ratio,
 loss-trajectory shape) — those need full rerun because the
 artifact's behaviour is the claim.
 
+### `inspired_by`
+
+An optional, weighted citation of one or more
+[informal hypotheses](01-glossary.md#informal-hypothesis) that
+inspired this formal hypothesis. The brainstorming layer above
+the formal registry is documented in
+[02b](02b-informal-hypothesis-format.md); the rationale and
+economic flow are in
+[ADR 0024](../adr/0024-informal-hypothesis-registry.md).
+
+```yaml
+inspired_by:
+  - id: I-0001
+    weight: 0.7
+  - id: I-0042
+    weight: 0.3
+```
+
+The field is optional. When non-empty, it routes a 5 pp
+[ideator slice](01-glossary.md#ideator) of the sponsor pool to
+the cited proposers on settlement, partitioned by `weight` and
+paid under the same two-tier 70 / 30 schedule as miner pay
+(HM-REQ-0070). When absent or empty, the 5 pp returns to the
+miner sub-pool.
+
+Constraints (canonical home:
+[`00.5 § B Defences against F8`](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation)):
+
+- ≤ 3 entries; weights ∈ (0, 1]; weights sum to 1.0
+  (HM-REQ-0151).
+- Each cited I-NNNN is in `accepted` status and at least
+  `ideator_staleness_blocks` older than this hypothesis's
+  PR-open block (HM-REQ-0153).
+- No cited I-NNNN's `proposer.hotkey` equals the citing
+  H-NNNN's primary author hotkey (HM-REQ-0151 self-cite ban).
+- Locked at T-ACC; cannot be amended after merge.
+
 ### `sponsorship`
 
 A counterparty-funded bounty paid on settlement. **Required**

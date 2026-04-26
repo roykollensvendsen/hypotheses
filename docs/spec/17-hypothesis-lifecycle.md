@@ -127,6 +127,56 @@ after the threshold-met moment score reproduction +
 improvement as today (novelty = 0) but do not receive any
 share of the settlement payout.
 
+## Informal-hypothesis lifecycle
+
+[Informal hypotheses](01-glossary.md#informal-hypothesis) under
+`informal/I-NNNN-*.md` follow a parallel lifecycle. The states
+and transitions are documented here as a sibling section so
+readers reasoning about cross-product I-state × H-state behaviour
+can find them in one place. Schema fields and rationale are in
+[02b](02b-informal-hypothesis-format.md) and
+[ADR 0024](../adr/0024-informal-hypothesis-registry.md).
+
+### Informal states
+
+| state | meaning |
+|-------|---------|
+| `proposed` | I-NNNN PR open; bond escrowed per HM-REQ-0152; not yet citable. |
+| `accepted` | merged on `main`; `id` allocated; citable from a formal hypothesis's `inspired_by`. |
+| `claimed` | first formal H-NNNN reaches T-ACC with this I-NNNN cited; bond returned to `proposer.hotkey`. |
+| `child-settled` | first cited H-NNNN reaches `settled-*`; 70 % of the [Ideator](01-glossary.md#ideator) slice paid (split by declared weight when multiple I are cited). |
+| `child-confirmed` | the cited H-NNNN reaches `confirmed`; the deferred 30 % of the ideator slice paid. |
+| `withdrawn` | proposer or maintainer withdraws the I-NNNN. Terminal. |
+| `expired` | no formal H-NNNN cited this I-NNNN within `ideator_expiry_blocks`. Bond forfeited to treasury. Terminal. |
+
+A single I-NNNN can transit `child-settled` and `child-confirmed`
+multiple times (multiple H-NNNN can cite it; payouts are per-H).
+The `status` field reports the most-advanced state across all
+citing H-NNNN, with `claimed` once at least one cite exists.
+
+### Informal transitions
+
+| id | from | to | trigger | who |
+|----|------|----|---------|-----|
+| **T-IPROP** | (none) | `proposed` | author opens PR creating `informal/I-NNNN-<slug>.md`; `stake_tao` bond escrowed | any contributor |
+| **T-IACC** | `proposed` | `accepted` | maintainer merges the PR after schema and prompt-injection-scanner gates pass | maintainer |
+| **T-ICLA** | `accepted` | `claimed` | first formal H-NNNN reaches T-ACC with this I-NNNN in `inspired_by` (HM-REQ-0151 + HM-REQ-0153 gates pass) | validators (consensus) at H's T-ACC |
+| **T-ICSE** | `claimed` | `child-settled` | a citing H-NNNN reaches `settled-supported` or `settled-refuted` | validators (consensus) at H's T-SUP / T-REF |
+| **T-ICON** | `child-settled` | `child-confirmed` | a citing H-NNNN reaches `confirmed` (T-CON) | system (time-triggered) at H's T-CON |
+| **T-IWIT** | `proposed` or `accepted` or `claimed` | `withdrawn` | proposer or maintainer opens a PR setting `status: withdrawn`; bond returned only if no H-NNNN has yet cited (else slashed) | proposer OR maintainer |
+| **T-IEXP** | `accepted` | `expired` | `ideator_expiry_blocks` elapsed since `proposed_at_block` with no T-ICLA having fired | system (time-triggered) |
+
+### Cross-product invariant
+
+If a citing H-NNNN's settlement is overturned (T-OVR), the
+deferred 30 % ideator slice is forfeited along with the deferred
+miner / validator / treasury portions, per HM-REQ-0070's
+two-tier defence (D8.4 in
+[00.5 § B](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation)).
+The I-NNNN's `status` does NOT regress on H-side T-OVR — it
+remains `child-settled` (since the 70 % was paid honestly).
+Phase 2 retro revisits this if observed overturn rates make it lossy.
+
 ## Security-hypothesis variant
 
 A **security-hypothesis** is a hypothesis whose claim is "attack X

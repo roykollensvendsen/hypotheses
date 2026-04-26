@@ -111,7 +111,7 @@ Total declared tokens: **66300**.
 
 ## `proposal`
 
-Total declared tokens: **15900**.
+Total declared tokens: **17300**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -119,13 +119,14 @@ Total declared tokens: **15900**.
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 6000 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2900 |
+| [docs/spec/02b-informal-hypothesis-format.md](02b-informal-hypothesis-format.md) | I-NNNN schema | 1400 |
 | [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `review`
 
-Total declared tokens: **76900**.
+Total declared tokens: **78300**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -133,6 +134,7 @@ Total declared tokens: **76900**.
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 6000 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2900 |
+| [docs/spec/02b-informal-hypothesis-format.md](02b-informal-hypothesis-format.md) | I-NNNN schema | 1400 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |

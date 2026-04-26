@@ -19,6 +19,7 @@ Phase 0 — spec freeze. The runtime under `src/hypotheses/` is not yet implemen
 - [docs/spec/00.5-foundations.md](docs/spec/00.5-foundations.md): adversarial-first foundation — threats, defences, assumptions, and what we give up.
 - [docs/spec/01-glossary.md](docs/spec/01-glossary.md): definitions of terms used across the specification.
 - [docs/spec/02-hypothesis-format.md](docs/spec/02-hypothesis-format.md): preregistration-style schema for hypothesis specs stored in hypotheses/.
+- [docs/spec/02b-informal-hypothesis-format.md](docs/spec/02b-informal-hypothesis-format.md): schema for cheap-to-post seed questions stored in informal/, paralleling the formal hypothesis registry.
 - [docs/spec/03-architecture.md](docs/spec/03-architecture.md): components, data flow, and trust model for the subnet.
 - [docs/spec/04-miner.md](docs/spec/04-miner.md): miner responsibilities, CLI, synapse interfaces, artifact contract.
 - [docs/spec/05-validator.md](docs/spec/05-validator.md): validator pipeline, rerun policy, score commitment.
