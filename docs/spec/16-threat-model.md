@@ -191,6 +191,12 @@ PR that ships the simulator.
 | T-075 | Long-latency rent extraction: validators paid every cycle (~20 min) but research ground-truth arrives in months; rational validator extracts emissions during easy-verification phase and exits before slow truth invalidates the consensus | two-tier settlement (HM-REQ-0070): 70% of novelty + improvement at first settlement, 30% deferred 6 months pending no T-OVR overturn; external-verifiability anchor (HM-REQ-0060) so consensus alone cannot manufacture a settlement | [17 § two-tier settlement](17-hypothesis-lifecycle.md#two-tier-settlement), [00.5 § F6](00.5-foundations.md#f6--long-latency-rent-extraction) | mitigated |
 | T-076 | Discoverer publishes a security-hypothesis without following the SECURITY.md embargo, exposing the unfixed attack publicly before the spec/code defends it | HM-REQ-0100 zeros the `improvement` component for non-embargoed disclosures (no bounty); `rigor` + `reproduction` still pay so the public fixture isn't lost; the `red-team` role prompt (PR 3) trains agents on the embargo workflow | [22 § disclosure mechanics](22-security-bounty.md#d-disclosure-mechanics-phase-01), [SECURITY.md](../../SECURITY.md) | mitigated |
 
+### I. Curation attacks
+
+| ID | description | mitigation | references | residual risk |
+|----|-------------|------------|------------|---------------|
+| T-080 | Whale or sybil cluster dominates a community sponsorship pool to steer miner attention toward a chosen hypothesis (curation manipulation) | per-sponsor cap (HM-REQ-0140) limits any single `sponsor_id` to ≤ 50 % of pool total; minimum-2-distinct-sponsors requirement; the rigor floor (HM-REQ-0001 + HM-REQ-0050) means funded hypotheses still must declare preregistered analysis plans, success / falsification criteria, external anchor — curation buys attention, not score control | [00.5 § F7](00.5-foundations.md#f7--curation-manipulation), [02 § sponsorship](02-hypothesis-format.md#sponsorship), ADR 0022 | partial — sybil sponsor-IDs and off-pool side payments are residual; F7 fixture under HM-REQ-0090 lands at Phase 2 |
+
 ## Known accepted risk
 
 - **Single-maintainer bus factor (T-052).** Intentional for Phase 0–2;

@@ -301,7 +301,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Implement the validator pipeline** (T-P1-015) | 05 (~2200) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
 | **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
 | **Review a validator-side PR** | 05 (~2200) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
-| **Draft a new hypothesis** | 02 (~1700) + 01 (~700) + existing H-000x (~800–2500) | ≈ 3200–4900 |
+| **Draft a new hypothesis** | 02 (~2700) + 01 (~700) + existing H-000x (~800–2500) | ≈ 4200–5900 |
 | **Run a validator-operator agent** | 05 (~2200) + 13 (~1800) + 19 (~3800) | ≈ 7800 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
@@ -515,7 +515,7 @@ This document is read first by every agent role.
 [`agents/prompts/`](../../agents/prompts/) reference it as their
 preamble.
 
-## A. The six threats the design must survive
+## A. The seven threats the design must survive
 
 Every defence in this spec descends from one of these. If you find
 yourself proposing a change that doesn't address (or might weaken)
@@ -607,6 +607,30 @@ deferred settlement is the design's bet against rent extraction;
 fixtures that demonstrate the bet doesn't hold under specific
 coalition shapes are exactly what the bounty rewards.
 
+### F7 — Curation manipulation
+
+Once the design admits community-funded sponsorship pools per
+ADR 0022, a new attack surface opens: a whale or sybil cluster
+can dominate the pool for a hypothesis that isn't actually
+rigorous, biasing miner attention and validator workload toward
+popular-but-shallow questions. The threat is *demand-side* — F5
+covers supply-side sybil farming on the miner population; F7
+covers demand-side concentration on the sponsorship pool.
+
+**Maps to threat-model rows.** [T-080 (NEW)](16-threat-model.md#i-curation-attacks)
+— added in the same PR that lands HM-REQ-0140. The fixture
+documenting the bound on whale-share is
+[`tests/golden/adversarial/F7-curation-manipulation.json`](../../tests/golden/adversarial/F7-curation-manipulation.json)
+(deferred to Phase 2 onset; the placeholder is the
+adversarial-simulator coverage requirement under HM-REQ-0090).
+
+**Open discovery channel.** F7 is a third canonical target for
+the [22 — Security bounty](22-security-bounty.md) programme.
+HM-REQ-0140's 50 % per-sponsor cap is the design's defence;
+fixtures demonstrating attacks that bypass the cap (sybil
+sponsor-IDs, off-pool side payments, sponsor coordination)
+earn the standard scoring components.
+
 ## B. Defences derived from each threat
 
 Defences are listed by the threat they address. Where a defence is
@@ -696,6 +720,25 @@ New requirements introduced by this foundation are marked **NEW**.
   pending no overturn. Validators who defect after extracting the
   early payout lose the deferred 30%; validators who confirmed in
   good faith collect both.
+
+### Defences against F7 (curation manipulation)
+
+- **D7.1 Per-sponsor cap (HM-REQ-0140, NEW).** No single
+  `sponsor_id` contributes more than 50 % of a community
+  pool's total `bounty_tao` after the `escrow_block` cutoff.
+  A whale wanting to dominate must split across multiple
+  hotkeys, which costs registration fees and forfeits the
+  signal value of pooled support.
+- **D7.2 Minimum-distinct-sponsors floor (HM-REQ-0140).** The
+  `sponsors` array must contain ≥ 2 distinct `sponsor_id`
+  values. A single-sponsor pool degenerates to the
+  single-sponsor form and triggers HM-REQ-0140 rejection.
+- **D7.3 Schema-as-contract per-hypothesis (HM-REQ-0001 +
+  HM-REQ-0050).** Curation pressure can fund hypotheses but
+  cannot lower the rigor floor: every funded hypothesis still
+  must declare a preregistered analysis plan, success /
+  falsification criteria, and external anchor. F7 attacks
+  steer attention but cannot rewrite the rigor checks.
 
 ### Structural defences (not tied to a single threat)
 
@@ -896,6 +939,28 @@ underpinning the custody contract in
 maintainer either tightens the custody contract before the
 first sponsor's transaction or aborts the path. ADR 0014
 documents the contingency.
+
+### c13-community-funded-demand
+
+**Assumption (C13).** A meaningful fraction of would-be
+hypothesis funders contribute via per-bounty stakes ≤ 1 TAO
+to a community pool rather than as a single big counterparty.
+Comparable evidence: ResearchHub's RSC bounty mechanism
+distributes ~$1.9M across thousands of bounties
+({ref:researchhub-tokenomics-2025}); Gitcoin quadratic-funding
+has channelled ~$50M cumulative across ~7 000 funded grants
+in 18 rounds, median per-contributor stake ~$5.
+
+**Defences supported.** None directly — *commercial* assumption
+underpinning the community-pool branch of the sponsorship
+mechanism in
+[`02 § sponsorship`](02-hypothesis-format.md#sponsorship)
+(introduced by ADR 0022).
+
+**If false.** Community-pool sponsorship doesn't materialise;
+gated-tier and `verification: oracle-only` hypotheses revert
+to depending on single-sponsor c8 only, narrowing the c8
+funnel back to "one big counterparty" form.
 
 ## D. What we explicitly give up
 
@@ -1207,7 +1272,7 @@ This doc is done when:
 ---
 name: hypothesis format
 description: preregistration-style schema for hypothesis specs stored in hypotheses/
-tokens: 1700
+tokens: 2700
 load_for: [implementation, proposal, review]
 depends_on: [01]
 kind: contract
@@ -1444,6 +1509,15 @@ fails outside the cheap-profile regime — see
 [ADR 0017](../adr/0017-validator-unit-economics.md) and
 [ADR 0019](../adr/0019-viability-verdict-not-viable-as-designed.md).
 
+The block admits two shapes: **single sponsor** (legacy form)
+and **community pool** (multiple sponsors). The community
+form is introduced by ADR 0022 and widens the funnel of
+[c8-sponsorship-demand](00.5-foundations.md#c8-sponsorship-demand)
+satisfiers from a single counterparty to a pool of
+≥ 2 contributors per HM-REQ-0140.
+
+#### Single sponsor
+
 ```yaml
 sponsorship:
   sponsor_id: "researchhub:0xABC..."   # opaque identifier; counterparty-defined
@@ -1454,6 +1528,40 @@ sponsorship:
     treasury: 0.10
   escrow_block: 1234567                 # block height bounty was locked
 ```
+
+#### Community pool
+
+```yaml
+sponsorship:
+  sponsors:                            # array form; one or more contributors
+    - sponsor_id: "5F1abc..."          # SS58 hotkey is the canonical identifier
+      bounty_tao: 1.0
+    - sponsor_id: "5G2def..."
+      bounty_tao: 0.5
+    - sponsor_id: "researchhub:0xABC..."
+      bounty_tao: 3.5
+  split:
+    miner: 0.60
+    validators: 0.30
+    treasury: 0.10
+  escrow_block: 1234567                 # cutoff after which contributions close
+```
+
+`bounty_tao` (single form) or the sum of
+`sponsors[].bounty_tao` (community form) determines the total
+pool. Splits and the `escrow_block` cutoff apply identically.
+After settlement, the miner / validators / treasury shares
+are computed from the total and distributed; sponsors do not
+directly track per-sponsor recipients.
+
+**F7 anti-manipulation cap.** No single `sponsor_id`
+contributes more than 50 % of the total `bounty_tao` after
+the `escrow_block` cutoff fires. A community pool that fails
+this check is rejected per HM-REQ-0140 below. The cap defends
+against whale-steering per
+[`00.5 § F7`](00.5-foundations.md#f7--curation-manipulation);
+PR-E.5's calibration ratchet revises the threshold based on
+Phase 2 pool data.
 
 The split defaults to `(0.60, 0.30, 0.10)` per
 [`27 § G open question 2`](27-economic-strategy.md#g-open-questions);
@@ -1500,6 +1608,17 @@ profiles.
 > `verification: full-rerun` carries no such constraint.
 > Operationalises ADR 0021's third viability path beyond the
 > safe-tier and sponsor-gated tier.
+
+> **HM-REQ-0140** A `sponsorship` block declaring `sponsors`
+> (community-pool form) MUST satisfy: (a) every entry has a
+> non-empty `sponsor_id` and `bounty_tao > 0`; (b) no single
+> `sponsor_id` contributes more than 50 % of the sum of
+> `sponsors[].bounty_tao` after the `escrow_block` cutoff;
+> (c) at least 2 distinct `sponsor_id` values are present.
+> A community pool that fails any condition is rejected at
+> acceptance. Defends F7 (curation manipulation) per
+> [`00.5 § F7`](00.5-foundations.md#f7--curation-manipulation).
+> The single-sponsor form is unconstrained by HM-REQ-0140.
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
@@ -5062,6 +5181,12 @@ PR that ships the simulator.
 | T-075 | Long-latency rent extraction: validators paid every cycle (~20 min) but research ground-truth arrives in months; rational validator extracts emissions during easy-verification phase and exits before slow truth invalidates the consensus | two-tier settlement (HM-REQ-0070): 70% of novelty + improvement at first settlement, 30% deferred 6 months pending no T-OVR overturn; external-verifiability anchor (HM-REQ-0060) so consensus alone cannot manufacture a settlement | [17 § two-tier settlement](17-hypothesis-lifecycle.md#two-tier-settlement), [00.5 § F6](00.5-foundations.md#f6--long-latency-rent-extraction) | mitigated |
 | T-076 | Discoverer publishes a security-hypothesis without following the SECURITY.md embargo, exposing the unfixed attack publicly before the spec/code defends it | HM-REQ-0100 zeros the `improvement` component for non-embargoed disclosures (no bounty); `rigor` + `reproduction` still pay so the public fixture isn't lost; the `red-team` role prompt (PR 3) trains agents on the embargo workflow | [22 § disclosure mechanics](22-security-bounty.md#d-disclosure-mechanics-phase-01), [SECURITY.md](../../SECURITY.md) | mitigated |
 
+### I. Curation attacks
+
+| ID | description | mitigation | references | residual risk |
+|----|-------------|------------|------------|---------------|
+| T-080 | Whale or sybil cluster dominates a community sponsorship pool to steer miner attention toward a chosen hypothesis (curation manipulation) | per-sponsor cap (HM-REQ-0140) limits any single `sponsor_id` to ≤ 50 % of pool total; minimum-2-distinct-sponsors requirement; the rigor floor (HM-REQ-0001 + HM-REQ-0050) means funded hypotheses still must declare preregistered analysis plans, success / falsification criteria, external anchor — curation buys attention, not score control | [00.5 § F7](00.5-foundations.md#f7--curation-manipulation), [02 § sponsorship](02-hypothesis-format.md#sponsorship), ADR 0022 | partial — sybil sponsor-IDs and off-pool side payments are residual; F7 fixture under HM-REQ-0090 lands at Phase 2 |
+
 ## Known accepted risk
 
 - **Single-maintainer bus factor (T-052).** Intentional for Phase 0–2;
@@ -7674,6 +7799,7 @@ The numbering is per-role, monotonic.
 | S-MINE-12 | Oracle composition required: `propose` rejects a hypothesis with `oracle.oracles` length ≥ 2 that omits `oracle.composition` | CLI | HM-REQ-0080 | `tests/system/mine/test_oracle_composition.py` |
 | S-MINE-13 | Gated-profile sponsorship required: `propose` rejects a hypothesis whose `hardware_profile` is gated-tier (per `06 § Profile tiers`) and lacks a `sponsorship` block | CLI | HM-REQ-0120 | `tests/system/mine/test_gated_profile_sponsorship.py` |
 | S-MINE-14 | Oracle-only requires oracle: `propose` rejects a hypothesis declaring `verification: oracle-only` that lacks an `oracle` block (or `external_anchor.type=oracle`) | CLI | HM-REQ-0130 | `tests/system/mine/test_oracle_only_requires_oracle.py` |
+| S-MINE-15 | Community pool caps: `propose` rejects a `sponsorship` block in community-pool form that fails any HM-REQ-0140 condition (single sponsor > 50 % of pool, < 2 distinct sponsor IDs, or zero / missing `bounty_tao`) | CLI | HM-REQ-0140 | `tests/system/mine/test_community_pool_caps.py` |
 
 ### Validate
 
@@ -10028,14 +10154,14 @@ Total declared tokens: **33600**.
 
 ## `implementation`
 
-Total declared tokens: **62000**.
+Total declared tokens: **63000**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
@@ -10068,28 +10194,28 @@ Total declared tokens: **62000**.
 
 ## `proposal`
 
-Total declared tokens: **12200**.
+Total declared tokens: **13200**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2700 |
 | [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `review`
 
-Total declared tokens: **72600**.
+Total declared tokens: **73600**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
@@ -10282,6 +10408,7 @@ checker enforces one-way invariants:
 | HM-REQ-0110 | [12](12-implementation-constraints.md) | Documentation discipline | Every fact, contract, parameter, or list in this repository has exactly one canonical home; other docs link rather than restate; drift between a canonical statement and a restatement is a bug in the restatement | normative |
 | HM-REQ-0120 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring a gated-tier `hardware_profile` (any `single-gpu-*` or `multi-gpu-*` profile) MUST include a `sponsorship` block; without it the hypothesis is rejected at acceptance. Operationalises ADR 0019's tier-2 pivot | normative |
 | HM-REQ-0130 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring `verification: oracle-only` MUST declare an `oracle` block (or `external_anchor.type=oracle`); without one the hypothesis is rejected at acceptance. Operationalises ADR 0021's third viability path | normative |
+| HM-REQ-0140 | [02](02-hypothesis-format.md) | Schema validation | A `sponsorship` block in community-pool form MUST satisfy: every entry has non-empty `sponsor_id` and `bounty_tao > 0`; no single `sponsor_id` exceeds 50 % of the pool sum after `escrow_block` cutoff; ≥ 2 distinct `sponsor_id` values present. Defends F7 (curation manipulation) per ADR 0022 | normative |
 
 ## How to add
 
@@ -10350,6 +10477,7 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0110 | [12](12-implementation-constraints.md) Documentation discipline | tests/integration/test_meta_gates.py::test_single_source_principle | pending |
 | HM-REQ-0120 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_gated_profile_requires_sponsorship | pending |
 | HM-REQ-0130 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_oracle_only_requires_oracle | pending |
+| HM-REQ-0140 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_community_pool_caps | pending |
 
 ## System-test scenarios
 
@@ -10374,6 +10502,7 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-MINE-12 | HM-REQ-0080 | tests/system/mine/test_oracle_composition.py::test_oracle_composition | pending |
 | S-MINE-13 | HM-REQ-0120 | tests/system/mine/test_gated_profile_sponsorship.py::test_gated_profile_sponsorship | pending |
 | S-MINE-14 | HM-REQ-0130 | tests/system/mine/test_oracle_only_requires_oracle.py::test_oracle_only_requires_oracle | pending |
+| S-MINE-15 | HM-REQ-0140 | tests/system/mine/test_community_pool_caps.py::test_community_pool_caps | pending |
 | S-VAL-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_discover_score.py::test_discover_score | pending |
 | S-VAL-02 | HM-REQ-0010, HM-REQ-0011 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
 | S-VAL-03 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_rerun_tolerance.py::test_rerun_tolerance | pending |
