@@ -7414,7 +7414,7 @@ load-sets — see that table for per-task curated bundles.
 
 ## `agent-operator`
 
-Total declared tokens: **31800**.
+Total declared tokens: **35300**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -7433,6 +7433,7 @@ Total declared tokens: **31800**.
 | [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 3300 |
 | [docs/spec/19-operations.md](19-operations.md) | operations | 3800 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
+| [docs/spec/23-system-tests.md](23-system-tests.md) | system tests | 3500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
@@ -7456,7 +7457,7 @@ Total declared tokens: **20500**.
 
 ## `implementation`
 
-Total declared tokens: **51900**.
+Total declared tokens: **55400**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -7484,6 +7485,7 @@ Total declared tokens: **51900**.
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
 | [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
+| [docs/spec/23-system-tests.md](23-system-tests.md) | system tests | 3500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
@@ -7507,7 +7509,7 @@ Total declared tokens: **12200**.
 
 ## `review`
 
-Total declared tokens: **51900**.
+Total declared tokens: **55400**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -7535,6 +7537,7 @@ Total declared tokens: **51900**.
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
 | [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
+| [docs/spec/23-system-tests.md](23-system-tests.md) | system tests | 3500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
