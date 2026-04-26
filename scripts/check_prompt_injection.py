@@ -50,6 +50,7 @@ ROOTS: tuple[Path, ...] = (
     Path("AGENTS.md"),
     Path("docs"),
     Path("agents/prompts"),
+    Path("informal"),
 )
 
 ALLOWLIST_PREFIXES: tuple[str, ...] = ("docs/spec/antipatterns/",)

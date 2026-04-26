@@ -199,6 +199,14 @@ PR that ships the simulator.
 
 ### J. Ideator-graph attacks
 
+Attacks on the brainstorming layer introduced by ADR 0024:
+the parallel [informal hypothesis](01-glossary.md#informal-hypothesis)
+registry under `informal/`, and the [ideator](01-glossary.md#ideator)
+slice paid out when a formal hypothesis cites one or more I-NNNN
+via [inspired-by](01-glossary.md#inspired-by). See
+[00.5 § F8](00.5-foundations.md#f8--ideator-graph-manipulation) for
+the threat foundation.
+
 | ID | description | mitigation | references | residual risk |
 |----|-------------|------------|------------|---------------|
 | T-090 | Brainstorm sybil-spam — one operator floods `/informal/` with low-quality I-NNNN hoping one gets cited or to coerce/bribe formal authors into citing | stake-to-post bond (HM-REQ-0152, `ideator_min_stake`) returned only on `claimed` or forfeited to treasury at `expired`; cite cap of 3 per H-NNNN (HM-REQ-0151) bounds the per-payout fan-out; rigor floor (D7.3) unaffected — funded formal hypotheses still must clear schema gates | [00.5 § F8](00.5-foundations.md#f8--ideator-graph-manipulation), ADR 0024 | partial — bond size is governance-tunable; F8 fixture under HM-REQ-0090 lands at Phase 2 |

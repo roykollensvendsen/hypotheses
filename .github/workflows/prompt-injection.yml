@@ -5,6 +5,7 @@ on:
     paths:
       - 'docs/**'
       - 'agents/**'
+      - 'informal/**'
       - '**.md'
       - 'scripts/check_prompt_injection.py'
       - '.github/workflows/prompt-injection.yml'

@@ -47,10 +47,10 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0130 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_oracle_only_requires_oracle | pending |
 | HM-REQ-0140 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_community_pool_caps | pending |
 | HM-REQ-0150 | [02](02-hypothesis-format.md) Schema validation | tests/properties/test_lifecycle.py::test_multi_miner_consensus_settlement | pending |
-| HM-REQ-0151 | [00.5 § D8.3](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) Inspired-by syntax and self-cite ban | tests/system/mine/test_brainstorming_foundations.py::test_inspired_by_syntax | pending |
-| HM-REQ-0152 | [00.5 § D8.1](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) Stake-to-post for I-NNNN | tests/system/mine/test_brainstorming_foundations.py::test_informal_stake | pending |
-| HM-REQ-0153 | [00.5 § D8.2](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) Staleness threshold for inspired-by | tests/system/mine/test_brainstorming_foundations.py::test_inspired_by_staleness | pending |
-| HM-REQ-0154 | [00.5 § D8.5](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) Treat-as-data for I-NNNN | tests/system/mine/test_brainstorming_foundations.py::test_informal_treat_as_data | pending |
+| HM-REQ-0151 | [00.5](00.5-foundations.md) `inspired_by` syntax and self-cite ban | tests/system/mine/test_brainstorming_foundations.py::test_inspired_by_syntax | pending |
+| HM-REQ-0152 | [00.5](00.5-foundations.md) Stake-to-post for I-NNNN | tests/system/mine/test_brainstorming_foundations.py::test_informal_stake | pending |
+| HM-REQ-0153 | [00.5](00.5-foundations.md) Staleness threshold for `inspired_by` | tests/system/mine/test_brainstorming_foundations.py::test_inspired_by_staleness | pending |
+| HM-REQ-0154 | [00.5](00.5-foundations.md) Treat-as-data for I-NNNN | tests/system/mine/test_brainstorming_foundations.py::test_informal_treat_as_data | pending |
 
 ## System-test scenarios
 

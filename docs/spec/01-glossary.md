@@ -21,7 +21,35 @@ ratchets that discipline.
 
 A preregistered, falsifiable claim about an ML training or model
 behaviour, plus the protocol to test it. See
-[02](02-hypothesis-format.md).
+[02](02-hypothesis-format.md). Also called a **formal hypothesis**
+when distinguished from an [informal hypothesis](#informal-hypothesis).
+
+### Informal hypothesis
+
+A cheap-to-post seed question without a runnable protocol or
+falsification criteria, registered under `informal/` with an
+immutable `I-NNNN` ID. Posting requires a TAO bond
+(`ideator_min_stake`, default 0.1 TAO per
+[20 § parameter inventory](20-economic-model.md#parameter-inventory)).
+Formal hypotheses cite informal ones via
+[Inspired-by](#inspired-by); on settlement, a 5 pp slice of the
+sponsor pool flows to cited [Ideators](#ideator). See
+[02b](02b-informal-hypothesis-format.md) and ADR 0024.
+
+### Ideator
+
+The proposer of an [informal hypothesis](#informal-hypothesis),
+identified by `proposer.hotkey`. Ideators earn a share of the
+sponsor pool of any formal hypothesis whose
+[Inspired-by](#inspired-by) cites their I-NNNN, paid under the
+same two-tier 70 / 30 schedule as miners.
+
+### Inspired-by
+
+An optional, weighted field on a formal hypothesis declaring which
+informal hypotheses inspired it. Locked at acceptance (T-ACC); ≤ 3
+entries; weights sum to 1.0. See
+[02 § inspired_by](02-hypothesis-format.md#inspired_by).
 
 ### Spec
 
