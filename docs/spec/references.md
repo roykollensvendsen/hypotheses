@@ -1,7 +1,7 @@
 ---
 name: references
 description: central bibliography of external sources cited by the spec; stable IDs for in-doc citation
-tokens: 700
+tokens: 1000
 load_for: [governance, review]
 depends_on: []
 kind: reference
@@ -45,6 +45,12 @@ resolvable.
 | `[ref:mast-taxonomy-2025]` | Anonymous, *MAST: a taxonomy of failure modes in agentic AI systems* (primary source link in the entry text); used in this repo as shorthand for the agent-failure-mode catalogue | [adr/0004](../adr/0004-design-heuristics.md) |
 | `[ref:stackoverflow-shared-coding-2026]` | Stack Overflow Blog, *Building shared coding guidelines for AI (and people too)*, 2026-03-26 (archived) | [adr/0004](../adr/0004-design-heuristics.md) |
 | `[ref:anthropic-claude-code-2026]` | Anthropic, *Claude Code best practices*, code.claude.com/docs, accessed 2026 | [adr/0004](../adr/0004-design-heuristics.md) |
+| `[ref:bittensor-grayscale-2025]` | Grayscale Research, *Bittensor on the Eve of the First Halving*, Grayscale Investments, 2025 (archived) | [27](27-economic-strategy.md) |
+| `[ref:bittensor-dtao-whitepaper-2025]` | Opentensor Foundation, *Dynamic TAO (dTAO) whitepaper*, bittensor.com/whitepapers, 2025 (archived) | [27](27-economic-strategy.md) |
+| `[ref:researchhub-tokenomics-2025]` | ResearchHub Foundation, *RSC tokenomics and bounty mechanics*, docs.researchhub.com, accessed 2026 (archived) | [27](27-economic-strategy.md) |
+| `[ref:vitadao-pfizer-gero-2025]` | Blockworks, *Pfizer-backed VitaDAO spins out biotech company; Gero secures $1B+ partnership with Chugai Pharmaceutical*, blockworks.co, 2025 (archived) | [27](27-economic-strategy.md) |
+| `[ref:desci-berkeley-cmr-2025]` | Berkeley *California Management Review*, *Can Decentralized Science Be the Next Frontier of Scientific Research?*, cmr.berkeley.edu, 2025-11 (archived) | [27](27-economic-strategy.md) |
+| `[ref:bio-protocol-desci-2026]` | KuCoin Research, *BIO Surges 96 %: Is DeSci the Next Big Narrative in Crypto?*, kucoin.com/research, 2026 (archived; DeSci ecosystem cap reaching $329M) | [27](27-economic-strategy.md) |
 
 ## How to add a new source
 
