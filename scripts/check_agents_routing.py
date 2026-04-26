@@ -14,7 +14,7 @@ Two layers of check:
 1. **Doc resolution (error)**. Every summand in the `load`
    column must resolve to an existing file. Recognised shapes:
    - `NN`, `NN.5`             → docs/spec/NN-*.md
-   - `invariants`, `requirements`, `traceability`
+   - `invariants`, `requirements`, `traceability`, `references`
                               → docs/spec/<name>.md
    - `antipatterns/`          → docs/spec/antipatterns/ directory
    - `antipatterns/ap-NNNN`   → docs/spec/antipatterns/ap-NNNN-*.md
@@ -58,7 +58,9 @@ TOKENS_PAREN = (
 SUMMAND_SHAPES = (
     re.compile(r"^(?P<n>\d{2}(?:\.\d+)?)" + TOKENS_PAREN + r"$"),
     re.compile(
-        r"^(?P<name>invariants|requirements|traceability)" + TOKENS_PAREN + r"$"
+        r"^(?P<name>invariants|requirements|traceability|references)"
+        + TOKENS_PAREN
+        + r"$"
     ),
     re.compile(r"^antipatterns/(?P<ap>ap-\d{4})" + TOKENS_PAREN + r"$"),
     re.compile(r"^antipatterns/?" + TOKENS_PAREN + r"$"),

@@ -61,6 +61,11 @@
       },
       "uniqueItems": true,
       "description": "Optional list of HM-REQ/HM-INV IDs whose enforcement is purely internal (CI gate, code-shape) and have no surface-observable manifestation. Used by scripts/check_system_test_traceability.py to exempt these IDs from the 'every requirement has a system-test scenario' rule. Only meaningful in docs/spec/requirements.md and docs/spec/invariants.md."
+    },
+    "evidence": {
+      "type": "string",
+      "enum": ["well-supported", "reasoned-design", "assumption", "tbd"],
+      "description": "Optional doc-level empirical posture per docs/spec/25-rigor-framework.md. well-supported = cited research/standard backs every normative claim; reasoned-design = design choices with stated rationale (default for internal-mechanism docs); assumption = at least one normative claim rests on an unproven empirical claim flagged in 00.5 § C; tbd = deferred until a named trigger. Optional today; the grounding gate ratchets coverage and will eventually require it on every kind: contract doc."
     }
   }
 }

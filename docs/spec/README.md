@@ -72,6 +72,9 @@ Read in order:
 26. [24 — Design heuristics](24-design-heuristics.md) — positive
     structural rules (D-1 … D-6) for human and agent contributors;
     citable in PR review
+27. [25 — Rigor framework](25-rigor-framework.md) — citation,
+    assumption, and evidence-taxonomy conventions; how to ground
+    a normative claim
 
 Cross-cutting references:
 
@@ -84,6 +87,8 @@ Cross-cutting references:
   cross-checked in CI.
 - [`invariants.md`](invariants.md) — stable `HM-INV-NNNN`
   properties; Phase 1 property-based tests enforce each one.
+- [`references.md`](references.md) — central bibliography; every
+  `{ref:slug}` in a spec doc resolves to a row here.
 
 Implementation model: this spec is written to be implemented by an
 autonomous Claude agent without human interaction. [Document 12](

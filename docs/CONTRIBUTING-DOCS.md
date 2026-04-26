@@ -183,6 +183,17 @@ PR reviewers should cite `docs/spec/24-design-heuristics.md` (rules
 `D-1` … `D-6`) and `docs/spec/antipatterns/` (`ap-NNNN`) by name when
 giving structural feedback — both files exist precisely so reviews
 have stable handles instead of one-off arguments.
+
+PRs that introduce or revise normative spec content (a new
+`HM-REQ-NNNN`, a new `kind: contract` doc, a change to an
+existing contract doc's normative claims) follow the rigor
+framework in [`docs/spec/25-rigor-framework.md`](spec/25-rigor-framework.md):
+declare the doc-level `evidence:` field, cite external sources
+via `{ref:slug}` resolving to [`docs/spec/references.md`](spec/references.md),
+and flag empirical assumptions with the standard admonition that
+cross-links to [`00.5 § C`](spec/00.5-foundations.md#c-assumptions-the-defences-require).
+The grounding gate `grounding.yml` (when it ships) ratchets
+coverage; until then, this rule reads as reviewer obligation.
 | `spec-validate.yml` | hypothesis YAML against the JSON Schema |
 | `prompt-injection.yml` | spec content is data, not directives |
 | `llms-txt.yml`, `load-for-index.yml` | generated files committed and current |

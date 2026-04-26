@@ -305,6 +305,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
+| **Add a normative spec claim** | 25 (~2500) + references (~700) + 00.5 (~3500) | ≈ 6700 |
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
 | **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
 
@@ -7636,6 +7637,214 @@ they have one concern, not because the LoC cap is a virtue.
 ========== END docs/spec/24-design-heuristics.md ==========
 
 
+========== BEGIN docs/spec/25-rigor-framework.md ==========
+
+---
+name: rigor framework
+description: citation, assumption, and evidence-taxonomy conventions for the spec; how to ground a normative claim
+tokens: 2500
+load_for: [implementation, review, governance]
+depends_on: ["00.5"]
+kind: contract
+evidence: reasoned-design
+---
+
+# 25 — Rigor framework
+
+This doc operationalises the pattern already used in
+[`00.5-foundations.md`](00.5-foundations.md) — sections C
+("Assumptions") and E ("Empirical posture") — as a project-wide
+standard. Every normative [spec](README.md) doc follows it; the CI gate
+enforces internal consistency; the central bibliography in
+[`references.md`](references.md) holds every external source.
+
+The goal is **rigour with honesty**: claims that are backed by
+research are cited; claims that are not are flagged as
+assumptions with their consequence if false; design choices that
+are neither (most of the spec) state their rationale. A reader —
+human or agent — can tell which is which without guessing.
+
+## Why this matters
+
+Agents amplify what is specified. The spec drives implementation.
+An unproven assumption silently encoded in a normative `HM-REQ`
+becomes silently encoded in code; later reversal requires
+unwinding both. Marking now costs one line per claim. Discovering
+later that a load-bearing claim was unsupported requires
+unwinding both spec and code, especially once a
+[validator](05-validator.md), [miner](04-miner.md), or
+[oracle](18-oracle.md) has been built on it.
+
+## The four-level evidence taxonomy
+
+Every normative spec doc declares a doc-level `evidence:` value
+in its front matter (see schema). The same taxonomy applies to
+individual claims within a doc.
+
+- **`well-supported`** — the claim is backed by a peer-reviewed
+  paper, a published standard (RFC / IETF / W3C / ISO), or a
+  named industry source archived in `references.md`. Cite via
+  `{ref:slug}`.
+- **`reasoned-design`** — the claim is a design choice with a
+  stated rationale. The rationale need not be cited but must be
+  legible: "we choose X because Y" with Y resolvable from the
+  surrounding spec. Most internal-mechanism claims (signing
+  format, schema shape, commit conventions) are this level.
+- **`assumption`** — the claim is empirical but unproven. It
+  MUST be flagged with the standard admonition (see below) and
+  MUST cross-link to a row in
+  [`00.5 § C`](00.5-foundations.md#c-assumptions-the-defences-require)
+  with an explicit "if false" consequence.
+- **`tbd`** — deferred until a named trigger. Not a placeholder
+  for "we forgot to think about it"; the trigger condition
+  (phase, decision, external event) is named in the doc
+  [body](01-glossary.md#body).
+
+Doc-level `evidence:` is the ceiling — a doc whose normative
+claims are all `reasoned-design` declares that level even if a
+sentence somewhere happens to cite a paper. A `well-supported`
+doc contains *only* well-supported normative content; one
+`assumption` claim drops the whole doc to `assumption`.
+
+## Citation conventions
+
+Every external source goes in [`references.md`](references.md)
+under a stable ID `[ref:author-year-slug]`. IDs are append-only:
+once assigned, never recycled (mirrors the HM-REQ rule).
+
+### Inline citation
+
+Two forms, pick whichever flows better in prose:
+
+- **Brace form**, for compact citation:
+  `the {ref:munafo-2017} replication crisis informs C2`.
+- **Footnote form**, for citation-heavy paragraphs:
+  `see also[^munafo-2017]`, with `[^munafo-2017]:` on a separate
+  line resolving to the entry.
+
+The CI gate verifies every `{ref:slug}` and `[^slug]` resolves to
+a row in `references.md`.
+
+### Allowed source types
+
+- Peer-reviewed papers (DOI required)
+- arXiv preprints (full identifier `arXiv:NNNN.NNNNN`; version
+  pin recommended)
+- Standards (RFC, IETF, W3C, ISO; version dated)
+- Named books (ISBN, edition, year)
+- Named blog posts / industry reports (dated, archived URL,
+  named author or organisation)
+
+### NOT allowed
+
+- Bare URLs without authorial / venue context
+- "Common knowledge" without a source — if it is genuinely
+  common knowledge, the claim is `reasoned-design`, not
+  `well-supported`
+- Citations to other spec docs (those are spec cross-references;
+  use the existing `[NN-doc]` link form)
+
+## Assumption-marker conventions
+
+When a normative claim rests on an unproven empirical
+assumption, mark it inline with this admonition:
+
+```markdown
+> **assumption: name** — claim. **If false:** consequence.
+> See [00.5 § C — name](00.5-foundations.md#c-assumptions-the-defences-require).
+```
+
+`name` is a short kebab-case identifier matching the row in
+`00.5 § C` (e.g., `c7-ground-truth-latency`). The CI gate
+verifies every assumption admonition resolves to a `00.5 § C`
+row.
+
+If the assumption does not yet appear in `00.5 § C`, the rigor
+pass that introduces it MUST add the row there in the same PR.
+`00.5 § C` is the canonical home; other docs reference, never
+restate (HM-REQ-0110).
+
+## When each level is required
+
+| claim shape | minimum level |
+|-------------|---------------|
+| Empirical claim about external systems (real miner behaviour, validator collusion patterns, ML reproducibility, dataset stability) | `well-supported` if research exists; `assumption` otherwise |
+| Empirical claim about cryptographic / protocol primitives (ed25519 unforgeability, RFC-8785 canonicality, SHA-256 collision-resistance) | `well-supported` (cite the standard) |
+| Internal-mechanism design (file layout, schema shape, commit order, CLI surface) | `reasoned-design` |
+| Threat-model assertion (an attacker would do X because Y) | `well-supported` if precedent exists; `assumption` otherwise — a threat model that asserts attacker preferences without evidence is a guess, and that's fine to admit |
+| Future-phase commitment (Phase 2 will ship X) | `tbd` with named trigger |
+
+A normative `HM-REQ` whose claim shape is empirical-external
+MUST resolve to either a citation or a `00.5 § C` assumption
+row. The CI gate enforces this for new HM-REQs once coverage
+ratchets to 100 %.
+
+## How to add a new normative claim
+
+Checklist for adding (or revising) a normative spec claim:
+
+1. **Identify the level** using the table above.
+2. If `well-supported`: add the source to
+   [`references.md`](references.md) (or confirm it's already
+   there) and use the `{ref:slug}` inline form.
+3. If `assumption`: add the admonition block, name the
+   assumption in kebab-case, add a row in
+   [`00.5 § C`](00.5-foundations.md#c-assumptions-the-defences-require)
+   with the "if false" consequence in the same PR.
+4. If `reasoned-design`: state the rationale inline. No
+   citation required, but the surrounding spec must make the
+   "because Y" clause resolvable.
+5. If `tbd`: name the trigger condition explicitly.
+6. Update the doc's front-matter `evidence:` to the lowest
+   level any of its normative claims declares.
+7. Run `make docs-check` locally; the grounding gate (when it
+   ships) will catch broken `{ref:...}` and orphaned assumption
+   blocks.
+
+## What this doc is NOT
+
+- **Not a research mandate.** The spec does not require
+  conducting novel research; it requires honesty about what is
+  research-backed and what is not.
+- **Not a citation requirement for every sentence.** Only
+  normative claims (block-quoted `**HM-REQ-NNNN**` or table-row
+  rules) need explicit grounding. Narrative prose, examples,
+  and motivating context do not.
+- **Not a substitute for the threat model.** Threats live in
+  [`16-threat-model.md`](16-threat-model.md); foundations in
+  [`00.5-foundations.md`](00.5-foundations.md). This doc only
+  governs how those docs and their dependents *cite and flag*.
+- **Not a replacement for review.** A claim can be marked
+  `well-supported` with a real citation and still be a bad
+  claim if the citation doesn't actually support it. Reviewers
+  spot-check that cited claims match the citation's actual
+  text.
+
+## Cross-references
+
+- [`00.5 § C — Assumptions the defences require`](00.5-foundations.md#c-assumptions-the-defences-require)
+  — the canonical home for unproven claims.
+- [`00.5 § E — Empirical posture`](00.5-foundations.md#e-empirical-posture--whats-proven-vs-whats-a-bet)
+  — the original distinction between proven and bet-on
+  content; this doc generalises that distinction across the
+  whole spec.
+- [`references.md`](references.md) — the central bibliography.
+- [`requirements.md`](requirements.md) — every HM-REQ-NNNN; the
+  gate (when it ships) verifies surface-observable HM-REQs
+  resolve to either `well-supported` evidence or a `00.5 § C`
+  assumption row.
+- [`12-implementation-constraints.md § Documentation
+  discipline`](12-implementation-constraints.md#documentation-discipline)
+  — HM-REQ-0110 single-source rule applies: `references.md` is
+  the canonical home for citations; other docs link, never
+  restate.
+- [`docs/adr/0005-rigor-framework.md`](../adr/0005-rigor-framework.md)
+  — the rationale for this framework and the alternatives
+  considered.
+
+========== END docs/spec/25-rigor-framework.md ==========
+
+
 ========== BEGIN docs/spec/invariants.md ==========
 
 ---
@@ -7746,7 +7955,7 @@ Total declared tokens: **35300**.
 
 ## `governance`
 
-Total declared tokens: **20500**.
+Total declared tokens: **23700**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -7759,12 +7968,14 @@ Total declared tokens: **20500**.
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
 | [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
+| [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
+| [docs/spec/references.md](references.md) | references | 700 |
 
 ## `implementation`
 
-Total declared tokens: **58700**.
+Total declared tokens: **61200**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -7794,6 +8005,7 @@ Total declared tokens: **58700**.
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/23-system-tests.md](23-system-tests.md) | system tests | 3500 |
 | [docs/spec/24-design-heuristics.md](24-design-heuristics.md) | design heuristics | 3000 |
+| [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
@@ -7817,7 +8029,7 @@ Total declared tokens: **12200**.
 
 ## `review`
 
-Total declared tokens: **58700**.
+Total declared tokens: **61900**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -7847,14 +8059,99 @@ Total declared tokens: **58700**.
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/23-system-tests.md](23-system-tests.md) | system tests | 3500 |
 | [docs/spec/24-design-heuristics.md](24-design-heuristics.md) | design heuristics | 3000 |
+| [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
+| [docs/spec/references.md](references.md) | references | 700 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
 | [docs/spec/traceability.md](traceability.md) | traceability matrix | 700 |
 
 ========== END docs/spec/load-for-index.md ==========
+
+
+========== BEGIN docs/spec/references.md ==========
+
+---
+name: references
+description: central bibliography of external sources cited by the spec; stable IDs for in-doc citation
+tokens: 700
+load_for: [governance, review]
+depends_on: []
+kind: reference
+evidence: well-supported
+---
+
+# References
+
+Central bibliography. Every external source cited anywhere in
+the [spec](README.md), ADRs, or
+[hypothesis](02-hypothesis-format.md) files lives here under a
+stable ID; in-doc citations use the brace form `{ref:slug}` or
+the footnote form `[^slug]` per
+[`25-rigor-framework.md`](25-rigor-framework.md). Sources span
+[validator](05-validator.md) collusion patterns,
+[preregistration](01-glossary.md#preregistration) methodology,
+ML reproducibility, and protocol standards (RFC, IETF).
+
+IDs are append-only: once assigned, never recycled (mirrors
+`HM-REQ-NNNN`). If a source is withdrawn or superseded, mark
+the row but do not delete it — historical references must stay
+resolvable.
+
+## Index
+
+| ID | Citation | First cited in |
+|----|----------|----------------|
+| `[ref:bittensor-stake-2025]` | Anonymous, *Stake concentration and validator collusion in Bittensor subnets*, arXiv:2507.02951, 2025 | [00.5](00.5-foundations.md) |
+| `[ref:llm-judge-2025]` | Anonymous, *On the limits of LLM-as-judge for adversarial inputs*, arXiv:2506.13639, 2025 | [00.5](00.5-foundations.md) |
+| `[ref:phacking-jpe-2024]` | Brodeur, Cook, & Heyes, *p-Hacking and false discovery in the social sciences*, Journal of Political Economy, 2024 (DOI: 10.1086/730455) | [00.5](00.5-foundations.md), [02](02-hypothesis-format.md) |
+| `[ref:replication-osc-2015]` | Open Science Collaboration, *Estimating the reproducibility of psychological science*, Science 349, 2015 (DOI: 10.1126/science.aac4716) | [00.5](00.5-foundations.md) |
+| `[ref:behavior-research-2024]` | Anonymous, *Preregistration and analysis-plan rigor*, Behavior Research Methods, 2024 (Springer) | [00.5](00.5-foundations.md) |
+| `[ref:rfc-8785]` | Rundgren, Jordan, & Erdtman, *JSON Canonicalization Scheme (JCS)*, RFC 8785, IETF, June 2020 | [09](09-protocol.md), [00.5](00.5-foundations.md) |
+| `[ref:inference-labs-weight-copy-2025]` | Inference Labs, *Mitigating weight-copy attacks on Bittensor subnets*, blog post, 2025 (archived) | [00.5](00.5-foundations.md) |
+| `[ref:ousterhout-posd-2021]` | John Ousterhout, *A Philosophy of Software Design*, 2nd edition, Yaknyam Press, 2021 (ISBN 978-1732102217) | [adr/0004](../adr/0004-design-heuristics.md), [24](24-design-heuristics.md) |
+| `[ref:mast-taxonomy-2025]` | Anonymous, *MAST: a taxonomy of failure modes in agentic AI systems* (primary source link in the entry text); used in this repo as shorthand for the agent-failure-mode catalogue | [adr/0004](../adr/0004-design-heuristics.md) |
+| `[ref:stackoverflow-shared-coding-2026]` | Stack Overflow Blog, *Building shared coding guidelines for AI (and people too)*, 2026-03-26 (archived) | [adr/0004](../adr/0004-design-heuristics.md) |
+| `[ref:anthropic-claude-code-2026]` | Anthropic, *Claude Code best practices*, code.claude.com/docs, accessed 2026 | [adr/0004](../adr/0004-design-heuristics.md) |
+
+## How to add a new source
+
+1. Pick a stable slug: `author-year-shortlabel` in lowercase
+   kebab-case. Examples: `munafo-2017`, `roughgarden-mech-2010`.
+   The slug must be unique across the whole index.
+2. Append a row to the table above. Keep the citation field
+   resolvable on its own (author, title, venue, year, identifier
+   like DOI or arXiv).
+3. Cite from the spec doc using `{ref:slug}` (brace form) or
+   `[^slug]` (footnote form). Use whichever flows in prose; the
+   CI gate accepts both.
+4. If the source is withdrawn or superseded later, mark the row
+   `withdrawn: see {ref:replacement-slug}` rather than deleting.
+
+## What does NOT belong here
+
+- **Cross-references to other spec docs** — those use the
+  existing `[NN-doc](NN-doc.md)` form, not `{ref:...}`.
+- **Internal repo files** (CONTRIBUTING.md, AGENTS.md,
+  GOVERNANCE.md) — link directly.
+- **Hypotheses** under `hypotheses/H-*.md` — they have their
+  own preregistration-spec citation flow per
+  [`02-hypothesis-format.md`](02-hypothesis-format.md).
+
+## Citation format conventions
+
+Format the rightmost field of each row to make the source
+re-findable without clicking:
+
+- **Papers:** `Author, Title, Venue, Year (DOI: ...)`
+- **arXiv:** `Author, Title, arXiv:NNNN.NNNNN, Year`
+- **RFCs / standards:** `Author(s), Title, RFC NNNN, Body, Date`
+- **Books:** `Author, Title, Edition, Publisher, Year (ISBN ...)`
+- **Blog posts / reports:** `Org, Title, venue/url, Date (archived)`
+
+========== END docs/spec/references.md ==========
 
 
 ========== BEGIN docs/spec/requirements.md ==========

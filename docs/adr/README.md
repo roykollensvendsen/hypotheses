@@ -107,3 +107,4 @@ What did we decide?
 - [0002 — Test toolchain](0002-test-toolchain.md)
 - [0003 — System-test markers](0003-system-test-markers.md)
 - [0004 — Design heuristics](0004-design-heuristics.md)
+- [0005 — Rigor framework](0005-rigor-framework.md)
