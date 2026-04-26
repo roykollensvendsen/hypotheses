@@ -32,14 +32,26 @@ Load these into context:
    — your role-specific system prompt.
 4. [`docs/spec/README.md`](spec/README.md) — spec index.
 5. [`docs/spec/12-implementation-constraints.md`](spec/12-implementation-constraints.md)
-   — the rules you operate under. Re-read whenever unsure.
-6. [`docs/spec/11-roadmap.md`](spec/11-roadmap.md) — Phase 1 exit
+   — the mechanics you operate under (toolchain, TDD, fail-fast,
+   types, mutation, SPDX). Re-read whenever unsure.
+6. [`docs/spec/24-design-heuristics.md`](spec/24-design-heuristics.md)
+   — the structural rules `D-1` … `D-6`: deep modules, types over
+   runtime checks, validation at boundaries, deferred abstraction,
+   reader-first, surface-level testing. Doc 12 covers the
+   mechanics; this one covers the qualitative side.
+7. [`docs/spec/23-system-tests.md`](spec/23-system-tests.md) — the
+   black-box system-test contract. Required reading for any task
+   that ships a surface-observable behaviour (miner, validator,
+   CLI, SDK, MCP); the matching `tests/system/S-XXX-NN` scenarios
+   move from skipped to passing as part of that task's DoD.
+8. [`docs/spec/11-roadmap.md`](spec/11-roadmap.md) — Phase 1 exit
    criteria.
-7. [`docs/tasks/phase-1.yml`](tasks/phase-1.yml) — your ordered,
+9. [`docs/tasks/phase-1.yml`](tasks/phase-1.yml) — your ordered,
    DoD-annotated task list. This is what you walk top-to-bottom.
-8. [`docs/spec/antipatterns/`](spec/antipatterns/) — machine-readable
-   "do NOT do this" shapes; read before writing code.
-9. [`docs/adr/`](adr/) — prior decisions you must respect.
+10. [`docs/spec/antipatterns/README.md`](spec/antipatterns/README.md)
+    — machine-readable "do NOT do this" corpus, `ap-0001` …
+    `ap-0013`; read before writing code, cite by ID in PR review.
+11. [`docs/adr/`](adr/) — prior decisions you must respect.
 
 Don't load the whole spec tree on every session — see the
 [context-routing map in AGENTS.md](../AGENTS.md#context-routing) for
@@ -141,6 +153,10 @@ proceed.
 - Add `Co-Authored-By: Claude …` or similar AI trailers to commits.
 - Modify the license, the vision's pillars, or the commit
   conventions unilaterally — those belong to the maintainer.
+- Ship a PR description that doesn't cite the relevant `D-N`
+  heuristic or `ap-NNNN` antipattern by ID when the change is in
+  an area the rules cover. Reviewers (human or agent) need stable
+  handles, not freeform argument.
 
 ## When you finish Phase 1
 
