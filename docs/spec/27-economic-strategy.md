@@ -121,9 +121,23 @@ profile or repels them.
 > **assumption: c8-sponsorship-demand** — external
 > organisations will pay for specific scientific questions
 > when the cost / answer-quality ratio is favourable.
-> **If false:** revenue path 3.1 collapses; the subnet remains
-> funded by Bittensor emissions alone.
+> **If false:** revenue path 3.1 collapses; AND gated-tier
+> hypotheses (per
+> [HM-REQ-0120](02-hypothesis-format.md#schema-validation))
+> have no funding path, restricting the subnet to safe-tier
+> workloads alone.
 > See [00.5 § c8-sponsorship-demand](00.5-foundations.md#c8-sponsorship-demand).
+
+**Load-bearing for gated profiles.** ADR 0019's tier-2 pivot
+makes sponsorship the *required* funding path for any
+hypothesis declaring a `single-gpu-*` or `multi-gpu-*`
+profile (see
+[`06 § Profile tiers`](06-scoring.md#profile-tiers)). The
+strategy doc previously framed sponsorship as an *additional*
+revenue path; after the verdict, it is the only path for
+heavy profiles, and `c8-sponsorship-demand` accordingly
+shifts from "commercial assumption" to "load-bearing
+mechanism assumption".
 
 ### C.2 Registry / data licensing
 

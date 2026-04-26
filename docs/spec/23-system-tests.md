@@ -194,6 +194,7 @@ The numbering is per-role, monotonic.
 | S-MINE-10 | MCP read-only listing: `list_hypotheses` returns the same set as `hypo ls`, with the same shape | MCP | HM-REQ-0001 | `tests/system/mine/test_mcp_list.py` |
 | S-MINE-11 | External-anchor required: `propose` rejects a hypothesis whose front matter declares neither a mechanical metric, an oracle, nor a public benchmark | CLI | HM-REQ-0060 | `tests/system/mine/test_external_anchor_required.py` |
 | S-MINE-12 | Oracle composition required: `propose` rejects a hypothesis with `oracle.oracles` length ≥ 2 that omits `oracle.composition` | CLI | HM-REQ-0080 | `tests/system/mine/test_oracle_composition.py` |
+| S-MINE-13 | Gated-profile sponsorship required: `propose` rejects a hypothesis whose `hardware_profile` is gated-tier (per `06 § Profile tiers`) and lacks a `sponsorship` block | CLI | HM-REQ-0120 | `tests/system/mine/test_gated_profile_sponsorship.py` |
 
 ### Validate
 

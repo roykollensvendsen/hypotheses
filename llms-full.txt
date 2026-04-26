@@ -763,13 +763,25 @@ network composite spread across the
 participation targets (`N ≥ 10` validators per
 [HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets)
 and an order-of-magnitude larger miner set), token emissions
-are sufficient to attract honest miners despite the marginal
-cost of running experiments.
+**plus** the sponsor-funded bounty residual on gated-tier
+hypotheses (per
+[HM-REQ-0120](02-hypothesis-format.md#schema-validation)) are
+sufficient to attract honest miners and validators despite
+the marginal cost of running and reproducing experiments.
 
 **Defences supported.** DS.3.
 
 **If false.** The market has zero suppliers; mechanism becomes a
 curio.
+
+**Mechanical defence (NEW).** ADRs 0017 + 0018 showed
+emission alone is insufficient for non-trivial profile mixes;
+ADR 0019's tier-2 pivot installs HM-REQ-0120 (the
+hypothesis-acceptance gate) so that gated-tier hypotheses
+must carry their own bounty. C4a is therefore now
+*conditional on c8-sponsorship-demand* — the gate enforces
+the bound mechanically, but it relies on the sponsorship pipe
+actually delivering bounties.
 
 ### c4b-emission-sufficient-cold-start
 
@@ -1380,6 +1392,35 @@ external_anchor:
   metric: top1_accuracy
 ```
 
+### `sponsorship`
+
+A counterparty-funded bounty paid on settlement. **Required**
+for hypotheses whose `hardware_profile` is in the
+[gated tier](06-scoring.md#profile-tiers); optional for safe-
+tier hypotheses (which are funded by emission alone). The
+gate exists because validator break-even at heavy profiles
+fails outside the cheap-profile regime — see
+[ADR 0017](../adr/0017-validator-unit-economics.md) and
+[ADR 0019](../adr/0019-viability-verdict-not-viable-as-designed.md).
+
+```yaml
+sponsorship:
+  sponsor_id: "researchhub:0xABC..."   # opaque identifier; counterparty-defined
+  bounty_tao: 5.0                      # paid on settlement
+  split:                                # (miner, validators, treasury); sums to 1.0
+    miner: 0.60
+    validators: 0.30
+    treasury: 0.10
+  escrow_block: 1234567                 # block height bounty was locked
+```
+
+The split defaults to `(0.60, 0.30, 0.10)` per
+[`27 § G open question 2`](27-economic-strategy.md#g-open-questions);
+declared explicitly here so per-sponsor variations remain
+auditable. The validator share of the bounty supplements
+emission-side dividends, restoring break-even at heavy
+profiles.
+
 ## Schema validation
 
 > **HM-REQ-0001** Hypothesis front matter is governed by
@@ -1396,6 +1437,18 @@ external_anchor:
 > the analysis plan operationalises the finding. Phase 0 hypotheses
 > grandfather without the field; Phase 1 scoring rejects submissions
 > against hypotheses that lack one.
+
+> **HM-REQ-0120** A hypothesis whose `hardware_profile` is in the
+> [gated tier](06-scoring.md#profile-tiers) (`single-gpu-*` or
+> `multi-gpu-*`) MUST declare a `sponsorship` block. A gated-tier
+> hypothesis lacking sponsorship is rejected at acceptance.
+> Safe-tier hypotheses (`cpu-small`, `cpu-large`) declare
+> sponsorship only when a counterparty wishes to fund them
+> additionally. The gate operationalises ADR 0019's
+> tier-2 pivot: validator break-even at heavy profiles fails on
+> emission alone, so heavy profiles must carry their own
+> bounty per
+> [`27 § C.1`](27-economic-strategy.md#c1-sponsored-hypotheses).
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
@@ -2292,6 +2345,33 @@ Phase 2):
 Wallclock cost is priced at a spot-market reference set in
 `src/hypotheses/scoring/cost.py` (MANDATORY: a single constant table,
 not per-call lookups). Storage is priced per GiB-month.
+
+### Profile tiers
+
+Each hardware profile carries a tier classification that the
+hypothesis-acceptance gate ([HM-REQ-0120](02-hypothesis-format.md#schema-validation))
+keys on:
+
+| profile | tier | rationale |
+|---------|------|-----------|
+| `cpu-small` | safe | break-even on emission alone at moderate `N_miners` |
+| `cpu-large` | safe | break-even on emission alone at moderate `N_miners` |
+| `single-gpu-24gb` | gated | validator break-even fails at the [HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets) floor without sponsor supplementation |
+| `single-gpu-80gb` | gated | same |
+| `multi-gpu-4x80gb` | gated | same |
+
+**Safe tier** hypotheses run on emission-side economics alone
+and accept submissions permissionlessly. **Gated tier**
+hypotheses MUST carry a `sponsorship` block per
+[`02 § sponsorship`](02-hypothesis-format.md#sponsorship); the
+bounty supplements validator emission so reruns at heavy
+profiles remain profitable. The classification was set by
+ADR 0019's tier-2 pivot in response to the criterion-2/3
+joint failure surfaced by ADRs 0017 + 0018.
+
+The tier of a profile is a maintainer-controlled parameter
+([20 § Parameter inventory](20-economic-model.md#parameter-inventory))
+that PR-E.5's calibration ratchet revises as Phase 2 data lands.
 
 ## External-verifiability anchor
 
@@ -7491,6 +7571,7 @@ The numbering is per-role, monotonic.
 | S-MINE-10 | MCP read-only listing: `list_hypotheses` returns the same set as `hypo ls`, with the same shape | MCP | HM-REQ-0001 | `tests/system/mine/test_mcp_list.py` |
 | S-MINE-11 | External-anchor required: `propose` rejects a hypothesis whose front matter declares neither a mechanical metric, an oracle, nor a public benchmark | CLI | HM-REQ-0060 | `tests/system/mine/test_external_anchor_required.py` |
 | S-MINE-12 | Oracle composition required: `propose` rejects a hypothesis with `oracle.oracles` length ≥ 2 that omits `oracle.composition` | CLI | HM-REQ-0080 | `tests/system/mine/test_oracle_composition.py` |
+| S-MINE-13 | Gated-profile sponsorship required: `propose` rejects a hypothesis whose `hardware_profile` is gated-tier (per `06 § Profile tiers`) and lacks a `sponsorship` block | CLI | HM-REQ-0120 | `tests/system/mine/test_gated_profile_sponsorship.py` |
 
 ### Validate
 
@@ -8482,9 +8563,23 @@ profile or repels them.
 > **assumption: c8-sponsorship-demand** — external
 > organisations will pay for specific scientific questions
 > when the cost / answer-quality ratio is favourable.
-> **If false:** revenue path 3.1 collapses; the subnet remains
-> funded by Bittensor emissions alone.
+> **If false:** revenue path 3.1 collapses; AND gated-tier
+> hypotheses (per
+> [HM-REQ-0120](02-hypothesis-format.md#schema-validation))
+> have no funding path, restricting the subnet to safe-tier
+> workloads alone.
 > See [00.5 § c8-sponsorship-demand](00.5-foundations.md#c8-sponsorship-demand).
+
+**Load-bearing for gated profiles.** ADR 0019's tier-2 pivot
+makes sponsorship the *required* funding path for any
+hypothesis declaring a `single-gpu-*` or `multi-gpu-*`
+profile (see
+[`06 § Profile tiers`](06-scoring.md#profile-tiers)). The
+strategy doc previously framed sponsorship as an *additional*
+revenue path; after the verdict, it is the only path for
+heavy profiles, and `c8-sponsorship-demand` accordingly
+shifts from "commercial assumption" to "load-bearing
+mechanism assumption".
 
 ### C.2 Registry / data licensing
 
@@ -10037,6 +10132,7 @@ checker enforces one-way invariants:
 | HM-REQ-0090 | [21](21-adversarial-simulator.md) | Coverage requirement | Every threat in 16 must have at least one fixture under `tests/golden/adversarial/` by end of Phase 2; simulator runs nightly and failures block release | normative |
 | HM-REQ-0100 | [22](22-security-bounty.md) | Embargo before public disclosure | A security-hypothesis whose first appearance on `main` was NOT preceded by a private SECURITY.md advisory has its `improvement` component zeroed at scoring time; rigor + reproduction still pay (the public fixture is still useful coverage) | normative |
 | HM-REQ-0110 | [12](12-implementation-constraints.md) | Documentation discipline | Every fact, contract, parameter, or list in this repository has exactly one canonical home; other docs link rather than restate; drift between a canonical statement and a restatement is a bug in the restatement | normative |
+| HM-REQ-0120 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring a gated-tier `hardware_profile` (any `single-gpu-*` or `multi-gpu-*` profile) MUST include a `sponsorship` block; without it the hypothesis is rejected at acceptance. Operationalises ADR 0019's tier-2 pivot | normative |
 
 ## How to add
 
@@ -10103,6 +10199,7 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0090 | [21](21-adversarial-simulator.md) Coverage requirement | tests/integration/test_meta_gates.py::test_adversarial_coverage | pending |
 | HM-REQ-0100 | [22](22-security-bounty.md) Embargo before public disclosure | tests/integration/test_meta_gates.py::test_security_bounty_embargo | pending |
 | HM-REQ-0110 | [12](12-implementation-constraints.md) Documentation discipline | tests/integration/test_meta_gates.py::test_single_source_principle | pending |
+| HM-REQ-0120 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_gated_profile_requires_sponsorship | pending |
 
 ## System-test scenarios
 
@@ -10125,6 +10222,7 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-MINE-10 | HM-REQ-0001 | tests/system/mine/test_mcp_list.py::test_mcp_list | pending |
 | S-MINE-11 | HM-REQ-0060 | tests/system/mine/test_external_anchor_required.py::test_external_anchor_required | pending |
 | S-MINE-12 | HM-REQ-0080 | tests/system/mine/test_oracle_composition.py::test_oracle_composition | pending |
+| S-MINE-13 | HM-REQ-0120 | tests/system/mine/test_gated_profile_sponsorship.py::test_gated_profile_sponsorship | pending |
 | S-VAL-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_discover_score.py::test_discover_score | pending |
 | S-VAL-02 | HM-REQ-0010, HM-REQ-0011 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
 | S-VAL-03 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_rerun_tolerance.py::test_rerun_tolerance | pending |

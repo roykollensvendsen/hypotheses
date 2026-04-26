@@ -43,6 +43,7 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0090 | [21](21-adversarial-simulator.md) Coverage requirement | tests/integration/test_meta_gates.py::test_adversarial_coverage | pending |
 | HM-REQ-0100 | [22](22-security-bounty.md) Embargo before public disclosure | tests/integration/test_meta_gates.py::test_security_bounty_embargo | pending |
 | HM-REQ-0110 | [12](12-implementation-constraints.md) Documentation discipline | tests/integration/test_meta_gates.py::test_single_source_principle | pending |
+| HM-REQ-0120 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_gated_profile_requires_sponsorship | pending |
 
 ## System-test scenarios
 
@@ -65,6 +66,7 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-MINE-10 | HM-REQ-0001 | tests/system/mine/test_mcp_list.py::test_mcp_list | pending |
 | S-MINE-11 | HM-REQ-0060 | tests/system/mine/test_external_anchor_required.py::test_external_anchor_required | pending |
 | S-MINE-12 | HM-REQ-0080 | tests/system/mine/test_oracle_composition.py::test_oracle_composition | pending |
+| S-MINE-13 | HM-REQ-0120 | tests/system/mine/test_gated_profile_sponsorship.py::test_gated_profile_sponsorship | pending |
 | S-VAL-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_discover_score.py::test_discover_score | pending |
 | S-VAL-02 | HM-REQ-0010, HM-REQ-0011 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
 | S-VAL-03 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_rerun_tolerance.py::test_rerun_tolerance | pending |
