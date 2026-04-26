@@ -191,11 +191,26 @@ Each one mirrors a script under `scripts/check_*.py` or
 ```bash
 make precommit-install   # one-time; wires .pre-commit-config.yaml
 make docs-check          # everything CI runs (skips optional tools if absent)
+make test                # pytest with coverage (mirrors CI)
+make test-watch          # pytest-watcher: re-run on every save (safe-explore loop)
 ```
 
 Optional tooling for full coverage: `lychee`, `vale`, `typos`,
 `npx markdownlint-cli2`. The orchestrator skips silently if a tool
 is missing.
+
+## Test scaffolding (Phase-1 ready)
+
+`tests/` ships one `pytest.mark.skip` placeholder per HM-REQ /
+HM-INV with a `# spec:` comment, mapped 1:1 to
+`docs/spec/traceability.md`. The implementing agent's loop:
+`make test-watch` → unskip a placeholder → write a failing
+assertion → commit `test:` → implement under `src/hypotheses/`
+until green → commit `feat:` (TDD-gate enforces the order).
+
+Coverage threshold lives in `pyproject.toml`
+(`[tool.coverage.report].fail_under`), starts at `0`, ratchets
+toward `85` (HM-REQ-0040) per package as Phase 1 lands.
 
 ## Changes deferred
 

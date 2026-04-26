@@ -63,7 +63,15 @@ CHECKS: tuple[Check, ...] = (
     Check("typos", ["typos"], optional=True),
     Check(
         "markdownlint",
-        ["npx", "--yes", "markdownlint-cli2@0.14.0", "**/*.md"],
+        [
+            "npx",
+            "--yes",
+            "markdownlint-cli2@0.14.0",
+            "**/*.md",
+            "!**/.venv/**",
+            "!**/.pytest_cache/**",
+            "!**/node_modules/**",
+        ],
         optional=True,
     ),
 )

@@ -39,7 +39,7 @@ SPEC_DOCS_ROOT = Path("docs/spec")
 CODE_ROOTS = (Path("src"), Path("tests"))
 CODE_REF_RE = re.compile(r"#\s*spec:\s*HM-(?:REQ|INV)-\d{4}")
 TRACEABILITY_PLACEHOLDER = "TBD-Phase-1"
-TESTS_GLOB = "tests/test_*.py"
+TESTS_GLOB = "tests/**/test_*.py"
 
 
 def parse_index_ids(path: Path) -> dict[str, tuple[str, int]]:
@@ -209,32 +209,40 @@ def main() -> int:
     # via `# spec: HM-REQ-NNNN`, and every HM-REQ in the index must
     # be referenced by at least one test file. Until then this block
     # is a no-op — Phase 0 ships the spec, Phase 1 ships the tests.
+    def is_test_file(p: Path) -> bool:
+        return (
+            len(p.parts) >= 2
+            and p.parts[0] == "tests"
+            and p.suffix == ".py"
+            and p.name.startswith("test_")
+        )
+
     if tests_present:
         test_files = sorted(Path().glob(TESTS_GLOB))
         files_with_refs: set[Path] = set()
         for tag, sites in code_refs.items():
-            if not tag.startswith("HM-REQ-"):
+            if not tag.startswith(("HM-REQ-", "HM-INV-")):
                 continue
             for path, _line in sites:
-                if path.match(TESTS_GLOB):
+                if is_test_file(path):
                     files_with_refs.add(path)
         for path in test_files:
             if path not in files_with_refs:
                 errors.append(
                     f"::error file={path}::test file has no `# spec: "
-                    f"HM-REQ-NNNN` comment; every test should annotate the "
-                    "requirement(s) it covers."
+                    "HM-REQ-NNNN` (or HM-INV-NNNN) comment; every test "
+                    "should annotate the requirement/invariant(s) it covers."
                 )
         req_covered = {
             tag
             for tag, sites in code_refs.items()
-            if tag.startswith("HM-REQ-") and any(p.match(TESTS_GLOB) for p, _ in sites)
+            if tag.startswith("HM-REQ-") and any(is_test_file(p) for p, _ in sites)
         }
         for tag in sorted(req_set - req_covered):
             errors.append(
                 f"::error file={INDEX_PATH}::{tag} has no test reference; "
                 "add a `# spec: " + tag + "` comment to at least one "
-                "tests/test_*.py file that covers it."
+                "test file that covers it."
             )
 
     for w in warnings:

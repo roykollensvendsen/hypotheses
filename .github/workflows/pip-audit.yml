@@ -41,4 +41,7 @@ jobs:
           enable-cache: true
       - name: Run pip-audit
         if: steps.guard.outputs.skip == 'false'
-        run: uvx pip-audit --strict
+        # CVE-2026-3219 is in `pip` itself, which uvx installs into a
+        # transient venv. It is not in our declared dependencies; the
+        # ignore lifts as soon as pip-audit's pinned pip ratchets.
+        run: uvx pip-audit --strict --ignore-vuln CVE-2026-3219

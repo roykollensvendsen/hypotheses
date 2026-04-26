@@ -104,3 +104,4 @@ What did we decide?
 ## Existing ADRs
 
 - [0001 — Phase zero foundation](0001-phase-zero-foundation.md)
+- [0002 — Test toolchain](0002-test-toolchain.md)
