@@ -17,7 +17,9 @@ the system evolves under its allowed transitions.
 Phase 1 test code uses the [Hypothesis](https://hypothesis.readthedocs.io)
 library to enforce each HM-INV as a property-based test; the tests
 live under `tests/properties/` and link back via a
-`# spec: HM-INV-NNNN` comment.
+`# spec: HM-INV-NNNN` comment. Invariants span the lifecycle,
+scoring, runtime, and [validator](05-validator.md) layers; the
+table below collects them by canonical home.
 
 ## Index
 
@@ -33,6 +35,7 @@ live under `tests/properties/` and link back via a
 | HM-INV-0011 | [06](06-scoring.md) | Novelty non-increase: for a fixed `(id, version)`, novelty is strictly non-increasing in settlement order (1.0 → 0.5 → 0.0) | `tests/properties/test_scoring.py::test_novelty_non_increase` |
 | HM-INV-0012 | [06](06-scoring.md) | Improvement saturation: `improvement(s, H) ∈ [0, 1]` for any spec H and submission s; 0 when the statistical test fails, 1 when observed effect ≥ target effect | `tests/properties/test_scoring.py::test_improvement_saturation` |
 | HM-INV-0020 | [08](08-experiment-runtime.md) | Determinism: for identical `(spec, seed, hardware_profile, env.lock)`, `metrics.jsonl` is byte-identical across runs | `tests/properties/test_runtime.py::test_determinism_bytes` |
+| HM-INV-0030 | [05](05-validator.md) | Coverage bound: under uniform-independent rerun sampling, P(seed covered ‖ N [validators](05-validator.md)) = 1 − (1 − rerun_fraction)^N; the floor for ≥95% per-seed coverage at f = 0.4 is N ≥ 6 | `tests/properties/test_validator.py::test_coverage_bound` |
 | HM-INV-0021 | [08](08-experiment-runtime.md) | Dataset pin: declared `dataset_revision` matches the fetched blob's content hash on every load | `tests/properties/test_runtime.py::test_dataset_hash_pin` |
 
 ## How to add

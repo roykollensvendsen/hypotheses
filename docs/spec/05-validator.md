@@ -1,7 +1,7 @@
 ---
 name: validator
 description: validator pipeline, rerun policy, score commitment
-tokens: 1400
+tokens: 2200
 load_for: [implementation, agent-operator, review]
 depends_on: [02, 03, 06]
 kind: contract
@@ -108,6 +108,69 @@ epochs — revisit if an epoch changes length):
 9. **Score.** Compute the composite score (see [06](06-scoring.md)).
 10. **Commit weights.** Normalise scores per-miner-hotkey, set weights via
     YUMA.
+
+## Coverage under thin validator sets
+
+The `(validator_hotkey, epoch, spec_id, version)` seed makes every
+validator's rerun sample independent of every other validator's.
+For a submission with `S` declared seeds, each validator samples
+`f = rerun_fraction = 0.4` of them (subject to the minimum-1-seed
+floor for `S ≤ 2`). Under independent sampling, the probability
+that any *specific* seed is sampled by at least one of `N`
+validators is:
+
+```text
+P(seed-covered | N) = 1 − (1 − f)^N      (for S ≥ 3)
+```
+
+A miner cheating on even a single seed must evade every
+validator's sample to escape the zero-on-rerun-mismatch rule
+in [§ What kills a submission](#what-kills-a-submission). At
+`f = 0.4`:
+
+| `N` | `P(seed-covered)` |
+|----:|------------------:|
+|   1 |             0.400 |
+|   2 |             0.640 |
+|   3 |             0.784 |
+|   4 |             0.870 |
+|   5 |             0.922 |
+|   6 |             0.953 |
+|   7 |             0.972 |
+|  10 |             0.994 |
+
+> **HM-INV-0030** Under uniform-independent rerun sampling,
+> the probability that a specific seed is covered by at least
+> one of `N` validators is `1 − (1 − rerun_fraction)^N`. The
+> validator floor for ≥95% per-seed coverage at the Phase 1–2
+> default `rerun_fraction = 0.4` is therefore
+> `min_validators_d22_coverage = 6`.
+
+**Failure mode below the floor.** A validator set of `N < 6`
+silently degrades [D2.2 — Reproduction by random sample](00.5-foundations.md#defences-against-f2-miner-cheating):
+the cherry-picking miner's expected payoff scales with
+`P(seed-not-covered)^k` for `k` cheated seeds, and at `N = 3`
+single-seed cheating succeeds 21.6% of the time. The validator-
+set growth target in [`20-economic-model.md § Validator
+registration`](20-economic-model.md#validator-registration) is
+`N ≥ 10` at mainnet; this section names the *floor below which
+D2.2 is no longer effective* rather than the steady-state
+target.
+
+**Edge case: `S = 2`.** The minimum-1-seed floor in
+[§ Pipeline](#pipeline) step 4 means each validator samples
+exactly one of two seeds, so `P(seed-covered | N) = 1 − 0.5^N`.
+Coverage at the same 95% threshold requires `N ≥ 5`. Submissions
+with `S ≤ 2` are discouraged at the schema level and flagged in
+[`24-design-heuristics.md`](24-design-heuristics.md) as
+low-rigor.
+
+**Out of scope.** Adversarial validator-coverage (a coordinated
+validator bloc deliberately co-sampling the same seeds to leave
+gaps) is an F1-class threat, not addressed here. The white-hat
+programme in [`22-security-bounty.md`](22-security-bounty.md)
+covers it; a fixture demonstrating coalition-shaped seed-gap
+attacks lands as a security-hypothesis under HM-REQ-0100.
 
 ## What kills a submission
 
