@@ -106,16 +106,16 @@ minimum load-set for common tasks, ordered by expected frequency.
 
 | task | load (summands, ≈ tokens) | total |
 |------|---------------------------|-------|
-| **Implement a scoring component** (e.g. composite, rigor) | 06 (~1500) + 18 (~2300) + invariants (~600) + antipatterns/ap-0002 | ≈ 4800 |
+| **Implement a scoring component** (e.g. composite, rigor) | 06 (~2200) + 18 (~3300) + invariants (~600) + antipatterns/ap-0002 | ≈ 6500 |
 | **Implement errors.py** (T-P1-002) | 12 (~3400) + 16 (~3800) | ≈ 7200 |
 | **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~1000) | ≈ 5200 |
-| **Implement the validator pipeline** (T-P1-015) | 05 (~1400) + 06 (~1500) + 16 (~3800) + 18 (~2300) | ≈ 9000 |
+| **Implement the validator pipeline** (T-P1-015) | 05 (~1400) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
 | **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
-| **Review a validator-side PR** | 05 (~1400) + 06 (~1500) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8200 |
-| **Draft a new hypothesis** | 02 (~1000) + 01 (~500) + existing H-000x (~800–2500) | ≈ 2500–4000 |
+| **Review a validator-side PR** | 05 (~1400) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
+| **Draft a new hypothesis** | 02 (~1700) + 01 (~700) + existing H-000x (~800–2500) | ≈ 3200–4900 |
 | **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
-| **Governance / weight change** | 06 (~1500) + 07 (~800) + 20 (~3200) | ≈ 5500 |
+| **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
 
 Token estimates come from the `tokens:` front matter and are rough
 (wc × 1.3 rounded to 100). Treat them as planning, not a hard cap —

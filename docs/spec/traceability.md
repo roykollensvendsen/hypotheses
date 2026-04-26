@@ -1,7 +1,7 @@
 ---
 name: traceability matrix
 description: HM-REQ-NNNN to test-id mapping; populated as Phase 1 ships tests
-tokens: 800
+tokens: 400
 load_for: [implementation, review]
 depends_on: []
 kind: reference

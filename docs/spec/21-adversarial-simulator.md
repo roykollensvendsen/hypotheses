@@ -1,7 +1,7 @@
 ---
 name: adversarial simulator
 description: contract for the coalition-level attack simulator that must catch every threat in 16
-tokens: 2000
+tokens: 1300
 load_for: [implementation, review, governance]
 depends_on: [16, 12]
 kind: contract

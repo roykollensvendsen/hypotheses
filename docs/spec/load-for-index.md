@@ -1,7 +1,7 @@
 ---
 name: load-for index
 description: reverse index of `load_for:` tags to spec docs and token totals
-tokens: 1500
+tokens: 1100
 load_for: [agent-operator, governance, implementation, proposal, review]
 depends_on: []
 kind: reference
@@ -22,7 +22,7 @@ load-sets — see that table for per-task curated bundles.
 
 ## `agent-operator`
 
-Total declared tokens: **29800**.
+Total declared tokens: **31800**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -37,45 +37,45 @@ Total declared tokens: **29800**.
 | [docs/spec/13-agent-integration.md](13-agent-integration.md) | agent integration | 1800 |
 | [docs/spec/14-cli.md](14-cli.md) | cli | 900 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
-| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
-| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 2300 |
+| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
+| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 3300 |
 | [docs/spec/19-operations.md](19-operations.md) | operations | 3800 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `governance`
 
-Total declared tokens: **20900**.
+Total declared tokens: **20500**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 1500 |
+| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/11-roadmap.md](11-roadmap.md) | roadmap | 900 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
-| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 2000 |
+| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `implementation`
 
-Total declared tokens: **49600**.
+Total declared tokens: **51900**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
-| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 1500 |
+| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
 | [docs/spec/09-protocol.md](09-protocol.md) | protocol | 800 |
@@ -86,47 +86,47 @@ Total declared tokens: **49600**.
 | [docs/spec/14-cli.md](14-cli.md) | cli | 900 |
 | [docs/spec/15-ci-cd.md](15-ci-cd.md) | ci and automations | 2700 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
-| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
-| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 2300 |
+| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
+| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 3300 |
 | [docs/spec/19-operations.md](19-operations.md) | operations | 3800 |
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
-| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 2000 |
+| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
-| [docs/spec/traceability.md](traceability.md) | traceability matrix | 800 |
+| [docs/spec/traceability.md](traceability.md) | traceability matrix | 400 |
 
 ## `proposal`
 
-Total declared tokens: **10500**.
+Total declared tokens: **12200**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
-| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
+| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `review`
 
-Total declared tokens: **49600**.
+Total declared tokens: **51900**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
-| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 1500 |
+| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
 | [docs/spec/09-protocol.md](09-protocol.md) | protocol | 800 |
@@ -137,15 +137,15 @@ Total declared tokens: **49600**.
 | [docs/spec/14-cli.md](14-cli.md) | cli | 900 |
 | [docs/spec/15-ci-cd.md](15-ci-cd.md) | ci and automations | 2700 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
-| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
-| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 2300 |
+| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
+| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 3300 |
 | [docs/spec/19-operations.md](19-operations.md) | operations | 3800 |
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
-| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 2000 |
+| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
-| [docs/spec/traceability.md](traceability.md) | traceability matrix | 800 |
+| [docs/spec/traceability.md](traceability.md) | traceability matrix | 400 |

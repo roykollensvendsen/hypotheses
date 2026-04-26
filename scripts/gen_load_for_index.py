@@ -45,7 +45,7 @@ HEADER = (
     "---\n"
     "name: load-for index\n"
     "description: reverse index of `load_for:` tags to spec docs and token totals\n"
-    "tokens: 1500\n"
+    "tokens: 1100\n"
     "load_for: [agent-operator, governance, implementation, proposal, review]\n"
     "depends_on: []\n"
     "kind: reference\n"

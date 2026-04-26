@@ -291,16 +291,16 @@ minimum load-set for common tasks, ordered by expected frequency.
 
 | task | load (summands, ≈ tokens) | total |
 |------|---------------------------|-------|
-| **Implement a scoring component** (e.g. composite, rigor) | 06 (~1500) + 18 (~2300) + invariants (~600) + antipatterns/ap-0002 | ≈ 4800 |
+| **Implement a scoring component** (e.g. composite, rigor) | 06 (~2200) + 18 (~3300) + invariants (~600) + antipatterns/ap-0002 | ≈ 6500 |
 | **Implement errors.py** (T-P1-002) | 12 (~3400) + 16 (~3800) | ≈ 7200 |
 | **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~1000) | ≈ 5200 |
-| **Implement the validator pipeline** (T-P1-015) | 05 (~1400) + 06 (~1500) + 16 (~3800) + 18 (~2300) | ≈ 9000 |
+| **Implement the validator pipeline** (T-P1-015) | 05 (~1400) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
 | **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
-| **Review a validator-side PR** | 05 (~1400) + 06 (~1500) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8200 |
-| **Draft a new hypothesis** | 02 (~1000) + 01 (~500) + existing H-000x (~800–2500) | ≈ 2500–4000 |
+| **Review a validator-side PR** | 05 (~1400) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
+| **Draft a new hypothesis** | 02 (~1700) + 01 (~700) + existing H-000x (~800–2500) | ≈ 3200–4900 |
 | **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
-| **Governance / weight change** | 06 (~1500) + 07 (~800) + 20 (~3200) | ≈ 5500 |
+| **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
 
 Token estimates come from the `tokens:` front matter and are rough
 (wc × 1.3 rounded to 100). Treat them as planning, not a hard cap —
@@ -1020,7 +1020,7 @@ This doc is done when:
 ---
 name: hypothesis format
 description: preregistration-style schema for hypothesis specs stored in hypotheses/
-tokens: 1000
+tokens: 1700
 load_for: [implementation, proposal, review]
 depends_on: [01]
 kind: contract
@@ -1875,7 +1875,7 @@ This doc is done when:
 ---
 name: scoring
 description: composite score rubric, statistical tests, oracle integration
-tokens: 1500
+tokens: 2200
 load_for: [implementation, review, governance]
 depends_on: [02, 18]
 kind: contract
@@ -4657,7 +4657,7 @@ This doc is done when:
 ---
 name: hypothesis lifecycle
 description: states, transitions, authorities, and edge cases for hypothesis status
-tokens: 2600
+tokens: 4000
 load_for: [implementation, proposal, agent-operator, review]
 depends_on: [02, 06]
 kind: contract
@@ -5098,7 +5098,7 @@ This doc is done when:
 ---
 name: oracle contract
 description: interface, composition, outage semantics, and SN42 adapter for ground-truth oracles
-tokens: 2300
+tokens: 3300
 load_for: [implementation, agent-operator, review]
 depends_on: [02, 06]
 kind: contract
@@ -6508,7 +6508,7 @@ This doc is done when:
 ---
 name: adversarial simulator
 description: contract for the coalition-level attack simulator that must catch every threat in 16
-tokens: 2000
+tokens: 1300
 load_for: [implementation, review, governance]
 depends_on: [16, 12]
 kind: contract
@@ -7042,7 +7042,7 @@ later PR if it earns its keep.
 ---
 name: load-for index
 description: reverse index of `load_for:` tags to spec docs and token totals
-tokens: 1500
+tokens: 1100
 load_for: [agent-operator, governance, implementation, proposal, review]
 depends_on: []
 kind: reference
@@ -7063,7 +7063,7 @@ load-sets — see that table for per-task curated bundles.
 
 ## `agent-operator`
 
-Total declared tokens: **29800**.
+Total declared tokens: **31800**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -7078,45 +7078,45 @@ Total declared tokens: **29800**.
 | [docs/spec/13-agent-integration.md](13-agent-integration.md) | agent integration | 1800 |
 | [docs/spec/14-cli.md](14-cli.md) | cli | 900 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
-| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
-| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 2300 |
+| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
+| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 3300 |
 | [docs/spec/19-operations.md](19-operations.md) | operations | 3800 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `governance`
 
-Total declared tokens: **20900**.
+Total declared tokens: **20500**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
-| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 1500 |
+| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/11-roadmap.md](11-roadmap.md) | roadmap | 900 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
-| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 2000 |
+| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `implementation`
 
-Total declared tokens: **49600**.
+Total declared tokens: **51900**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
-| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 1500 |
+| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
 | [docs/spec/09-protocol.md](09-protocol.md) | protocol | 800 |
@@ -7127,47 +7127,47 @@ Total declared tokens: **49600**.
 | [docs/spec/14-cli.md](14-cli.md) | cli | 900 |
 | [docs/spec/15-ci-cd.md](15-ci-cd.md) | ci and automations | 2700 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
-| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
-| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 2300 |
+| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
+| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 3300 |
 | [docs/spec/19-operations.md](19-operations.md) | operations | 3800 |
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
-| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 2000 |
+| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
-| [docs/spec/traceability.md](traceability.md) | traceability matrix | 800 |
+| [docs/spec/traceability.md](traceability.md) | traceability matrix | 400 |
 
 ## `proposal`
 
-Total declared tokens: **10500**.
+Total declared tokens: **12200**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
-| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
+| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `review`
 
-Total declared tokens: **49600**.
+Total declared tokens: **51900**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1000 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
-| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 1500 |
+| [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
 | [docs/spec/09-protocol.md](09-protocol.md) | protocol | 800 |
@@ -7178,18 +7178,18 @@ Total declared tokens: **49600**.
 | [docs/spec/14-cli.md](14-cli.md) | cli | 900 |
 | [docs/spec/15-ci-cd.md](15-ci-cd.md) | ci and automations | 2700 |
 | [docs/spec/16-threat-model.md](16-threat-model.md) | threat model | 3800 |
-| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 2600 |
-| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 2300 |
+| [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
+| [docs/spec/18-oracle.md](18-oracle.md) | oracle contract | 3300 |
 | [docs/spec/19-operations.md](19-operations.md) | operations | 3800 |
 | [docs/spec/20-economic-model.md](20-economic-model.md) | economic model | 3200 |
-| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 2000 |
+| [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
-| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1500 |
+| [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
-| [docs/spec/traceability.md](traceability.md) | traceability matrix | 800 |
+| [docs/spec/traceability.md](traceability.md) | traceability matrix | 400 |
 
 ========== END docs/spec/load-for-index.md ==========
 
@@ -7270,7 +7270,7 @@ historical references stay resolvable.
 ---
 name: traceability matrix
 description: HM-REQ-NNNN to test-id mapping; populated as Phase 1 ships tests
-tokens: 800
+tokens: 400
 load_for: [implementation, review]
 depends_on: []
 kind: reference
