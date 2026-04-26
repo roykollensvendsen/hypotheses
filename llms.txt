@@ -64,6 +64,12 @@ Phase 0 — spec freeze. The runtime under `src/hypotheses/` is not yet implemen
 - [docs/spec/antipatterns/ap-0005-synthesize-spec-field.md](docs/spec/antipatterns/ap-0005-synthesize-spec-field.md)
 - [docs/spec/antipatterns/ap-0006-cli-only-path.md](docs/spec/antipatterns/ap-0006-cli-only-path.md)
 - [docs/spec/antipatterns/ap-0007-floating-action-ref.md](docs/spec/antipatterns/ap-0007-floating-action-ref.md)
+- [docs/spec/antipatterns/ap-0008-defensive-overhandling.md](docs/spec/antipatterns/ap-0008-defensive-overhandling.md)
+- [docs/spec/antipatterns/ap-0009-premature-abstraction.md](docs/spec/antipatterns/ap-0009-premature-abstraction.md)
+- [docs/spec/antipatterns/ap-0010-comment-restating-code.md](docs/spec/antipatterns/ap-0010-comment-restating-code.md)
+- [docs/spec/antipatterns/ap-0011-dead-branches.md](docs/spec/antipatterns/ap-0011-dead-branches.md)
+- [docs/spec/antipatterns/ap-0012-wide-signatures.md](docs/spec/antipatterns/ap-0012-wide-signatures.md)
+- [docs/spec/antipatterns/ap-0013-speculative-configurability.md](docs/spec/antipatterns/ap-0013-speculative-configurability.md)
 
 ## Agent role prompts
 
