@@ -7342,6 +7342,7 @@ of each ID; the table below adds only the test-id mapping column.
 ========== BEGIN docs/spec/antipatterns/ap-0001-oracle-fallback.md ==========
 
 <!-- antipattern-content -->
+<!-- protects: HM-REQ-0080 -->
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
@@ -7408,6 +7409,7 @@ submission `pending`; the next cycle retries.
 ========== BEGIN docs/spec/antipatterns/ap-0002-llm-in-scoring.md ==========
 
 <!-- antipattern-content -->
+<!-- protects: HM-REQ-0010,HM-REQ-0011 -->
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
@@ -7484,6 +7486,7 @@ respond to an operator) — but never in the score function.
 ========== BEGIN docs/spec/antipatterns/ap-0003-bare-except.md ==========
 
 <!-- antipattern-content -->
+<!-- protects:  -->
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
@@ -7555,6 +7558,7 @@ visible bug, not a silent `False`.
 ========== BEGIN docs/spec/antipatterns/ap-0004-skip-tdd.md ==========
 
 <!-- antipattern-content -->
+<!-- protects: HM-REQ-0040 -->
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
@@ -7646,6 +7650,7 @@ implementation must satisfy.
 ========== BEGIN docs/spec/antipatterns/ap-0005-synthesize-spec-field.md ==========
 
 <!-- antipattern-content -->
+<!-- protects: HM-REQ-0001 -->
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
@@ -7723,6 +7728,7 @@ check is the ratchet: if the doc and schema disagree, CI fails.
 ========== BEGIN docs/spec/antipatterns/ap-0006-cli-only-path.md ==========
 
 <!-- antipattern-content -->
+<!-- protects:  -->
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors
@@ -7797,6 +7803,7 @@ A single `RescoreReport` type, a single code path, three surfaces.
 ========== BEGIN docs/spec/antipatterns/ap-0007-floating-action-ref.md ==========
 
 <!-- antipattern-content -->
+<!-- protects: HM-REQ-0041 -->
 <!--
 SPDX-License-Identifier: AGPL-3.0-or-later
 SPDX-FileCopyrightText: 2026 The hypotheses subnet contributors

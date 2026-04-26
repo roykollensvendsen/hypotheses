@@ -28,6 +28,14 @@ every `*.md` under `agents/prompts/`. The allow-listed directory
 skipped wholesale — its content is marked at file level with
 `<!-- antipattern-content -->`.
 
+In addition, every `docs/spec/antipatterns/ap-*.md` declares which
+HM-REQ / HM-INV identifiers it protects via a
+`<!-- protects: <ids> -->` comment. The script verifies every listed
+ID resolves to an entry in `docs/spec/requirements.md` or
+`docs/spec/invariants.md`; an empty list is allowed for antipatterns
+that protect general policy not pinned to a specific normative
+requirement.
+
 Used by `.github/workflows/prompt-injection.yml`.
 """
 
@@ -85,6 +93,49 @@ DIRECTIVE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
 )
 
 EXAMPLE_BLOCK_LABELS = ("example", "antipattern", "bad-code", "injection-example")
+
+PROTECTS_RE = re.compile(r"<!--\s*protects:\s*([^>]*?)\s*-->")
+TAG_DEFINE_RE = re.compile(r"^\|\s*(HM-(?:REQ|INV)-\d{4})\b", re.MULTILINE)
+ANTIPATTERN_GLOB = "docs/spec/antipatterns/ap-*.md"
+REQUIREMENTS_PATH = Path("docs/spec/requirements.md")
+INVARIANTS_PATH = Path("docs/spec/invariants.md")
+
+
+def known_normative_ids() -> set[str]:
+    """Collect HM-REQ-/HM-INV- identifiers defined in the index tables."""
+    ids: set[str] = set()
+    for path in (REQUIREMENTS_PATH, INVARIANTS_PATH):
+        if not path.exists():
+            continue
+        ids.update(TAG_DEFINE_RE.findall(path.read_text()))
+    return ids
+
+
+def validate_antipattern_protects(known: set[str]) -> list[str]:
+    """Verify every antipattern's ``protects:`` IDs resolve."""
+    errors: list[str] = []
+    for path in sorted(Path().glob(ANTIPATTERN_GLOB)):
+        text = path.read_text()
+        match = PROTECTS_RE.search(text)
+        if match is None:
+            errors.append(
+                f"::error file={path}::missing `<!-- protects: ... -->` "
+                "comment; declare the HM-REQ/HM-INV IDs this antipattern "
+                "protects (empty list allowed for general-policy cases)"
+            )
+            continue
+        raw = match.group(1).strip()
+        if not raw:
+            continue
+        for token in (t.strip() for t in raw.split(",")):
+            if not token:
+                continue
+            if token not in known:
+                errors.append(
+                    f"::error file={path}::protects: '{token}' does not "
+                    "resolve to an entry in requirements.md or invariants.md"
+                )
+    return errors
 
 
 def iter_scan_targets() -> list[Path]:
@@ -177,6 +228,7 @@ def main() -> int:
     errors: list[str] = []
     for path in targets:
         errors.extend(scan(path))
+    errors.extend(validate_antipattern_protects(known_normative_ids()))
     if errors:
         for e in errors:
             print(e)
@@ -187,7 +239,8 @@ def main() -> int:
         )
         return 1
     print(
-        f"Scanned {len(targets)} markdown file(s); no prompt-injection patterns matched."
+        f"Scanned {len(targets)} markdown file(s); no prompt-injection patterns "
+        "matched and every antipattern's protects: list resolved."
     )
     return 0
 

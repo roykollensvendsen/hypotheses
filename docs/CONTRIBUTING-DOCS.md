@@ -199,8 +199,6 @@ is missing.
 
 Open improvements that are spec'd but not yet implemented:
 
-- **Antipattern `protects:` tags** — each `ap-*.md` should declare
-  which `HM-REQ`/`HM-INV` it protects. Editorial work.
 - **Docs-impact PR comment bot** — `scripts/docs_impact_comment.py`
   needs git-diff context that is awkward to test outside a real
   PR runtime. Lands in a follow-up.
