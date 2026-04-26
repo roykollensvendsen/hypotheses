@@ -239,7 +239,90 @@ the model's predicted range by ≥ 50 % opens a recalibration ADR),
 and the link to the operating-cost catalogue in
 [`28 § C`](28-treasury.md#c-operating-cost-catalogue).
 
-## E. Open questions
+## E. Viability criteria
+
+The decision protocol that says "this subnet's economics work"
+or "they don't." Four numerical pass/fail thresholds. Viable
+means **all four** hold simultaneously across the reference
+parameter ranges.
+
+| # | criterion | threshold | source / measured by |
+|---|-----------|-----------|----------------------|
+| 1 | Miner median break-even | `s_miner = 1/N_miners` is profitable for ≥ 80 % of supported [hypothesis](02-hypothesis-format.md) profiles at reference `t_TAO`, `E_epoch`, `k` | § C miner economics formula `(*)` |
+| 2 | Validator break-even | `f_validator · E_epoch · t_TAO / N_validators ≥ rerun_cost(N_validators) + c_overhead_validator` at `N ≥ 6` (the [HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets) floor) | § D.1 (PR-E.2) |
+| 3 | Stable participation equilibrium | At least one fixed point where `dN_miner/dt = dN_validator/dt = 0` exists and is locally attracting from the [Phase 2.0 cold-start position](11-roadmap.md#phase-20-cold-start) | § D.2 (PR-E.3) |
+| 4 | Robustness | Criteria 1–3 hold under `t_TAO ∈ [0.5, 2.0] · reference` and `E_epoch ∈ [0.5, 2.0] · reference` | § D.3 (PR-E.4) |
+
+### What "viable" does NOT mean
+
+- **Not a guarantee under adversarial conditions.** The four
+  criteria assume honest play. F1–F6 adversarial scenarios are
+  covered by [`16-threat-model.md`](16-threat-model.md) and
+  [`21-adversarial-simulator.md`](21-adversarial-simulator.md);
+  adversarial viability is a separate question.
+- **Not robust to single-shot black-swan TAO crashes.** A
+  100× sudden price drop breaks every emission-funded subnet;
+  the criteria don't claim immunity.
+- **Not robust to specific miner-skill heterogeneity.** Beyond
+  the median-case `s_miner ≈ 1/N_miners`, individual miners
+  with above- or below-median skill are not separately
+  modelled here. PR-E.3 introduces a skill distribution under
+  criterion 3.
+
+### Why 80 %, not 100 %, of profiles
+
+§ C already shows `multi-gpu-4x80gb` is a duopoly (`N ≈ 2`) at
+reference numbers — known and documented as a narrow market.
+Demanding viability across **every** profile would force a
+spurious "not viable" verdict on a finding the spec already
+acknowledges. The 80 % threshold lets `cpu-small`,
+`cpu-large`, `single-gpu-24gb`, `single-gpu-80gb` carry the
+viability claim while heavy-GPU profiles remain
+sponsorship-dependent per
+[`27 § C.1`](27-economic-strategy.md#c1-sponsored-hypotheses).
+
+### Decision protocol
+
+After PR-E.2 through PR-E.5 + the simulation infrastructure in
+[ADR 0021](../adr/0021-economic-survival-simulator.md) land,
+the maintainer publishes a **viability ADR** that:
+
+1. Reports each criterion's measured value.
+2. Returns one of three verdicts:
+   - **Viable** — all four pass; proceed to Phase 2 testnet
+     onset without further pivot.
+   - **Marginal** — one or two fail by < 30 %; enact a tier-1
+     pivot (rerun_fraction adjustment, emission-split tweak,
+     or cost-table refresh per
+     [`20 § Parameter inventory`](20-economic-model.md#parameter-inventory))
+     and re-evaluate.
+   - **Not viable as designed** — multiple fail or any fail
+     by ≥ 30 %; enact a tier-2 / tier-3 pivot (hypothesis-
+     acceptance gate tightening, treasury thin-network
+     subsidy per
+     [`28 § E`](28-treasury.md#e-outflow-rules), strategic
+     re-pivot, or subnet redefinition).
+3. The ADR is the canonical "go / no-go" for Phase 2.
+
+The decision is not purely numerical — the maintainer weighs
+Phase 2 onboarding cost against verification confidence — but
+the criteria provide a defensible base case. ADR
+[0016](../adr/0016-viability-decision-protocol.md) captures
+the rationale for these specific thresholds and the verdict
+taxonomy.
+
+### Pivot ladder reference
+
+The maintainer's response to a "marginal" or "not viable"
+verdict follows the pivot ladder in ADR 0016 — seven levers
+ranked by reversibility / disruption. Tier-1 levers are
+parameter adjustments (no new spec docs); tier-2 introduces
+new mechanisms (hypothesis-acceptance gates, treasury
+subsidy); tier-3 is redesign-class (strategy rewrite or
+foundation review). Each lever lands as its own ≤ 500-LoC PR
+when the verdict mandates it.
+
+## F. Open questions
 
 1. **`E_epoch` real value.** Today this is a placeholder; at
    netuid registration the Bittensor root allocation gives the
@@ -257,7 +340,7 @@ and the link to the operating-cost catalogue in
    PR-E.3 introduces a skill distribution. Until then the
    numbers in `(*)` are the median, not every miner.
 
-## F. References
+## G. References
 
 - [`00.5-foundations.md § C c4a / c4b`](00.5-foundations.md#c4a-emission-sufficient-steady-state),
   [§ D](00.5-foundations.md#d-what-we-explicitly-give-up).
@@ -269,12 +352,14 @@ and the link to the operating-cost catalogue in
   [§ Honest-play arithmetic](20-economic-model.md#honest-play-arithmetic),
   [§ Out of scope](20-economic-model.md#out-of-scope).
 - [`27 § C, D`](27-economic-strategy.md#c-non-bittensor-revenue-paths).
-- [`28 § C`](28-treasury.md#c-operating-cost-catalogue).
+- [`28 § C`](28-treasury.md#c-operating-cost-catalogue),
+  [§ E](28-treasury.md#e-outflow-rules).
 - ADRs: [0010](../adr/0010-economic-strategy.md),
   [0011](../adr/0011-d22-coverage-bound.md),
   [0013](../adr/0013-cold-start-contingency.md),
   [0014](../adr/0014-treasury-pre-dao.md),
-  [0015](../adr/0015-economic-survival-scope.md).
+  [0015](../adr/0015-economic-survival-scope.md),
+  [0016](../adr/0016-viability-decision-protocol.md).
 
 ## Self-audit
 
@@ -288,6 +373,9 @@ Done when:
   assumptions explicitly.
 - Each of the four follow-up PRs (E.2–E.5) has a named scope
   and the section it will populate.
+- § E names four numerical viability criteria, each
+  cross-referenced to the section / PR that measures it, plus
+  a three-verdict decision protocol citing ADR 0016.
 - Reference numbers carry the same Q2 2026 caveat as the
   cost-table USD values in `20 § Cost penalty calibration`.
 - Cross-refs resolve under
