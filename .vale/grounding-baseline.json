@@ -1,0 +1,21 @@
+{
+  "_comment": "Ratchet baseline for scripts/check_grounding.py. Lists kind: contract docs that do not yet declare 'evidence:' in front matter. New docs not on this list that lack the field fail CI; docs that gain the field can be removed from this list (the gate prints an info-level 'ratchet opportunity' to remind the maintainer). Per-doc rigor passes ratchet this list down toward zero. Do not add new entries by hand — the gate names them in error output.",
+  "docs_without_evidence": [
+    "docs/spec/02-hypothesis-format.md",
+    "docs/spec/04-miner.md",
+    "docs/spec/05-validator.md",
+    "docs/spec/06-scoring.md",
+    "docs/spec/07-incentive.md",
+    "docs/spec/08-experiment-runtime.md",
+    "docs/spec/09-protocol.md",
+    "docs/spec/12-implementation-constraints.md",
+    "docs/spec/13-agent-integration.md",
+    "docs/spec/14-cli.md",
+    "docs/spec/17-hypothesis-lifecycle.md",
+    "docs/spec/18-oracle.md",
+    "docs/spec/21-adversarial-simulator.md",
+    "docs/spec/22-security-bounty.md",
+    "docs/spec/23-system-tests.md",
+    "docs/spec/24-design-heuristics.md"
+  ]
+}

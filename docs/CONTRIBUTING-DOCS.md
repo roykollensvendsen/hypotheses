@@ -178,6 +178,7 @@ Doc-quality gates that block merge:
 | `spec-consistency.yml` | cross-reference integrity, canonical-constant check |
 | `requirements.yml` | HM-REQ/HM-INV index ↔ inline tags ↔ traceability matrix |
 | `system-tests.yml` | every surface-observable HM-REQ has a system-test scenario in `traceability.md`; every scenario cites a real HM-REQ and a real test file; the `internal_only:` array in `requirements.md` front matter exempts CI-only requirements (see `docs/spec/23-system-tests.md` §Spec-test sync workflow) |
+| `grounding.yml` | every `{ref:slug}` and `[^slug]` in a spec or ADR doc resolves to a row in `docs/spec/references.md`; every `kind: contract` spec doc declares `evidence:` in front matter (ratchet against `.vale/grounding-baseline.json`, decreases only — see `docs/spec/25-rigor-framework.md`) |
 
 PR reviewers should cite `docs/spec/24-design-heuristics.md` (rules
 `D-1` … `D-6`) and `docs/spec/antipatterns/` (`ap-NNNN`) by name when

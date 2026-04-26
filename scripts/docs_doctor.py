@@ -59,6 +59,7 @@ CHECKS: tuple[Check, ...] = (
         "system-test-traceability",
         ["python3", "scripts/check_system_test_traceability.py"],
     ),
+    Check("grounding", ["python3", "scripts/check_grounding.py"]),
     Check("staleness", ["python3", "scripts/check_staleness.py"]),
     Check("prompt-injection", ["python3", "scripts/check_prompt_injection.py"]),
     Check("spdx-headers", ["python3", "scripts/check_spdx_headers.py"]),
