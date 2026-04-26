@@ -8,11 +8,13 @@
 # Additional targets land incrementally with the documentation-quality
 # sprint; see docs/CONTRIBUTING-DOCS.md for the catalog.
 
-.PHONY: help docs-check links vale typos markdownlint precommit-install
+.PHONY: help docs-check test test-watch links vale typos markdownlint precommit-install
 
 help:
 	@echo "Available targets:"
 	@echo "  docs-check          run all documentation checks (mirrors CI)"
+	@echo "  test                run pytest once (mirrors CI; reports coverage)"
+	@echo "  test-watch          re-run relevant tests on every save (pytest-watcher)"
 	@echo "  links               run lychee link checker"
 	@echo "  vale                run vale prose linter"
 	@echo "  typos               run typos spell-checker"
@@ -21,6 +23,15 @@ help:
 
 docs-check:
 	@python3 scripts/docs_doctor.py
+
+test:
+	@uv run --extra dev pytest --cov=hypotheses --cov-report=term-missing -n auto
+
+# Fast inner loop. Re-runs the relevant tests on every save under tests/
+# and src/. Skipped placeholders stay green; replacing one with a
+# real (failing) test is the safe-explore entry point.
+test-watch:
+	@uv run --extra dev ptw --runner "pytest --cov=hypotheses -n auto" tests src
 
 links:
 	@lychee --no-progress .
@@ -32,7 +43,7 @@ typos:
 	@typos
 
 markdownlint:
-	@npx --yes markdownlint-cli2@0.14.0 "**/*.md"
+	@npx --yes markdownlint-cli2@0.14.0 "**/*.md" "!**/.venv/**" "!**/.pytest_cache/**" "!**/node_modules/**"
 
 precommit-install:
 	@pre-commit install --hook-type pre-commit --hook-type commit-msg

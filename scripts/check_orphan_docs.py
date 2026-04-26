@@ -77,6 +77,9 @@ EXCLUDE_DIR_PARTS: frozenset[str] = frozenset(
         "node_modules",
         ".ruff_cache",
         ".vale",
+        ".pytest_cache",
+        ".mypy_cache",
+        ".pyright",
     }
 )
 

@@ -1,6 +1,10 @@
 node_modules/
+node_modules/**
 .venv/
+.venv/**
 .git/
+.pytest_cache/
+.pytest_cache/**
 # Curated bad code; intentionally non-conforming.
 docs/spec/antipatterns/
 # Quint formal specs; not prose.
