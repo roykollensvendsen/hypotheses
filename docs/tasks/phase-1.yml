@@ -7,6 +7,17 @@
 
 phase: 1
 mirrors: docs/spec/12-implementation-constraints.md#build-order
+
+# Cross-cutting reads. Load these once per session and treat as
+# global constraints; every task below assumes they are in context.
+references:
+  - path: docs/spec/24-design-heuristics.md
+    why: "structural rules D-1 .. D-6 every PR is reviewed against"
+  - path: docs/spec/antipatterns/README.md
+    why: "ap-0001 .. ap-0013 negative shapes the agent must refuse to produce"
+  - path: docs/spec/23-system-tests.md
+    why: "black-box harness contract; the surface: field on each task below names the scenarios that must turn green as part of its DoD"
+
 tasks:
 
   - id: T-P1-001
@@ -178,11 +189,14 @@ tasks:
     path: src/hypotheses/miner/
     depends_on: [T-P1-005, T-P1-007, T-P1-011]
     reqs: []
+    surface: [cli, sdk]
+    system_scenarios: [S-MINE-01, S-MINE-02, S-MINE-03, S-MINE-04, S-MINE-05, S-MINE-06, S-MINE-07, S-MINE-08, S-MINE-09, S-MINE-11, S-MINE-12]
     dod:
       - "`propose` runs schema validation + dry-run entrypoint on cpu-small."
       - "`run` emits an artifact bundle matching docs/spec/04-miner exactly."
       - "`submit` signs, uploads, and returns an announcement that validates against synapses.schema.json."
       - "Integration test exercises the full loop on H-0001."
+      - "Every scenario in system_scenarios moves from @pytest.mark.skip to passing; see docs/spec/23-system-tests.md and traceability.md."
     sibling_tests: tests/miner/
     size_budget_loc: 450
 
@@ -191,11 +205,14 @@ tasks:
     path: src/hypotheses/validator/
     depends_on: [T-P1-013, T-P1-014]
     reqs: [HM-REQ-0010, HM-REQ-0012]
+    surface: [cli]
+    system_scenarios: [S-VAL-01, S-VAL-02, S-VAL-03, S-VAL-04, S-VAL-05, S-VAL-07, S-VAL-08]
     dod:
       - "Pipeline processes a submission against H-0001 end-to-end."
       - "Rerun sample is deterministic in `(validator_hotkey, epoch, spec_id, version)`."
       - "Weight vector sums to 1 within float epsilon."
       - "Self-scoring rejection covered by a failing-then-passing test pair."
+      - "Every scenario in system_scenarios moves from @pytest.mark.skip to passing; see docs/spec/23-system-tests.md and traceability.md."
     sibling_tests: tests/validator/
     size_budget_loc: 450
 
@@ -204,11 +221,14 @@ tasks:
     path: src/hypotheses/cli/
     depends_on: [T-P1-014, T-P1-015]
     reqs: []
+    surface: [cli]
+    system_scenarios: [S-DEV-01, S-DEV-02, S-DEV-03]
     dod:
       - "Single `hypo` entry point per docs/spec/14."
       - "Every documented subcommand exercised with `--help` + a happy-path invocation."
       - "CLI is a thin dispatcher (no business logic)."
       - "`--json` flag produces structured output on every command."
+      - "Every scenario in system_scenarios moves from @pytest.mark.skip to passing; see docs/spec/23-system-tests.md and traceability.md."
     sibling_tests: tests/cli/
     size_budget_loc: 400
 
@@ -217,10 +237,13 @@ tasks:
     path: src/hypotheses/client/
     depends_on: [T-P1-014, T-P1-015]
     reqs: []
+    surface: [sdk]
+    system_scenarios: [S-DEV-04]
     dod:
       - "`Client` (sync) and `AsyncClient` mirror each other method-for-method."
       - "Models in `client/models.py` are the single public Python surface; internal types are not re-exported."
       - "Fake-backend tests exercise every public method."
+      - "Every scenario in system_scenarios moves from @pytest.mark.skip to passing; see docs/spec/23-system-tests.md and traceability.md."
     sibling_tests: tests/client/
     size_budget_loc: 400
 
@@ -229,10 +252,13 @@ tasks:
     path: src/hypotheses/mcp/
     depends_on: [T-P1-017]
     reqs: []
+    surface: [mcp]
+    system_scenarios: [S-MINE-10, S-VAL-06]
     dod:
       - "Read-only tools in Phase 1 per docs/spec/13."
       - "Every MCP tool has a matching `Client` method (AP-0006 parity)."
       - "Per-tool argument schemas under `mcp/schema/` validate against inputs in tests."
+      - "Every scenario in system_scenarios moves from @pytest.mark.skip to passing; see docs/spec/23-system-tests.md and traceability.md."
     sibling_tests: tests/mcp/
     size_budget_loc: 350
 
