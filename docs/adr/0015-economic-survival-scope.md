@@ -29,6 +29,26 @@ structural gaps (D2.2 floor, c7 measurement, cold-start
 contingency, treasury custody). Quantitative survival is the
 fifth and structurally last one.
 
+### Predecessor ADRs in the gap-fix sequence
+
+The post-strategy-doc gap-review surfaced five economic-
+feasibility gaps that the strategy doc 27 did not close. The
+five ADRs that close them are sequenced cheapest-first so the
+structural foundations land before the quantitative work
+stream needs them. This ADR opens the fifth.
+
+| gap | ADR | landed in |
+|-----|-----|-----------|
+| Validator-set thin regime — N below which D2.2 silently degrades | [0011](0011-d22-coverage-bound.md) | HM-INV-0030, `min_validators_d22_coverage = 6` |
+| C7 (ground-truth latency < 12 months) untested | [0012](0012-c7-measurement.md) | settlement-latency p50/p95 SLI + HM-REQ-0070 revision trigger |
+| Cold-start at Phase 2 entry — no thin-period plan | [0013](0013-cold-start-contingency.md) | Phase 2.0 sub-phase, c4a/c4b split, 60-day abort trigger |
+| No subnet treasury — no fiduciary mechanism for non-TAO revenue | [0014](0014-treasury-pre-dao.md) | [`28-treasury.md`](../spec/28-treasury.md), c12-pre-dao-custody |
+| Quantitative survival analysis (this ADR) | [0015](0015-economic-survival-scope.md) | [`29-economic-survival.md`](../spec/29-economic-survival.md), miner unit economics |
+
+The four follow-up PRs (E.2–E.5) named in
+[`29 § D — Sub-PR roadmap`](../spec/29-economic-survival.md#d-sub-pr-roadmap)
+extend the fifth row over time; ADRs 0011–0014 are one-shot.
+
 This ADR opens the work stream. It is intentionally *not* the
 whole work stream — that needs four more PRs (E.2–E.5). The
 purpose of this PR is to pin the modelling contract (variables,
