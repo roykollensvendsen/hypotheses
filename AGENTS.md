@@ -120,9 +120,10 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
-| **Add a normative spec claim** | 25 (~2500) + references (~700) + 00.5 (~3500) | ≈ 6700 |
+| **Add a normative spec claim** | 25 (~2500) + references (~1000) + 00.5 (~3500) | ≈ 6700 |
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
 | **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
+| **Articulate investment / revenue narrative** | 27 (~2400) + 20 (~3200) + references (~1000) | ≈ 6600 |
 
 Token estimates come from the `tokens:` front matter and are rough
 (wc × 1.3 rounded to 100). Treat them as planning, not a hard cap —

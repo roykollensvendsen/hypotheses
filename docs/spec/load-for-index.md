@@ -47,7 +47,7 @@ Total declared tokens: **35300**.
 
 ## `governance`
 
-Total declared tokens: **25400**.
+Total declared tokens: **28100**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -62,9 +62,10 @@ Total declared tokens: **25400**.
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/26-external-review.md](26-external-review.md) | external review | 1700 |
+| [docs/spec/27-economic-strategy.md](27-economic-strategy.md) | economic strategy | 2400 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
-| [docs/spec/references.md](references.md) | references | 700 |
+| [docs/spec/references.md](references.md) | references | 1000 |
 
 ## `implementation`
 
@@ -122,7 +123,7 @@ Total declared tokens: **12200**.
 
 ## `review`
 
-Total declared tokens: **63600**.
+Total declared tokens: **66300**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -154,10 +155,11 @@ Total declared tokens: **63600**.
 | [docs/spec/24-design-heuristics.md](24-design-heuristics.md) | design heuristics | 3000 |
 | [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/26-external-review.md](26-external-review.md) | external review | 1700 |
+| [docs/spec/27-economic-strategy.md](27-economic-strategy.md) | economic strategy | 2400 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
-| [docs/spec/references.md](references.md) | references | 700 |
+| [docs/spec/references.md](references.md) | references | 1000 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
 | [docs/spec/traceability.md](traceability.md) | traceability matrix | 700 |

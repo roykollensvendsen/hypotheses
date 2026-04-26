@@ -78,6 +78,9 @@ Read in order:
 28. [26 — External review](26-external-review.md) — scope and
     criteria for a one-shot adversarial review of the foundation
     before Phase 2
+29. [27 — Economic strategy](27-economic-strategy.md) —
+    investment thesis and non-Bittensor revenue paths;
+    commercial complement to doc 20
 
 Cross-cutting references:
 

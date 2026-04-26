@@ -305,9 +305,10 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
-| **Add a normative spec claim** | 25 (~2500) + references (~700) + 00.5 (~3500) | ≈ 6700 |
+| **Add a normative spec claim** | 25 (~2500) + references (~1000) + 00.5 (~3500) | ≈ 6700 |
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
 | **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
+| **Articulate investment / revenue narrative** | 27 (~2800) + 20 (~3200) + references (~1000) | ≈ 6700 |
 
 Token estimates come from the `tokens:` front matter and are rough
 (wc × 1.3 rounded to 100). Treat them as planning, not a hard cap —
@@ -791,6 +792,44 @@ settle is rare; most hypotheses settle in weeks-to-months.
 
 **If false.** The 6-month deferred-settlement window is wrong; need
 a longer or per-hypothesis window.
+
+C-rows c8–c11 are *commercial* assumptions underpinning the
+four revenue paths in
+[`27-economic-strategy.md`](27-economic-strategy.md); they
+support no defence directly. Each row's "if false" collapses
+the corresponding revenue path.
+
+### c8-sponsorship-demand
+
+**Assumption (C8).** External organisations (research labs,
+pharma, AI labs, foundations) pay for specific scientific
+questions when the cost / answer-quality ratio is favourable
+({ref:researchhub-tokenomics-2025}).
+**If false.** Revenue path 3.1 collapses.
+
+### c9-registry-ip-value
+
+**Assumption (C9).** A corpus of preregistered + reproduced
+ML findings has licensable IP value
+({ref:vitadao-pfizer-gero-2025}).
+**If false.** Revenue path 3.2 collapses; corpus remains a
+public good.
+
+### c10-audit-demand
+
+**Assumption (C10).** External researchers / publishers /
+industry pay for ML reproducibility audits with SLA above
+in-subnet scoring.
+**If false.** Revenue path 3.3 collapses; validators do reruns
+purely for in-subnet scoring.
+
+### c11-credential-demand
+
+**Assumption (C11).** External job markets / institutions
+treat verified miner track records as a referenceable
+credential.
+**If false.** Revenue path 3.4 collapses; miner reputation
+stays internal to the subnet.
 
 ## D. What we explicitly give up
 
@@ -8123,6 +8162,337 @@ once embargo elapses.
 ========== END docs/spec/26-external-review.md ==========
 
 
+========== BEGIN docs/spec/27-economic-strategy.md ==========
+
+---
+name: economic strategy
+description: investment thesis, revenue paths beyond Bittensor emission, phase-by-phase commercial trajectory, comparable-model evidence
+tokens: 2400
+load_for: [governance, review]
+depends_on: ["00.5", "07", "20", "11"]
+kind: contract
+evidence: reasoned-design
+---
+
+# 27 — Economic strategy
+
+[`20-economic-model.md`](20-economic-model.md) treats the
+**operational** economics (emissions, parameters, governance,
+Sybil arithmetic, incentive compatibility) but leaves the
+**commercial** story out: how investors form a thesis on this
+subnet, and how revenue flows from outside the Bittensor block
+reward. This doc closes that gap — investors and external
+sponsors form their own theses regardless of whether the
+[spec](README.md) articulates one; the choice is between
+articulating it explicitly so it can be reviewed and
+pressure-tested, or letting it float as folklore.
+
+## A. Purpose & scope
+
+**This doc covers.** The investment thesis for someone
+allocating dTAO; the catalogue of non-Bittensor revenue paths
+the subnet adds across Phase 2–3, with comparable-model
+evidence and the assumptions each rests on; the phase-by-phase
+trajectory matching [`11-roadmap.md`](11-roadmap.md); a
+four-row comparables matrix.
+
+**Explicitly out of scope** (see [§ F](#f-out-of-scope) for
+detail): quantitative survival analysis (separate work
+stream); treasury / fiduciary structure (until DAO
+incorporation, Phase 3+); TAO / Alpha price prediction
+(inherited exclusion from
+[`20-economic-model.md § Out of scope`](20-economic-model.md#out-of-scope));
+empirical validation of c8–c11 (Phase 2+ retrospectives
+generate it); external-reviewer booking (gated by
+[`26-external-review.md`](26-external-review.md)).
+
+This doc is `kind: contract, evidence: reasoned-design`.
+Strategic claims rest on comparable-model evidence and stated
+rationale, not on equilibrium proofs. The four revenue paths
+each rest on a specific commercial assumption (`c8`–`c11`)
+declared in
+[`00.5 § C`](00.5-foundations.md#c-assumptions-the-defences-require).
+
+## B. The dTAO investment thesis
+
+Bittensor's dynamic-TAO mechanism (live across the network
+since 2025) gives every subnet its own Alpha token; emissions
+flow from net TAO inflows ("Taoflow") rather than
+[validator](05-validator.md)-set weighting alone
+({ref:bittensor-dtao-whitepaper-2025}). Total Alpha-token
+market cap reached ~$1.12B as of March 2026, ≈27% of TAO's
+own cap; 128 subnets are active
+({ref:bittensor-grayscale-2025}). An allocator picking this
+subnet's Alpha is making three coupled bets:
+
+1. **Durable scientific findings produce a self-reinforcing
+   emission-share story.** Each preregistered, reproduced,
+   externally-anchored finding adds to a corpus that other
+   actors (research labs, pharma, ML benchmark vendors) want
+   access to. Inflows track real value capture rather than
+   speculative narrative.
+2. **The adversarial-first foundation in
+   [`00.5-foundations.md`](00.5-foundations.md) holds.**
+   Investment is a leveraged bet on the design surviving F1–F6
+   under live operation. If the foundation fails, the corpus
+   is noise.
+3. **The commercial revenue paths in § C come online.**
+   Without them, the subnet remains a pure infrastructure bet
+   priced on emission-share growth alone.
+
+**Why this subnet specifically.** Permissionless scientific
+market with adversarial-first defences (the threat-model and
+rigor-framework discipline of
+[`16-threat-model.md`](16-threat-model.md) and
+[`25-rigor-framework.md`](25-rigor-framework.md) is unusual
+across subnets); D1.1 external-verifiability anchor rejects
+consensus-only hypotheses at scoring time; falsification pays
+(DS.1) so a correctly-refuted
+[hypothesis](02-hypothesis-format.md) earns rigor +
+reproduction + novelty, accumulating the negative findings
+historically missing from the literature
+({ref:replication-osc-2015}).
+
+**Why this thesis differs from the standard Bittensor one.**
+Most subnets pitch on inference / training throughput plus
+emission share, in continuous re-pricing. This subnet's pitch
+is durability: preregistered + reproduced findings compound
+because they retain meaning — closer to an academic-publishing
+/ patent-registry analogue than a teraflops marketplace.
+
+## C. Non-Bittensor revenue paths
+
+Four paths, sequenced across Phases 2 and 3. Each lists status,
+mechanism, comparable evidence, and the underlying commercial
+assumption from
+[`00.5 § C`](00.5-foundations.md#c-assumptions-the-defences-require).
+
+### C.1 Sponsored hypotheses
+
+**Status.** Phase 2 onset; aspirational at Phase 1.
+**Mechanism.** External organisations (research labs, pharma,
+AI labs, foundations) fund specific questions — TAO bridged
+from fiat or direct sponsorship of a hypothesis with a bounty
+payable on settlement. Bounty supplements emission; miners
+earn both. The hypothesis follows the standard
+[preregistration](01-glossary.md#preregistration) +
+reproduction discipline — sponsorship buys attention, not
+score control.
+**Comparable.** ResearchHub's RSC bounty + tip on Base ERC-20:
+~$1.9M distributed, $7M raised across three rounds, partnered
+with Endaoment for institutional flows
+({ref:researchhub-tokenomics-2025}). The mechanism shape is
+validated; the open question is whether this subnet's
+preregistration discipline attracts a different sponsor
+profile or repels them.
+
+> **assumption: c8-sponsorship-demand** — external
+> organisations will pay for specific scientific questions
+> when the cost / answer-quality ratio is favourable.
+> **If false:** revenue path 3.1 collapses; the subnet remains
+> funded by Bittensor emissions alone.
+> See [00.5 § c8-sponsorship-demand](00.5-foundations.md#c8-sponsorship-demand).
+
+### C.2 Registry / data licensing
+
+**Status.** Phase 3 (mainnet); aspirational earlier.
+**Mechanism.** The corpus of preregistered + reproduced ML
+findings is licensable IP under three tiers: public read
+(every settled hypothesis on-chain, free); bulk export with
+provenance (research lab or pharma replication library
+subscribes to a periodic, schema-stable export with
+cryptographic provenance attestation); targeted partnership
+(counterparty engages a hypothesis or hypothesis-cluster with
+right of first refusal, mirroring the IP-NFT model).
+**Comparable.** VitaDAO's IP-NFT model: $55.8M treasury (Jan
+2026), $4.7M deployed across 31 projects, Gero spun out with a
+$1B+ Chugai partnership, Turn.bio licensed $300M+ to HanAll
+({ref:vitadao-pfizer-gero-2025}). Closest direct analogue to
+registry-as-licensable-IP.
+
+> **assumption: c9-registry-ip-value** — a corpus of
+> preregistered + reproduced findings has licensable IP value.
+> **If false:** revenue path 3.2 collapses; the corpus remains
+> a public good without monetisation.
+> See [00.5 § c9-registry-ip-value](00.5-foundations.md#c9-registry-ip-value).
+
+### C.3 Reproducibility-as-a-service
+
+**Status.** Phase 2 case study; Phase 3 productised.
+**Mechanism.** Validators already do reruns as standard
+operation (see [`05-validator.md`](05-validator.md)). An
+external counterparty (journal, regulator, industry consortium)
+engages validators for an audit-with-SLA above in-subnet
+scoring: defined sample size, fixed turnaround, signed report
+keyed by validator hotkeys with known stake. Per-audit pricing;
+fees split between subnet treasury and participating validators.
+**Comparable.** The audit-firm landscape for code (Trail of
+Bits, NCC Group, Cure53 and peers) demonstrates
+willingness-to-pay for third-party assurance with named
+liability; the ML-reproducibility variant is less developed —
+the path with the thinnest external precedent.
+
+> **assumption: c10-audit-demand** — external researchers /
+> publishers / industry pay for ML reproducibility audits
+> above what in-subnet scoring already provides.
+> **If false:** revenue path 3.3 collapses; validators do
+> reruns purely as part of in-subnet scoring.
+> See [00.5 § c10-audit-demand](00.5-foundations.md#c10-audit-demand).
+
+### C.4 Credentialing / reputation
+
+**Status.** Phase 3+; speculative.
+**Mechanism.** Miners accumulate machine-verifiable track
+records — reproduced-findings count, Brier score across
+settled hypotheses, refuted-vs-confirmed ratio — public,
+signed, tied to hotkey identity. External job markets,
+academic institutions, or industry consortia treat the record
+as a referenceable credential ("trusted ML engineer with N
+reproduced findings"); the subnet earns referral or framework
+fees.
+**Comparable.** Gitcoin Passport (machine-verifiable reputation
+across heterogeneous sources), ENS reputation graphs (on-chain
+identity travelling outside its origin system), academic
+citation indices (h-index, ORCID — machine-aggregable
+scholarly metrics carrying weight in hiring and grant
+decisions). None is a direct analogue; the path with the most
+extrapolation.
+
+> **assumption: c11-credential-demand** — external job markets
+> / institutions treat verified [miner](04-miner.md) track
+> records as a referenceable credential. **If false:** revenue
+> path 3.4 collapses; miner reputation remains internal to the
+> subnet.
+> See [00.5 § c11-credential-demand](00.5-foundations.md#c11-credential-demand).
+
+## D. Phase-by-phase trajectory
+
+Aligned with [`11-roadmap.md`](11-roadmap.md). Each phase
+tightens the investment thesis from "infrastructure bet"
+toward "earnings-backed valuation."
+
+**Phase 1 — Offline reference.** No revenue; single-operator
+local round-trip. Investment thesis: pure infrastructure bet.
+Evidence generated: whether the mechanism is mechanically
+sound. No commercial signal.
+
+**Phase 2 — Testnet.** C.1 (sponsored hypotheses) goes live
+as a concierge integration with one or two external sponsors,
+manually onboarded; C.3 (reproducibility-as-a-service) starts
+as a single case study with one external counterparty and one
+audit, lessons captured in an ADR; C.2 and C.4 remain
+aspirational. Investment thesis: pre-revenue plus first
+earnings signal — concierge sponsorship demonstrates whether
+c8 survives contact with a real counterparty. A null result
+(no sponsor materialises) is itself information that triggers
+an ADR per
+[`00.5 § How this document evolves`](00.5-foundations.md#how-this-document-evolves).
+Evidence generated: first commercial datapoint; the two-week
+stable-operation criterion (per
+[`11-roadmap.md § Phase 2`](11-roadmap.md#phase-2--testnet-subnet))
+validates the mechanism; sponsorship outcome validates or
+falsifies c8.
+
+**Phase 3 — Mainnet.** All four paths live: C.1 productised
+(self-service surface replacing concierge); C.2 tiered
+licensing rolled out per the VitaDAO IP-NFT model, first
+targeted-partnership engagement is the analogue of VitaDAO's
+Gero / Chugai spinout; C.3 productised audit product, SLAs
+and pricing public; C.4 first external partnership with a
+job market or academic institution. Investment thesis:
+earnings-backed valuation — dTAO allocators model expected
+revenue from each path against its underlying commercial
+assumption. Evidence generated: each path either compounds
+(distinguishing revenue line) or atrophies (triggers an ADR
+moving its `c-NN` assumption to
+[`00.5 § E`](00.5-foundations.md#e-empirical-posture--whats-proven-vs-whats-a-bet)
+"open bets that failed").
+
+## E. Comparables matrix
+
+| comparable | scale (latest) | mechanism | what this subnet borrows |
+|------------|----------------|-----------|--------------------------|
+| ResearchHub / RSC ({ref:researchhub-tokenomics-2025}) | ~$1.9M distributed; $7M raised; Endaoment partnership | ERC-20 bounty + tip on Base | Sponsored-hypothesis mechanism (C.1) |
+| VitaDAO / BIO Protocol ({ref:vitadao-pfizer-gero-2025}) | $55.8M treasury; $4.7M deployed across 31 projects; $1B+ Gero spinout; $300M+ Turn.bio licensing | IP-NFT model — exclusive licensing of decentralised research IP | Registry / data licensing (C.2) |
+| BIO Protocol / DeSci ecosystem ({ref:bio-protocol-desci-2026}, {ref:desci-berkeley-cmr-2025}) | ~50 active projects; ~$60M+ combined funding; ecosystem cap $329M (March 2026) | Replication-bounty mechanisms emerging across multiple projects | Validates the broader category — DeSci durable enough to host this commercial model |
+| ClawdLab / Science Beach (no archived report yet) | Prototype; not productised | Fully autonomous AI-scientist-swarm research orgs | Validates the agent-first posture; comparable for c11 (credentialing) |
+
+The four span the maturity range: ResearchHub demonstrates the
+bounty mechanism at production scale; VitaDAO demonstrates IP
+licensing at industry scale; the DeSci ecosystem demonstrates
+that decentralised science is a durable category; AI-scientist-
+swarm prototypes show the agent-first posture is not unique
+to this subnet.
+
+## F. Out of scope
+
+- **Quantitative survival analysis.** Unit-economics modelling
+  of miner / validator break-even, sensitivity tables for
+  cost-budget obsolescence, Nash-equilibrium analysis,
+  fixed-point modelling of participation rates. Separate 3–5
+  PR work stream tracked against Phase 3 exit criteria in
+  [`11-roadmap.md`](11-roadmap.md); does not block this PR.
+- **Treasury / fiduciary structure.** Until DAO incorporation
+  (Phase 3+), at which point the doc gains a section on
+  treasury governance for non-TAO revenue.
+- **TAO / Alpha price prediction.** Inherited exclusion from
+  [`20-economic-model.md § Out of scope`](20-economic-model.md#out-of-scope);
+  mechanism design is price-agnostic.
+- **Empirical validation of c8–c11.** Phase 2+ retrospective
+  ADRs generate the data, not this doc.
+- **Booking the external reviewer.** Engagement gated by
+  [`26-external-review.md`](26-external-review.md)'s trigger
+  condition.
+
+## G. Open questions
+
+Each lands as an ADR when it resolves — positive or negative.
+
+1. **Phase-2-onset trigger for C.1.** Coupled to "≥3 external
+   miners and ≥2 external validators" per
+   [`11-roadmap.md`](11-roadmap.md), with maintainer discretion
+   to onboard the first concierge sponsor earlier when a
+   counterparty is ready. Maintainer judgement at Phase 2
+   entry, recorded in an ADR.
+2. **Bounty splits.** Miner who settles / validators who
+   reproduce / subnet treasury. Placeholder 60 / 30 / 10;
+   deferred to the first concierge integration.
+3. **Registry-licensing tier prices.** Public read free;
+   bulk-export and targeted-partnership pricing deferred to
+   Phase 3 launch ADR.
+4. **Audit-product SLA shape.** Sample size, turnaround,
+   liability framework deferred to the Phase 2 case study's
+   retrospective ADR.
+5. **Credentialing partnership format.** Job market vs
+   academic institution vs industry consortium; first partner
+   determines the first surface. Deferred to Phase 3+.
+
+## H. References
+
+[`00.5-foundations.md`](00.5-foundations.md) §§ A, C, D — the
+foundation; C-rows c8–c11 declare the commercial assumptions.
+[`07-incentive.md`](07-incentive.md), [`11-roadmap.md`](11-roadmap.md),
+[`20-economic-model.md`](20-economic-model.md) (operational
+complement), [`22-security-bounty.md`](22-security-bounty.md),
+[`26-external-review.md`](26-external-review.md),
+[`docs/adr/0010-economic-strategy.md`](../adr/0010-economic-strategy.md).
+External: {ref:bittensor-grayscale-2025},
+{ref:bittensor-dtao-whitepaper-2025},
+{ref:researchhub-tokenomics-2025}, {ref:vitadao-pfizer-gero-2025},
+{ref:desci-berkeley-cmr-2025}, {ref:bio-protocol-desci-2026}.
+
+## Self-audit
+
+Done when: each path in § C carries status / mechanism /
+comparable / `> **assumption:**` resolving to a `c8`–`c11` row;
+§ D names path-per-phase and evidence; § E cites four
+comparables with scale numbers; § F lists the five out-of-scope
+items; cross-refs resolve under
+`scripts/check_spec_consistency.py` and `check_grounding.py`.
+
+========== END docs/spec/27-economic-strategy.md ==========
+
+
 ========== BEGIN docs/spec/invariants.md ==========
 
 ---
@@ -8233,7 +8603,7 @@ Total declared tokens: **35300**.
 
 ## `governance`
 
-Total declared tokens: **25400**.
+Total declared tokens: **28100**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -8248,9 +8618,10 @@ Total declared tokens: **25400**.
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/26-external-review.md](26-external-review.md) | external review | 1700 |
+| [docs/spec/27-economic-strategy.md](27-economic-strategy.md) | economic strategy | 2400 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
-| [docs/spec/references.md](references.md) | references | 700 |
+| [docs/spec/references.md](references.md) | references | 1000 |
 
 ## `implementation`
 
@@ -8308,7 +8679,7 @@ Total declared tokens: **12200**.
 
 ## `review`
 
-Total declared tokens: **63600**.
+Total declared tokens: **66300**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -8340,11 +8711,12 @@ Total declared tokens: **63600**.
 | [docs/spec/24-design-heuristics.md](24-design-heuristics.md) | design heuristics | 3000 |
 | [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/26-external-review.md](26-external-review.md) | external review | 1700 |
+| [docs/spec/27-economic-strategy.md](27-economic-strategy.md) | economic strategy | 2400 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
-| [docs/spec/references.md](references.md) | references | 700 |
+| [docs/spec/references.md](references.md) | references | 1000 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
 | [docs/spec/traceability.md](traceability.md) | traceability matrix | 700 |
 
@@ -8356,7 +8728,7 @@ Total declared tokens: **63600**.
 ---
 name: references
 description: central bibliography of external sources cited by the spec; stable IDs for in-doc citation
-tokens: 700
+tokens: 1000
 load_for: [governance, review]
 depends_on: []
 kind: reference
@@ -8400,6 +8772,12 @@ resolvable.
 | `[ref:mast-taxonomy-2025]` | Anonymous, *MAST: a taxonomy of failure modes in agentic AI systems* (primary source link in the entry text); used in this repo as shorthand for the agent-failure-mode catalogue | [adr/0004](../adr/0004-design-heuristics.md) |
 | `[ref:stackoverflow-shared-coding-2026]` | Stack Overflow Blog, *Building shared coding guidelines for AI (and people too)*, 2026-03-26 (archived) | [adr/0004](../adr/0004-design-heuristics.md) |
 | `[ref:anthropic-claude-code-2026]` | Anthropic, *Claude Code best practices*, code.claude.com/docs, accessed 2026 | [adr/0004](../adr/0004-design-heuristics.md) |
+| `[ref:bittensor-grayscale-2025]` | Grayscale Research, *Bittensor on the Eve of the First Halving*, Grayscale Investments, 2025 (archived) | [27](27-economic-strategy.md) |
+| `[ref:bittensor-dtao-whitepaper-2025]` | Opentensor Foundation, *Dynamic TAO (dTAO) whitepaper*, bittensor.com/whitepapers, 2025 (archived) | [27](27-economic-strategy.md) |
+| `[ref:researchhub-tokenomics-2025]` | ResearchHub Foundation, *RSC tokenomics and bounty mechanics*, docs.researchhub.com, accessed 2026 (archived) | [27](27-economic-strategy.md) |
+| `[ref:vitadao-pfizer-gero-2025]` | Blockworks, *Pfizer-backed VitaDAO spins out biotech company; Gero secures $1B+ partnership with Chugai Pharmaceutical*, blockworks.co, 2025 (archived) | [27](27-economic-strategy.md) |
+| `[ref:desci-berkeley-cmr-2025]` | Berkeley *California Management Review*, *Can Decentralized Science Be the Next Frontier of Scientific Research?*, cmr.berkeley.edu, 2025-11 (archived) | [27](27-economic-strategy.md) |
+| `[ref:bio-protocol-desci-2026]` | KuCoin Research, *BIO Surges 96 %: Is DeSci the Next Big Narrative in Crypto?*, kucoin.com/research, 2026 (archived; DeSci ecosystem cap reaching $329M) | [27](27-economic-strategy.md) |
 
 ## How to add a new source
 
