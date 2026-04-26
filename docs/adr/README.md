@@ -116,3 +116,4 @@ What did we decide?
 - [0011 — D2.2 coverage bound](0011-d22-coverage-bound.md)
 - [0012 — C7 measurement](0012-c7-measurement.md)
 - [0013 — Cold-start contingency](0013-cold-start-contingency.md)
+- [0014 — Treasury pre-DAO](0014-treasury-pre-dao.md)
