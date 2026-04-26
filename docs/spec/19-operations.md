@@ -121,13 +121,33 @@ from the event stream; no new emission paths are required.
 
 ### Subnet-wide SLIs (for the maintainer)
 
-| sli | definition |
-|-----|------------|
-| registry health | count of hypotheses by status, per week |
-| settlement latency | time from `accepted` to first `settled-*`, per hypothesis |
-| oracle verdict latency | p95 wallclock for `OracleVerdict` queries |
-| CI health | pass rate of `main`-branch CI runs over 7 days |
-| mutation-score trend | per-module trend week over week |
+| sli | definition | healthy range |
+|-----|------------|---------------|
+| registry health | count of hypotheses by status, per week | informational |
+| settlement-latency p50 | median time from `accepted` to first `settled-*` across all settled hypotheses in the trailing 90 days | ≤ 90 days (3 months) |
+| settlement-latency p95 | 95th percentile of the same distribution | ≤ 12 months |
+| oracle verdict latency | p95 wallclock for `OracleVerdict` queries | ≤ 5 s |
+| CI health | pass rate of `main`-branch CI runs over 7 days | ≥ 0.95 |
+| mutation-score trend | per-module trend week over week | non-decreasing |
+
+**Settlement-latency trigger.** The p50 ≤ 90 days / p95 ≤ 12 months
+bounds derive from
+[c7-ground-truth-latency](00.5-foundations.md#c7-ground-truth-latency).
+HM-REQ-0070's two-tier settlement (70/30 over 6 months) only
+defends against F6 (long-latency rent extraction) when c7 holds.
+The maintainer opens an ADR revising HM-REQ-0070 (lengthen the
+deferred window, or move to a per-hypothesis-class window) when
+**either** condition fires, measured across **≥ 10 settled
+hypotheses**:
+
+- p50 > 6 months, **or**
+- p95 > 12 months.
+
+Below 10 settled hypotheses the SLI is informational only — at
+that count, the p95 estimate's 90 % confidence interval still
+spans more than the 6-month → 12-month window the trigger keys
+on, so a normative change is not yet justified. Phase 2 onward
+generates the data.
 
 ## Service-level objectives
 
