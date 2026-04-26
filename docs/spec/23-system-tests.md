@@ -197,6 +197,10 @@ The numbering is per-role, monotonic.
 | S-MINE-13 | Gated-profile sponsorship required: `propose` rejects a hypothesis whose `hardware_profile` is gated-tier (per `06 § Profile tiers`) and lacks a `sponsorship` block | CLI | HM-REQ-0120 | `tests/system/mine/test_gated_profile_sponsorship.py` |
 | S-MINE-14 | Oracle-only requires oracle: `propose` rejects a hypothesis declaring `verification: oracle-only` that lacks an `oracle` block (or `external_anchor.type=oracle`) | CLI | HM-REQ-0130 | `tests/system/mine/test_oracle_only_requires_oracle.py` |
 | S-MINE-15 | Community pool caps: `propose` rejects a `sponsorship` block in community-pool form that fails any HM-REQ-0140 condition (single sponsor > 50 % of pool, < 2 distinct sponsor IDs, or zero / missing `bounty_tao`) | CLI | HM-REQ-0140 | `tests/system/mine/test_community_pool_caps.py` |
+| S-MINE-16 | Inspired-by syntax and self-cite ban: `propose` rejects a hypothesis whose `inspired_by` block fails any HM-REQ-0151 condition (more than 3 entries, weights not summing to 1.0, or self-citation by primary author hotkey) | CLI | HM-REQ-0151 | `tests/system/mine/test_brainstorming_foundations.py` |
+| S-MINE-17 | Stake-to-post for I-NNNN: posting an informal hypothesis without `stake_tao ≥ ideator_min_stake` is rejected at PR open per HM-REQ-0152 | CLI | HM-REQ-0152 | `tests/system/mine/test_brainstorming_foundations.py` |
+| S-MINE-18 | Staleness threshold for inspired-by: `propose` rejects a hypothesis whose `inspired_by` references an I-NNNN created less than `ideator_staleness_blocks` before the H-NNNN's PR-open block, or whose status is not `accepted`, per HM-REQ-0153 | CLI | HM-REQ-0153 | `tests/system/mine/test_brainstorming_foundations.py` |
+| S-MINE-19 | Treat-as-data for I-NNNN: an informal hypothesis without `treat_as_data: true` in front matter is rejected at PR open; the prompt-injection scanner covers `/informal/` and rejects directive-shaped content per HM-REQ-0154 | CLI | HM-REQ-0154 | `tests/system/mine/test_brainstorming_foundations.py` |
 
 ### Validate
 

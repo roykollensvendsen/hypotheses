@@ -104,8 +104,8 @@ follow-up plans.
 A finding is a security-hypothesis if **all** of the following
 hold:
 
-1. It targets at least one **F1–F7** threat from
-   [`00.5-foundations.md § A`](00.5-foundations.md#a-the-seven-threats-the-design-must-survive)
+1. It targets at least one **F1–F8** threat from
+   [`00.5-foundations.md § A`](00.5-foundations.md#a-the-eight-threats-the-design-must-survive)
    or one **T-NNN** row in
    [`16-threat-model.md`](16-threat-model.md). Unmitigated and
    partial threats are preferred targets — see § A.

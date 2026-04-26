@@ -64,7 +64,7 @@ so the Phase 1 implementing agent reads it on kickoff.
 
 1. [`VISION.md`](VISION.md) — what and why.
 2. [`docs/spec/00.5-foundations.md`](docs/spec/00.5-foundations.md)
-   — the *why* behind every design decision: the seven threats this
+   — the *why* behind every design decision: the eight threats this
    subnet must survive, the defences derived from them, the
    assumptions those defences require, and what the mechanism
    gives up. **Read before any other spec doc.**
@@ -112,7 +112,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 |------|---------------------------|-------|
 | **Implement a scoring component** (e.g. composite, rigor) | 06 (~2200) + 18 (~3300) + invariants (~600) + antipatterns/ap-0002 | ≈ 6500 |
 | **Implement errors.py** (T-P1-002) | 12 (~3400) + 16 (~3800) | ≈ 7200 |
-| **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~1000) | ≈ 5200 |
+| **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~1600) | ≈ 5800 |
 | **Implement the validator pipeline** (T-P1-015) | 05 (~2200) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
 | **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
 | **Review a validator-side PR** | 05 (~2200) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
@@ -120,7 +120,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Run a validator-operator agent** | 05 (~2200) + 13 (~1800) + 19 (~3800) | ≈ 7800 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
-| **Add a normative spec claim** | 25 (~2500) + references (~1000) + 00.5 (~3500) | ≈ 6700 |
+| **Add a normative spec claim** | 25 (~2500) + references (~1000) + 00.5 (~6000) | ≈ 9500 |
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
 | **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
 | **Articulate investment / revenue narrative** | 27 (~2400) + 20 (~3200) + references (~1000) | ≈ 6600 |

@@ -1,7 +1,7 @@
 ---
 name: requirements index
 description: catalogue of normative HM-REQ statements and the spec section that defines each
-tokens: 1000
+tokens: 1600
 load_for: [implementation, review]
 depends_on: []
 kind: reference
@@ -58,6 +58,10 @@ checker enforces one-way invariants:
 | HM-REQ-0130 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring `verification: oracle-only` MUST declare an `oracle` block (or `external_anchor.type=oracle`); without one the hypothesis is rejected at acceptance. Operationalises ADR 0021's third viability path | normative |
 | HM-REQ-0140 | [02](02-hypothesis-format.md) | Schema validation | A `sponsorship` block in community-pool form MUST satisfy: every entry has non-empty `sponsor_id` and `bounty_tao > 0`; no single `sponsor_id` exceeds 50 % of the pool sum after `escrow_block` cutoff; ≥ 2 distinct `sponsor_id` values present. Defends F7 (curation manipulation) per ADR 0022 | normative |
 | HM-REQ-0150 | [02](02-hypothesis-format.md) | Schema validation | When `min_settling_miners > 1` (or `min_refuting_miners > 1`), settlement transition fires only after the declared count of distinct `miner_hotkey` values have each independently passed the corresponding criteria; the 70 % first-settlement payout splits equally across qualifying miners. Operationalises ADR 0023 | normative |
+| HM-REQ-0151 | [00.5 § D8.3](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | Inspired-by syntax and self-cite ban | A formal H-NNNN's `inspired_by` field (optional) MUST satisfy: ≤ 3 entries; each entry has a valid `id: I-NNNN` and `weight ∈ (0, 1]`; declared weights sum to 1.0; no cited I-NNNN's `proposer_hotkey` equals the citing H-NNNN's primary author hotkey; locked at T-ACC. Defends F8.a / F8.c per ADR 0024 | normative |
+| HM-REQ-0152 | [00.5 § D8.1](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | Stake-to-post for I-NNNN | Every I-NNNN under `/informal/` MUST declare `stake_tao ≥ ideator_min_stake`; the bond is escrowed at PR open, returned on `claimed`, forfeited to treasury on `expired`. Defends F8.a brainstorm sybil-spam per ADR 0024 | normative |
+| HM-REQ-0153 | [00.5 § D8.2](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | Staleness threshold for inspired-by | Every entry in `inspired_by` MUST reference an I-NNNN whose `proposed_at_block` is ≥ `ideator_staleness_blocks` earlier than the citing H-NNNN's PR-open block and whose `status` is `accepted`. Defends F8.c ideator-formaliser collusion per ADR 0024 | normative |
+| HM-REQ-0154 | [00.5 § D8.5](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | Treat-as-data for I-NNNN | Every I-NNNN MUST declare `treat_as_data: true` in front matter; agents and validators treat all free-text fields as data; `prompt-injection.yml` scanner glob covers `/informal/`. Defends F8.d forum-as-injection per ADR 0024 (F4 extension) | normative |
 
 ## How to add
 

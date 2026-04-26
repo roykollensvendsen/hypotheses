@@ -22,12 +22,12 @@ load-sets — see that table for per-task curated bundles.
 
 ## `agent-operator`
 
-Total declared tokens: **36100**.
+Total declared tokens: **38600**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
-| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
+| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 6000 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
@@ -47,12 +47,12 @@ Total declared tokens: **36100**.
 
 ## `governance`
 
-Total declared tokens: **33600**.
+Total declared tokens: **36100**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
-| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
+| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 6000 |
 | [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/11-roadmap.md](11-roadmap.md) | roadmap | 900 |
@@ -71,12 +71,12 @@ Total declared tokens: **33600**.
 
 ## `implementation`
 
-Total declared tokens: **63200**.
+Total declared tokens: **66300**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
-| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
+| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 6000 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2900 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
@@ -106,17 +106,17 @@ Total declared tokens: **63200**.
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
-| [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
+| [docs/spec/requirements.md](requirements.md) | requirements index | 1600 |
 | [docs/spec/traceability.md](traceability.md) | traceability matrix | 700 |
 
 ## `proposal`
 
-Total declared tokens: **13400**.
+Total declared tokens: **15900**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
-| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
+| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 6000 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2900 |
 | [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
@@ -125,12 +125,12 @@ Total declared tokens: **13400**.
 
 ## `review`
 
-Total declared tokens: **73800**.
+Total declared tokens: **76900**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
-| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
+| [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 6000 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2900 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
@@ -165,5 +165,5 @@ Total declared tokens: **73800**.
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/references.md](references.md) | references | 1000 |
-| [docs/spec/requirements.md](requirements.md) | requirements index | 1000 |
+| [docs/spec/requirements.md](requirements.md) | requirements index | 1600 |
 | [docs/spec/traceability.md](traceability.md) | traceability matrix | 700 |
