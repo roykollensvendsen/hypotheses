@@ -38,6 +38,9 @@ resolvable.
 | `[ref:inference-labs-weight-copy-2025]` | Inference Labs, *Mitigating weight-copy attacks on Bittensor subnets*, blog post, 2025 (archived) | [00.5](00.5-foundations.md) |
 | `[ref:polymarket-uma-ukraine-2025]` | Knight, *Polymarket says governance attack by UMA whale to hijack a bet's resolution is 'unprecedented'*, The Block, 2025-03-26 | [00.5](00.5-foundations.md) |
 | `[ref:polymarket-paris-weather-2026]` | Le Monde / Euronews, *Hair dryer trick behind ~€25,000 win? France probes potential weather data scam linked to Polymarket*, 2026-04-23 | [00.5](00.5-foundations.md) |
+| `[ref:welch-1947]` | Welch, B. L., *The generalization of "Student's" problem when several different population variances are involved*, Biometrika 34(1–2):28–35, 1947 (DOI: 10.1093/biomet/34.1-2.28) | [06](06-scoring.md) |
+| `[ref:mann-whitney-1947]` | Mann, H. B. & Whitney, D. R., *On a Test of Whether one of Two Random Variables is Stochastically Larger than the Other*, Annals of Mathematical Statistics 18(1):50–60, 1947 (DOI: 10.1214/aoms/1177730491) | [06](06-scoring.md) |
+| `[ref:efron-tibshirani-1993]` | Efron, B. & Tibshirani, R. J., *An Introduction to the Bootstrap*, Chapman & Hall, 1993 (ISBN 978-0-412-04231-7); BCa method per Efron 1987 | [06](06-scoring.md) |
 | `[ref:ousterhout-posd-2021]` | John Ousterhout, *A Philosophy of Software Design*, 2nd edition, Yaknyam Press, 2021 (ISBN 978-1732102217) | [adr/0004](../adr/0004-design-heuristics.md), [24](24-design-heuristics.md) |
 | `[ref:mast-taxonomy-2025]` | Anonymous, *MAST: a taxonomy of failure modes in agentic AI systems* (primary source link in the entry text); used in this repo as shorthand for the agent-failure-mode catalogue | [adr/0004](../adr/0004-design-heuristics.md) |
 | `[ref:stackoverflow-shared-coding-2026]` | Stack Overflow Blog, *Building shared coding guidelines for AI (and people too)*, 2026-03-26 (archived) | [adr/0004](../adr/0004-design-heuristics.md) |
