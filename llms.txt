@@ -40,6 +40,7 @@ Phase 0 — spec freeze. The runtime under `src/hypotheses/` is not yet implemen
 - [docs/spec/21-adversarial-simulator.md](docs/spec/21-adversarial-simulator.md): contract for the coalition-level attack simulator that must catch every threat in 16.
 - [docs/spec/22-security-bounty.md](docs/spec/22-security-bounty.md): white-hat program — vulnerability disclosures are first-class hypotheses on the registry.
 - [docs/spec/23-system-tests.md](docs/spec/23-system-tests.md): black-box harness contract for the full Phase-1 subnet across CLI, SDK, and MCP surfaces.
+- [docs/spec/24-design-heuristics.md](docs/spec/24-design-heuristics.md): positive structural rules for human and agent contributors; module shape, types, validation, abstraction, naming, testing, PR shape.
 - [docs/spec/invariants.md](docs/spec/invariants.md): catalogue of HM-INV properties the implementation must preserve.
 - [docs/spec/load-for-index.md](docs/spec/load-for-index.md): reverse index of `load_for:` tags to spec docs and token totals.
 - [docs/spec/requirements.md](docs/spec/requirements.md): catalogue of normative HM-REQ statements and the spec section that defines each.

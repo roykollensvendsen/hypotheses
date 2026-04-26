@@ -115,6 +115,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Draft a new hypothesis** | 02 (~1700) + 01 (~700) + existing H-000x (~800–2500) | ≈ 3200–4900 |
 | **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
+| **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
 | **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
 

@@ -69,6 +69,9 @@ Read in order:
 25. [23 — System tests](23-system-tests.md) — black-box harness
     contract; role × surface × scenario matrix; local developer
     workflow
+26. [24 — Design heuristics](24-design-heuristics.md) — positive
+    structural rules (D-1 … D-6) for human and agent contributors;
+    citable in PR review
 
 Cross-cutting references:
 
