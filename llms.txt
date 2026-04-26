@@ -44,6 +44,7 @@ Phase 0 — spec freeze. The runtime under `src/hypotheses/` is not yet implemen
 - [docs/spec/25-rigor-framework.md](docs/spec/25-rigor-framework.md): citation, assumption, and evidence-taxonomy conventions for the spec; how to ground a normative claim.
 - [docs/spec/26-external-review.md](docs/spec/26-external-review.md): scope, criteria, and output format for a one-shot adversarial review of the foundation by an outside reviewer.
 - [docs/spec/27-economic-strategy.md](docs/spec/27-economic-strategy.md): investment thesis, revenue paths beyond Bittensor emission, phase-by-phase commercial trajectory, comparable-model evidence.
+- [docs/spec/28-treasury.md](docs/spec/28-treasury.md): pre-DAO custody, operating-cost catalogue, and transition contract for non-TAO revenue and operational spend.
 - [docs/spec/invariants.md](docs/spec/invariants.md): catalogue of HM-INV properties the implementation must preserve.
 - [docs/spec/load-for-index.md](docs/spec/load-for-index.md): reverse index of `load_for:` tags to spec docs and token totals.
 - [docs/spec/references.md](docs/spec/references.md): central bibliography of external sources cited by the spec; stable IDs for in-doc citation.

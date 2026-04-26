@@ -47,7 +47,7 @@ Total declared tokens: **36100**.
 
 ## `governance`
 
-Total declared tokens: **28100**.
+Total declared tokens: **29900**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -63,6 +63,7 @@ Total declared tokens: **28100**.
 | [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/26-external-review.md](26-external-review.md) | external review | 1700 |
 | [docs/spec/27-economic-strategy.md](27-economic-strategy.md) | economic strategy | 2400 |
+| [docs/spec/28-treasury.md](28-treasury.md) | treasury | 1800 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/references.md](references.md) | references | 1000 |
@@ -123,7 +124,7 @@ Total declared tokens: **12200**.
 
 ## `review`
 
-Total declared tokens: **67100**.
+Total declared tokens: **68900**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -156,6 +157,7 @@ Total declared tokens: **67100**.
 | [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
 | [docs/spec/26-external-review.md](26-external-review.md) | external review | 1700 |
 | [docs/spec/27-economic-strategy.md](27-economic-strategy.md) | economic strategy | 2400 |
+| [docs/spec/28-treasury.md](28-treasury.md) | treasury | 1800 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |

@@ -124,6 +124,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Incident response (pick a runbook)** | 19 (~3800) + 16 (~3800, only if security-flavoured) | 3800–7600 |
 | **Governance / weight change** | 06 (~2200) + 07 (~800) + 20 (~3200) | ≈ 6200 |
 | **Articulate investment / revenue narrative** | 27 (~2400) + 20 (~3200) + references (~1000) | ≈ 6600 |
+| **Spec a treasury / fiduciary action** | 28 (~1800) + 27 (~2400) + 11 (~900) | ≈ 5100 |
 
 Token estimates come from the `tokens:` front matter and are rough
 (wc × 1.3 rounded to 100). Treat them as planning, not a hard cap —

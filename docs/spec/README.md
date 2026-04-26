@@ -81,6 +81,8 @@ Read in order:
 29. [27 — Economic strategy](27-economic-strategy.md) —
     investment thesis and non-Bittensor revenue paths;
     commercial complement to doc 20
+30. [28 — Treasury](28-treasury.md) — pre-DAO custody contract,
+    operating-cost catalogue, Phase 3 DAO transition
 
 Cross-cutting references:
 

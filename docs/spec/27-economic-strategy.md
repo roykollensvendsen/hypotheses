@@ -281,9 +281,12 @@ to this subnet.
   fixed-point modelling of participation rates. Separate 3–5
   PR work stream tracked against Phase 3 exit criteria in
   [`11-roadmap.md`](11-roadmap.md); does not block this PR.
-- **Treasury / fiduciary structure.** Until DAO incorporation
-  (Phase 3+), at which point the doc gains a section on
-  treasury governance for non-TAO revenue.
+- **Treasury / fiduciary structure.** Pre-DAO custody, the
+  operating-cost catalogue, inflow / outflow rules, and the
+  Phase 3 DAO transition contract are now specified in
+  [`28-treasury.md`](28-treasury.md). § F's prior exclusion is
+  thereby withdrawn for the pre-DAO period; the strategy doc
+  remains revenue-focused.
 - **TAO / Alpha price prediction.** Inherited exclusion from
   [`20-economic-model.md § Out of scope`](20-economic-model.md#out-of-scope);
   mechanism design is price-agnostic.
