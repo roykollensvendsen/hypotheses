@@ -1,7 +1,7 @@
 ---
 name: hypothesis format
 description: preregistration-style schema for hypothesis specs stored in hypotheses/
-tokens: 1700
+tokens: 2700
 load_for: [implementation, proposal, review]
 depends_on: [01]
 kind: contract
@@ -238,6 +238,15 @@ fails outside the cheap-profile regime — see
 [ADR 0017](../adr/0017-validator-unit-economics.md) and
 [ADR 0019](../adr/0019-viability-verdict-not-viable-as-designed.md).
 
+The block admits two shapes: **single sponsor** (legacy form)
+and **community pool** (multiple sponsors). The community
+form is introduced by ADR 0022 and widens the funnel of
+[c8-sponsorship-demand](00.5-foundations.md#c8-sponsorship-demand)
+satisfiers from a single counterparty to a pool of
+≥ 2 contributors per HM-REQ-0140.
+
+#### Single sponsor
+
 ```yaml
 sponsorship:
   sponsor_id: "researchhub:0xABC..."   # opaque identifier; counterparty-defined
@@ -248,6 +257,40 @@ sponsorship:
     treasury: 0.10
   escrow_block: 1234567                 # block height bounty was locked
 ```
+
+#### Community pool
+
+```yaml
+sponsorship:
+  sponsors:                            # array form; one or more contributors
+    - sponsor_id: "5F1abc..."          # SS58 hotkey is the canonical identifier
+      bounty_tao: 1.0
+    - sponsor_id: "5G2def..."
+      bounty_tao: 0.5
+    - sponsor_id: "researchhub:0xABC..."
+      bounty_tao: 3.5
+  split:
+    miner: 0.60
+    validators: 0.30
+    treasury: 0.10
+  escrow_block: 1234567                 # cutoff after which contributions close
+```
+
+`bounty_tao` (single form) or the sum of
+`sponsors[].bounty_tao` (community form) determines the total
+pool. Splits and the `escrow_block` cutoff apply identically.
+After settlement, the miner / validators / treasury shares
+are computed from the total and distributed; sponsors do not
+directly track per-sponsor recipients.
+
+**F7 anti-manipulation cap.** No single `sponsor_id`
+contributes more than 50 % of the total `bounty_tao` after
+the `escrow_block` cutoff fires. A community pool that fails
+this check is rejected per HM-REQ-0140 below. The cap defends
+against whale-steering per
+[`00.5 § F7`](00.5-foundations.md#f7--curation-manipulation);
+PR-E.5's calibration ratchet revises the threshold based on
+Phase 2 pool data.
 
 The split defaults to `(0.60, 0.30, 0.10)` per
 [`27 § G open question 2`](27-economic-strategy.md#g-open-questions);
@@ -294,6 +337,17 @@ profiles.
 > `verification: full-rerun` carries no such constraint.
 > Operationalises ADR 0021's third viability path beyond the
 > safe-tier and sponsor-gated tier.
+
+> **HM-REQ-0140** A `sponsorship` block declaring `sponsors`
+> (community-pool form) MUST satisfy: (a) every entry has a
+> non-empty `sponsor_id` and `bounty_tao > 0`; (b) no single
+> `sponsor_id` contributes more than 50 % of the sum of
+> `sponsors[].bounty_tao` after the `escrow_block` cutoff;
+> (c) at least 2 distinct `sponsor_id` values are present.
+> A community pool that fails any condition is rejected at
+> acceptance. Defends F7 (curation manipulation) per
+> [`00.5 § F7`](00.5-foundations.md#f7--curation-manipulation).
+> The single-sponsor form is unconstrained by HM-REQ-0140.
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
