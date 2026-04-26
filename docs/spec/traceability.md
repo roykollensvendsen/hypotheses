@@ -1,7 +1,7 @@
 ---
 name: traceability matrix
 description: HM-REQ-NNNN to test-id mapping; populated as Phase 1 ships tests
-tokens: 400
+tokens: 700
 load_for: [implementation, review]
 depends_on: []
 kind: reference
@@ -43,3 +43,33 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0090 | [21](21-adversarial-simulator.md) Coverage requirement | tests/integration/test_meta_gates.py::test_adversarial_coverage | pending |
 | HM-REQ-0100 | [22](22-security-bounty.md) Embargo before public disclosure | tests/integration/test_meta_gates.py::test_security_bounty_embargo | pending |
 | HM-REQ-0110 | [12](12-implementation-constraints.md) Documentation discipline | tests/integration/test_meta_gates.py::test_single_source_principle | pending |
+
+## System-test scenarios
+
+Black-box scenarios from
+[`23-system-tests.md`](23-system-tests.md). Each scenario traces to
+≥1 HM-REQ in the table above. Scenario IDs are stable forever, like
+HM-REQ IDs; once assigned they are never renamed or recycled.
+
+| Scenario | HM-REQ refs | Test path | Status |
+|----------|-------------|-----------|--------|
+| S-MINE-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/mine/test_happy_path_cli.py::test_happy_path_cli | pending |
+| S-MINE-02 | HM-REQ-0030 | tests/system/mine/test_bad_signature.py::test_bad_signature | pending |
+| S-MINE-03 | HM-REQ-0031 | tests/system/mine/test_non_canonical_json.py::test_non_canonical_json | pending |
+| S-MINE-04 | HM-REQ-0001, HM-REQ-0050 | tests/system/mine/test_schema_rejects.py::test_schema_rejects | pending |
+| S-MINE-05 | HM-REQ-0050 | tests/system/mine/test_seed_required.py::test_seed_required | pending |
+| S-MINE-06 | HM-REQ-0010 | tests/system/mine/test_rate_limit.py::test_rate_limit | pending |
+| S-MINE-07 | HM-REQ-0002, HM-REQ-0003 | tests/system/mine/test_version_bump.py::test_version_bump | pending |
+| S-MINE-08 | HM-REQ-0030 | tests/system/mine/test_unregistered_hotkey.py::test_unregistered_hotkey | pending |
+| S-MINE-09 | HM-REQ-0001 | tests/system/mine/test_sdk_cli_parity.py::test_sdk_cli_parity | pending |
+| S-MINE-10 | HM-REQ-0001 | tests/system/mine/test_mcp_list.py::test_mcp_list | pending |
+| S-VAL-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_discover_score.py::test_discover_score | pending |
+| S-VAL-02 | HM-REQ-0010 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
+| S-VAL-03 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_rerun_tolerance.py::test_rerun_tolerance | pending |
+| S-VAL-04 | HM-REQ-0012 | tests/system/validate/test_no_self_score.py::test_no_self_score | pending |
+| S-VAL-05 | HM-REQ-0021 | tests/system/validate/test_novelty_tiebreak.py::test_novelty_tiebreak | pending |
+| S-VAL-06 | HM-REQ-0010 | tests/system/validate/test_mcp_score_parity.py::test_mcp_score_parity | pending |
+| S-DEV-01 | HM-REQ-0001 | tests/system/develop/test_doctor_clean.py::test_doctor_clean | pending |
+| S-DEV-02 | HM-REQ-0001 | tests/system/develop/test_doctor_broken.py::test_doctor_broken | pending |
+| S-DEV-03 | HM-REQ-0001 | tests/system/develop/test_init_layout.py::test_init_layout | pending |
+| S-DEV-04 | HM-REQ-0001 | tests/system/develop/test_client_from_env.py::test_client_from_env | pending |
