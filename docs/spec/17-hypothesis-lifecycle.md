@@ -69,8 +69,8 @@ below.
 | **T-PROP** | (none) | `proposed` | author opens a PR creating `hypotheses/H-NNNN-<slug>.md` | any contributor | `id` placeholder `H-XXXX` allowed; CI schema-validates |
 | **T-ACC** | `proposed` | `accepted` | maintainer merges the PR to `main` after review | maintainer | `id` assigned; spec CID fixed; registry entry live; mining permitted |
 | **T-RUN** | `accepted` | `running` | first valid `ResultsAnnouncement` for current `version` observed by validators | validators (consensus) | informational only; registry `status` update is eventual-consistent via a spec PR **or** can be inferred at read time from on-chain announcements |
-| **T-SUP** | `running` or `accepted` | `settled-supported` | a miner's submission passes all gates and meets every `success_criterion` under validator consensus | validators (consensus) | novelty bonus attributed per [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements); further submissions allowed at this version but score novelty = 0 |
-| **T-REF** | `running` or `accepted` | `settled-refuted` | a miner's submission passes all gates and meets every `falsification_criterion` under validator consensus | validators (consensus) | same as T-SUP; an honest null is a settlement |
+| **T-SUP** | `running` or `accepted` | `settled-supported` | `min_settling_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `success_criterion` under validator consensus | validators (consensus) | novelty bonus attributed per [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements); the 70 % first-settlement payout from HM-REQ-0070 splits equally among qualifying miners (per HM-REQ-0150); further submissions allowed at this version but score novelty = 0 |
+| **T-REF** | `running` or `accepted` | `settled-refuted` | `min_refuting_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `falsification_criterion` under validator consensus | validators (consensus) | same as T-SUP; an honest null is a settlement |
 | **T-CON** | `settled-supported` or `settled-refuted` | `confirmed` | 6 months elapsed since the settlement and no `T-OVR` has fired | system (time-triggered) | releases the deferred 30% of novelty + improvement to the original settling miner; `(id, version)` becomes terminal |
 | **T-OVR** | `settled-supported` or `settled-refuted` | back to `running` | a fresh submission against the same `(id, version)` reproduces with metrics that flip the settlement under the original analysis plan | validators (consensus) + maintainer-confirmed | clears the tentative settlement, claws back the original 70% from the settler, makes both miners eligible for fresh novelty under the new settlement |
 | **T-VER** | any non-terminal | `proposed` *(new file version)* | author bumps `version` via PR | author + maintainer | all prior `(spec_id, old_version)` submissions are invalidated for scoring; on-chain announcements against the old version remain readable for audit |
@@ -115,6 +115,17 @@ latency. An overturn event (T-OVR) requires a fresh submission whose
 metrics, evaluated under the *original* preregistered analysis plan,
 flip the settlement direction; it is not enough for one validator to
 disagree.
+
+When `min_settling_miners > 1` (per HM-REQ-0150 in
+[`02 § min_settling_miners`](02-hypothesis-format.md#min_settling_miners--min_refuting_miners)),
+the first-settlement event is the moment the *threshold* is
+met — i.e., when the Nth distinct qualifying submission lands.
+The 70 % is split equally among the N qualifying miners at
+that moment; the deferred 30 % is held against T-CON and
+released on the same proportional split. Submissions arriving
+after the threshold-met moment score reproduction +
+improvement as today (novelty = 0) but do not receive any
+share of the settlement payout.
 
 ## Security-hypothesis variant
 

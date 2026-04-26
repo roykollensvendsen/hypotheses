@@ -57,6 +57,7 @@ checker enforces one-way invariants:
 | HM-REQ-0120 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring a gated-tier `hardware_profile` (any `single-gpu-*` or `multi-gpu-*` profile) MUST include a `sponsorship` block; without it the hypothesis is rejected at acceptance. Operationalises ADR 0019's tier-2 pivot | normative |
 | HM-REQ-0130 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring `verification: oracle-only` MUST declare an `oracle` block (or `external_anchor.type=oracle`); without one the hypothesis is rejected at acceptance. Operationalises ADR 0021's third viability path | normative |
 | HM-REQ-0140 | [02](02-hypothesis-format.md) | Schema validation | A `sponsorship` block in community-pool form MUST satisfy: every entry has non-empty `sponsor_id` and `bounty_tao > 0`; no single `sponsor_id` exceeds 50 % of the pool sum after `escrow_block` cutoff; ≥ 2 distinct `sponsor_id` values present. Defends F7 (curation manipulation) per ADR 0022 | normative |
+| HM-REQ-0150 | [02](02-hypothesis-format.md) | Schema validation | When `min_settling_miners > 1` (or `min_refuting_miners > 1`), settlement transition fires only after the declared count of distinct `miner_hotkey` values have each independently passed the corresponding criteria; the 70 % first-settlement payout splits equally across qualifying miners. Operationalises ADR 0023 | normative |
 
 ## How to add
 

@@ -210,6 +210,7 @@ The numbering is per-role, monotonic.
 | S-VAL-06 | MCP score query parity: `get_score_history(...)` returns the same records as `hypo scores` for the same hotkey/window | MCP | HM-REQ-0010 | `tests/system/validate/test_mcp_score_parity.py` |
 | S-VAL-07 | Two-tier settlement: a settling submission earns 70 % of novelty + improvement at the first `settled-*` transition, with the remaining 30 % deferred for the documented six-month T-OVR window | CLI | HM-REQ-0070 | `tests/system/validate/test_two_tier_settlement.py` |
 | S-VAL-08 | Security-embargo gate: a security-flavoured hypothesis whose first appearance on `main` was not preceded by a SECURITY.md advisory has its improvement component zeroed at scoring time; rigor and reproduction still pay | CLI | HM-REQ-0100 | `tests/system/validate/test_security_embargo.py` |
+| S-VAL-09 | Multi-miner consensus settlement: a hypothesis with `min_settling_miners = 3` stays `running` after 2 distinct settling submissions; transitions to `settled-supported` on the 3rd; the 70 % first-settlement payout splits equally across the 3 qualifying miners | CLI | HM-REQ-0150 | `tests/system/validate/test_multi_miner_consensus.py` |
 
 ### Develop
 

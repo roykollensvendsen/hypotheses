@@ -116,6 +116,16 @@
     "external_anchor": {
       "$ref": "#/$defs/external_anchor",
       "description": "Optional explicit external-verifiability anchor. HM-REQ-0060 requires every hypothesis to have at least one of: (a) a mechanical anchor (numeric outcome computable from artifacts; this is the implicit default for any spec with metrics), (b) an oracle reference (already covered by the `oracle` field), or (c) a public_benchmark reference declared here. Pure validator-consensus settlement is rejected at scoring time."
+    },
+    "min_settling_miners": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Optional minimum number of distinct miner_hotkey values whose submissions must each pass success_criteria before the hypothesis transitions to settled-supported. Default 1 (current single-submission behaviour). HM-REQ-0150 / ADR 0023."
+    },
+    "min_refuting_miners": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Optional minimum number of distinct miner_hotkey values whose submissions must each pass falsification_criteria before the hypothesis transitions to settled-refuted. Default 1 (current behaviour). HM-REQ-0150 / ADR 0023."
     }
   },
 

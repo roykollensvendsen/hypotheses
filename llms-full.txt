@@ -301,7 +301,7 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Implement the validator pipeline** (T-P1-015) | 05 (~2200) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
 | **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
 | **Review a validator-side PR** | 05 (~2200) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
-| **Draft a new hypothesis** | 02 (~2700) + 01 (~700) + existing H-000x (~800–2500) | ≈ 4200–5900 |
+| **Draft a new hypothesis** | 02 (~2900) + 01 (~700) + existing H-000x (~800–2500) | ≈ 4400–6100 |
 | **Run a validator-operator agent** | 05 (~2200) + 13 (~1800) + 19 (~3800) | ≈ 7800 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
@@ -1272,7 +1272,7 @@ This doc is done when:
 ---
 name: hypothesis format
 description: preregistration-style schema for hypothesis specs stored in hypotheses/
-tokens: 2700
+tokens: 2900
 load_for: [implementation, proposal, review]
 depends_on: [01]
 kind: contract
@@ -1391,6 +1391,13 @@ falsification_criteria:
     statistical_test: welch_t
     p_max: 0.05
 
+# Optional: minimum independent miners required to flip status.
+# Default 1 (current behaviour: first settling submission wins).
+# Set higher for replication-class hypotheses that need
+# cross-miner consensus before the result is trusted.
+min_settling_miners: 1
+min_refuting_miners: 1
+
 # Optional: ground-truth oracle check. Null when no oracle applies.
 oracle:
   subnet: null                # e.g. 42
@@ -1456,6 +1463,67 @@ external_anchor:
   content_hash: "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
   metric: top1_accuracy
 ```
+
+### `min_settling_miners` / `min_refuting_miners`
+
+Minimum number of *independent* miners (distinct
+`miner_hotkey` values) whose submissions must individually
+pass every `success_criterion` (or `falsification_criterion`)
+before the hypothesis transitions to `settled-supported`
+(or `settled-refuted`). Default is `1` for both — the
+existing single-submission settlement behaviour.
+
+Set higher for replication-class hypotheses where one miner's
+result alone is not sufficient evidence:
+
+```yaml
+min_settling_miners: 3        # require 3 independent confirmations
+min_refuting_miners: 2        # 2 independent refutations to refute
+```
+
+Until the threshold is met the hypothesis stays in `running`
+status. Each individual settling submission still scores
+rigor + reproduction + improvement immediately; the **70 %
+first-settlement payout** from
+[HM-REQ-0070](#schema-validation) is attributed at the
+*threshold-met* moment and split equally among the qualifying
+miners. The deferred 30 % is held against
+[T-CON](17-hypothesis-lifecycle.md#transition-table) and
+distributed at the same proportional split.
+
+[Novelty](06-scoring.md#novelty) decays as today (1.0 / 0.5 /
+0.0 by settlement order), independent of the threshold —
+the first two qualifying miners earn novelty regardless of
+how subsequent confirmations follow. Validator-rerun applies
+to each individual submission as today (HM-REQ-0010); a
+submission that fails its rerun is zeroed and does not count
+toward the consensus threshold.
+
+**Sybil defence.** "Independent" means distinct on-chain
+`miner_hotkey`; the same registration cost + per-hotkey rate
+limit + cross-validator score check that defends F5 (per
+[`00.5 § F5`](00.5-foundations.md#f5--sybil-farming)) defends
+this mechanism against an operator running multiple hotkeys
+to manufacture fake consensus. Each hotkey still must pay
+registration, run the [experiment](01-glossary.md#experiment)
+honestly, and have its seeds reproduced by validators.
+
+**When to use.**
+
+- Replication-class hypotheses ("does this finding replicate
+  across labs?")
+- Statistical claims with cross-condition variance ("X works
+  on 60 % of the variable space")
+- High-stakes policy claims where one miner's result alone
+  shouldn't drive a settlement
+
+**When NOT to use.**
+
+- Pure prediction claims with an oracle (
+  `verification: oracle-only` already gives you the oracle's
+  verdict; consensus across miners adds nothing)
+- Single-condition computational claims where the protocol
+  pins determinism
 
 ### `verification`
 
@@ -1619,6 +1687,19 @@ profiles.
 > acceptance. Defends F7 (curation manipulation) per
 > [`00.5 § F7`](00.5-foundations.md#f7--curation-manipulation).
 > The single-sponsor form is unconstrained by HM-REQ-0140.
+
+> **HM-REQ-0150** When `min_settling_miners > 1` (or
+> `min_refuting_miners > 1`), the hypothesis transitions to
+> `settled-supported` (or `settled-refuted`) only after the
+> declared count of distinct `miner_hotkey` values have each
+> independently submitted a result that passes its
+> corresponding criteria under validator consensus. The 70 %
+> [first-settlement payout](17-hypothesis-lifecycle.md#two-tier-settlement)
+> per HM-REQ-0070 splits equally across the qualifying miners
+> at the threshold-met moment; the deferred 30 % follows the
+> same split. Validators MUST reject a candidate consensus
+> contributor whose `miner_hotkey` matches one already counted.
+> Operationalises ADR 0023's multi-miner replication mechanism.
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).
@@ -5318,8 +5399,8 @@ below.
 | **T-PROP** | (none) | `proposed` | author opens a PR creating `hypotheses/H-NNNN-<slug>.md` | any contributor | `id` placeholder `H-XXXX` allowed; CI schema-validates |
 | **T-ACC** | `proposed` | `accepted` | maintainer merges the PR to `main` after review | maintainer | `id` assigned; spec CID fixed; registry entry live; mining permitted |
 | **T-RUN** | `accepted` | `running` | first valid `ResultsAnnouncement` for current `version` observed by validators | validators (consensus) | informational only; registry `status` update is eventual-consistent via a spec PR **or** can be inferred at read time from on-chain announcements |
-| **T-SUP** | `running` or `accepted` | `settled-supported` | a miner's submission passes all gates and meets every `success_criterion` under validator consensus | validators (consensus) | novelty bonus attributed per [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements); further submissions allowed at this version but score novelty = 0 |
-| **T-REF** | `running` or `accepted` | `settled-refuted` | a miner's submission passes all gates and meets every `falsification_criterion` under validator consensus | validators (consensus) | same as T-SUP; an honest null is a settlement |
+| **T-SUP** | `running` or `accepted` | `settled-supported` | `min_settling_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `success_criterion` under validator consensus | validators (consensus) | novelty bonus attributed per [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements); the 70 % first-settlement payout from HM-REQ-0070 splits equally among qualifying miners (per HM-REQ-0150); further submissions allowed at this version but score novelty = 0 |
+| **T-REF** | `running` or `accepted` | `settled-refuted` | `min_refuting_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `falsification_criterion` under validator consensus | validators (consensus) | same as T-SUP; an honest null is a settlement |
 | **T-CON** | `settled-supported` or `settled-refuted` | `confirmed` | 6 months elapsed since the settlement and no `T-OVR` has fired | system (time-triggered) | releases the deferred 30% of novelty + improvement to the original settling miner; `(id, version)` becomes terminal |
 | **T-OVR** | `settled-supported` or `settled-refuted` | back to `running` | a fresh submission against the same `(id, version)` reproduces with metrics that flip the settlement under the original analysis plan | validators (consensus) + maintainer-confirmed | clears the tentative settlement, claws back the original 70% from the settler, makes both miners eligible for fresh novelty under the new settlement |
 | **T-VER** | any non-terminal | `proposed` *(new file version)* | author bumps `version` via PR | author + maintainer | all prior `(spec_id, old_version)` submissions are invalidated for scoring; on-chain announcements against the old version remain readable for audit |
@@ -5364,6 +5445,17 @@ latency. An overturn event (T-OVR) requires a fresh submission whose
 metrics, evaluated under the *original* preregistered analysis plan,
 flip the settlement direction; it is not enough for one validator to
 disagree.
+
+When `min_settling_miners > 1` (per HM-REQ-0150 in
+[`02 § min_settling_miners`](02-hypothesis-format.md#min_settling_miners--min_refuting_miners)),
+the first-settlement event is the moment the *threshold* is
+met — i.e., when the Nth distinct qualifying submission lands.
+The 70 % is split equally among the N qualifying miners at
+that moment; the deferred 30 % is held against T-CON and
+released on the same proportional split. Submissions arriving
+after the threshold-met moment score reproduction +
+improvement as today (novelty = 0) but do not receive any
+share of the settlement payout.
 
 ## Security-hypothesis variant
 
@@ -7813,6 +7905,7 @@ The numbering is per-role, monotonic.
 | S-VAL-06 | MCP score query parity: `get_score_history(...)` returns the same records as `hypo scores` for the same hotkey/window | MCP | HM-REQ-0010 | `tests/system/validate/test_mcp_score_parity.py` |
 | S-VAL-07 | Two-tier settlement: a settling submission earns 70 % of novelty + improvement at the first `settled-*` transition, with the remaining 30 % deferred for the documented six-month T-OVR window | CLI | HM-REQ-0070 | `tests/system/validate/test_two_tier_settlement.py` |
 | S-VAL-08 | Security-embargo gate: a security-flavoured hypothesis whose first appearance on `main` was not preceded by a SECURITY.md advisory has its improvement component zeroed at scoring time; rigor and reproduction still pay | CLI | HM-REQ-0100 | `tests/system/validate/test_security_embargo.py` |
+| S-VAL-09 | Multi-miner consensus settlement: a hypothesis with `min_settling_miners = 3` stays `running` after 2 distinct settling submissions; transitions to `settled-supported` on the 3rd; the 70 % first-settlement payout splits equally across the 3 qualifying miners | CLI | HM-REQ-0150 | `tests/system/validate/test_multi_miner_consensus.py` |
 
 ### Develop
 
@@ -10154,14 +10247,14 @@ Total declared tokens: **33600**.
 
 ## `implementation`
 
-Total declared tokens: **63000**.
+Total declared tokens: **63200**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2700 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2900 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
@@ -10194,28 +10287,28 @@ Total declared tokens: **63000**.
 
 ## `proposal`
 
-Total declared tokens: **13200**.
+Total declared tokens: **13400**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2700 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2900 |
 | [docs/spec/17-hypothesis-lifecycle.md](17-hypothesis-lifecycle.md) | hypothesis lifecycle | 4000 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 
 ## `review`
 
-Total declared tokens: **73600**.
+Total declared tokens: **73800**.
 
 | doc | name | tokens |
 |-----|------|--------|
 | [docs/spec/00-overview.md](00-overview.md) | overview | 500 |
 | [docs/spec/00.5-foundations.md](00.5-foundations.md) | foundations | 3500 |
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
-| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2700 |
+| [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 2900 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
 | [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
@@ -10409,6 +10502,7 @@ checker enforces one-way invariants:
 | HM-REQ-0120 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring a gated-tier `hardware_profile` (any `single-gpu-*` or `multi-gpu-*` profile) MUST include a `sponsorship` block; without it the hypothesis is rejected at acceptance. Operationalises ADR 0019's tier-2 pivot | normative |
 | HM-REQ-0130 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring `verification: oracle-only` MUST declare an `oracle` block (or `external_anchor.type=oracle`); without one the hypothesis is rejected at acceptance. Operationalises ADR 0021's third viability path | normative |
 | HM-REQ-0140 | [02](02-hypothesis-format.md) | Schema validation | A `sponsorship` block in community-pool form MUST satisfy: every entry has non-empty `sponsor_id` and `bounty_tao > 0`; no single `sponsor_id` exceeds 50 % of the pool sum after `escrow_block` cutoff; ≥ 2 distinct `sponsor_id` values present. Defends F7 (curation manipulation) per ADR 0022 | normative |
+| HM-REQ-0150 | [02](02-hypothesis-format.md) | Schema validation | When `min_settling_miners > 1` (or `min_refuting_miners > 1`), settlement transition fires only after the declared count of distinct `miner_hotkey` values have each independently passed the corresponding criteria; the 70 % first-settlement payout splits equally across qualifying miners. Operationalises ADR 0023 | normative |
 
 ## How to add
 
@@ -10478,6 +10572,7 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0120 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_gated_profile_requires_sponsorship | pending |
 | HM-REQ-0130 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_oracle_only_requires_oracle | pending |
 | HM-REQ-0140 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_community_pool_caps | pending |
+| HM-REQ-0150 | [02](02-hypothesis-format.md) Schema validation | tests/properties/test_lifecycle.py::test_multi_miner_consensus_settlement | pending |
 
 ## System-test scenarios
 
@@ -10511,6 +10606,7 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-VAL-06 | HM-REQ-0010 | tests/system/validate/test_mcp_score_parity.py::test_mcp_score_parity | pending |
 | S-VAL-07 | HM-REQ-0070 | tests/system/validate/test_two_tier_settlement.py::test_two_tier_settlement | pending |
 | S-VAL-08 | HM-REQ-0100 | tests/system/validate/test_security_embargo.py::test_security_embargo | pending |
+| S-VAL-09 | HM-REQ-0150 | tests/system/validate/test_multi_miner_consensus.py::test_multi_miner_consensus | pending |
 | S-DEV-01 | HM-REQ-0001 | tests/system/develop/test_doctor_clean.py::test_doctor_clean | pending |
 | S-DEV-02 | HM-REQ-0001 | tests/system/develop/test_doctor_broken.py::test_doctor_broken | pending |
 | S-DEV-03 | HM-REQ-0001 | tests/system/develop/test_init_layout.py::test_init_layout | pending |

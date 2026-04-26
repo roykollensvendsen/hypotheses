@@ -46,6 +46,7 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0120 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_gated_profile_requires_sponsorship | pending |
 | HM-REQ-0130 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_oracle_only_requires_oracle | pending |
 | HM-REQ-0140 | [02](02-hypothesis-format.md) Schema validation | tests/unit/test_spec_schema.py::test_community_pool_caps | pending |
+| HM-REQ-0150 | [02](02-hypothesis-format.md) Schema validation | tests/properties/test_lifecycle.py::test_multi_miner_consensus_settlement | pending |
 
 ## System-test scenarios
 
@@ -79,6 +80,7 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-VAL-06 | HM-REQ-0010 | tests/system/validate/test_mcp_score_parity.py::test_mcp_score_parity | pending |
 | S-VAL-07 | HM-REQ-0070 | tests/system/validate/test_two_tier_settlement.py::test_two_tier_settlement | pending |
 | S-VAL-08 | HM-REQ-0100 | tests/system/validate/test_security_embargo.py::test_security_embargo | pending |
+| S-VAL-09 | HM-REQ-0150 | tests/system/validate/test_multi_miner_consensus.py::test_multi_miner_consensus | pending |
 | S-DEV-01 | HM-REQ-0001 | tests/system/develop/test_doctor_clean.py::test_doctor_clean | pending |
 | S-DEV-02 | HM-REQ-0001 | tests/system/develop/test_doctor_broken.py::test_doctor_broken | pending |
 | S-DEV-03 | HM-REQ-0001 | tests/system/develop/test_init_layout.py::test_init_layout | pending |
