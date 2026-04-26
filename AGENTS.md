@@ -64,7 +64,7 @@ so the Phase 1 implementing agent reads it on kickoff.
 
 1. [`VISION.md`](VISION.md) — what and why.
 2. [`docs/spec/00.5-foundations.md`](docs/spec/00.5-foundations.md)
-   — the *why* behind every design decision: the six threats this
+   — the *why* behind every design decision: the seven threats this
    subnet must survive, the defences derived from them, the
    assumptions those defences require, and what the mechanism
    gives up. **Read before any other spec doc.**

@@ -66,7 +66,7 @@ subnet's Alpha is making three coupled bets:
    capture rather than speculative narrative.
 2. **The adversarial-first foundation in
    [`00.5-foundations.md`](00.5-foundations.md) holds.** A
-   leveraged bet on the design surviving F1–F6 under live
+   leveraged bet on the design surviving F1–F7 under live
    operation; if the foundation fails, the corpus is noise.
 3. **The commercial revenue paths in § C come online.**
    Without them, the subnet stays a pure infrastructure bet

@@ -1,0 +1,10 @@
+{
+  "name": "F7-curation-manipulation",
+  "threat": "F7",
+  "source": "docs/spec/00.5-foundations.md § F7 — curation manipulation",
+  "status": "placeholder",
+  "notes": "Phase 2 onset fixture. F7 was introduced by ADR 0022 (community bounty pool) and admits whale or sybil-cluster manipulation of the demand-side sponsorship pool. The defence is HM-REQ-0140's per-sponsor cap (≤50% of pool) plus the minimum-2-distinct-sponsors floor; the fixture documenting actual residual damage requires Phase 2 pool-data calibration to populate. Until then, this placeholder file exists so docs/spec/00.5-foundations.md § F7's reference resolves under the lychee link check, and the HM-REQ-0090 adversarial-simulator coverage requirement has a target. The acceptance scenario, residual-damage description, and defended-cases will be filled in during Phase 2 mid-point review.",
+  "scenario": "TBD-Phase-2",
+  "expected_residual_damage": "TBD-Phase-2",
+  "defence_status": "specified-not-yet-fixturised"
+}
