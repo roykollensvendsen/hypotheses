@@ -47,6 +47,11 @@
     "kind": {
       "enum": ["contract", "explanation", "reference"],
       "description": "Documentation taxonomy. `contract` for normative spec (HM-REQ/HM-INV bearing); `explanation` for narrative why-docs; `reference` for catalogs, glossaries, and indexes. Diátaxis-derived; see docs/CONTRIBUTING-DOCS.md for the rationale."
+    },
+    "last_updated": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Optional ISO date convenience marker. When present, scripts/check_staleness.py asserts it matches the file's actual git last-modified date within ±1 day. Run `python3 scripts/check_staleness.py --update` to auto-sync. Absent is fine — git is the source of truth."
     }
   }
 }

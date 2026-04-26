@@ -1,0 +1,62 @@
+name: Doc staleness signal
+
+on:
+  pull_request:
+    paths:
+      - 'docs/spec/**/*.md'
+      - 'docs/adr/**/*.md'
+      - 'scripts/check_staleness.py'
+      - '.github/workflows/staleness.yml'
+  schedule:
+    - cron: "0 6 * * 1"   # Monday 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staleness-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: declared last_updated vs git
+    steps:
+      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          fetch-depth: 0
+      - name: Skip if checker absent
+        id: guard
+        run: |
+          if [ ! -f scripts/check_staleness.py ]; then
+            echo "checker not present; no-op"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
+        if: steps.guard.outputs.skip == 'false'
+        with:
+          python-version: '3.12.7'
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        if: steps.guard.outputs.skip == 'false'
+        with:
+          enable-cache: true
+      - name: Run staleness check
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          uv run scripts/check_staleness.py | tee staleness.txt
+      - name: Post to job summary
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          {
+            echo "## Staleness signal"
+            echo
+            echo '```'
+            cat staleness.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
