@@ -11,34 +11,16 @@ kind: explanation
 
 ## Components
 
-```text
- ┌────────────────────┐         ┌────────────────────┐
- │ Hypothesis Registry│◀──PR───▶│   GitHub (this     │
- │  hypotheses/*.md   │         │   repo, mirrored   │
- └─────────┬──────────┘         │   to content-addr  │
-           │                    │   storage)         │
-           │                    └────────────────────┘
-           │
-     ┌─────▼──────┐       announces       ┌────────────┐
-     │   Miner    │──────spec/result─────▶│ Validator  │
-     │  (neuron)  │                       │  (neuron)  │
-     └─────┬──────┘                       └─────┬──────┘
-           │                                    │
-           │ runs in                             │ reruns in
-      ┌────▼─────┐                          ┌────▼─────┐
-      │ Runtime  │                          │ Runtime  │
-      │ (sandbox)│                          │ (sandbox)│
-      └────┬─────┘                          └─────┬────┘
-           │                                      │
-           │     artifacts (content-addressed)    │
-           └──────────────▶ Storage ◀─────────────┘
-                                │
-                                │   weights
-                                ▼
-                          ┌──────────┐
-                          │Bittensor │
-                          │  chain   │
-                          └──────────┘
+```mermaid
+flowchart TB
+    Registry["Hypothesis Registry<br/>hypotheses/*.md"] <-- PR --> GitHub["GitHub<br/>(repo, mirrored to<br/>content-addressed storage)"]
+    Registry --> Miner["Miner<br/>(neuron)"]
+    Miner -- "announces<br/>spec / result" --> Validator["Validator<br/>(neuron)"]
+    Miner -- runs in --> RuntimeM["Runtime<br/>(sandbox)"]
+    Validator -- reruns in --> RuntimeV["Runtime<br/>(sandbox)"]
+    RuntimeM -- "artifacts<br/>(content-addressed)" --> Storage[("Storage")]
+    RuntimeV -- "artifacts<br/>(content-addressed)" --> Storage
+    Storage -- weights --> Chain["Bittensor<br/>chain"]
 ```
 
 ### Hypothesis Registry
