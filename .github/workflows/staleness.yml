@@ -50,6 +50,20 @@ jobs:
         if: steps.guard.outputs.skip == 'false'
         run: |
           uv run scripts/check_staleness.py | tee staleness.txt
+      - name: Compute ratchet baseline counts
+        if: steps.guard.outputs.skip == 'false'
+        id: ratchet
+        run: |
+          vale_total=$(python3 -c 'import json; d=json.load(open(".vale/baseline.json")); print(sum(sum(v.values()) for v in d.values()))')
+          vale_files=$(python3 -c 'import json; print(len(json.load(open(".vale/baseline.json"))))')
+          gloss_total=$(python3 -c 'import json; d=json.load(open(".vale/glossary-baseline.json")); print(sum(sum(v.values()) for v in d.values()))')
+          gloss_files=$(python3 -c 'import json; print(len(json.load(open(".vale/glossary-baseline.json"))))')
+          {
+            echo "vale_total=$vale_total"
+            echo "vale_files=$vale_files"
+            echo "gloss_total=$gloss_total"
+            echo "gloss_files=$gloss_files"
+          } >> "$GITHUB_OUTPUT"
       - name: Post to job summary
         if: steps.guard.outputs.skip == 'false'
         run: |
@@ -59,4 +73,13 @@ jobs:
             echo '```'
             cat staleness.txt
             echo '```'
+            echo
+            echo "## Baseline ratchet snapshot"
+            echo
+            echo "Both baselines are monotonically non-increasing — the only legitimate way a cell changes is downward. Schedule a 30-minute monthly ratchet pass to fix one rule's worth of offences and regenerate."
+            echo
+            echo "| baseline | files | offences |"
+            echo "|----------|-------|----------|"
+            echo "| Vale (\`.vale/baseline.json\`) | ${{ steps.ratchet.outputs.vale_files }} | ${{ steps.ratchet.outputs.vale_total }} |"
+            echo "| Glossary (\`.vale/glossary-baseline.json\`) | ${{ steps.ratchet.outputs.gloss_files }} | ${{ steps.ratchet.outputs.gloss_total }} |"
           } >> "$GITHUB_STEP_SUMMARY"

@@ -1,7 +1,7 @@
 ---
 name: hypothesis format
 description: preregistration-style schema for hypothesis specs stored in hypotheses/
-tokens: 1000
+tokens: 1700
 load_for: [implementation, proposal, review]
 depends_on: [01]
 kind: contract

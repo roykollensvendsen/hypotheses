@@ -14,15 +14,16 @@ declares a `tokens:` value in front-matter, computes a heuristic
 token estimate of the body and compares it to the declared value.
 
 Tolerances:
-- Diff up to 40 % from declared: silently OK.
-- 40-100 %: warning printed, exit 0 (does not fail CI).
-- > 100 %: fail.
+- Diff up to 25 % from declared: silently OK.
+- 25–50 %: warning printed, exit 0 (does not fail CI).
+- > 50 %: fail.
 
-The 100 % outer tolerance is deliberately lax. AGENTS.md documents
-the declared values as rough planning estimates — the goal is
-"the declared budget is in the right order of magnitude", not
-exact accounting. Tightening the bound is a follow-up after a
-calibration pass that re-aligns AGENTS.md routing-table totals.
+Tightened from the original 40 %/100 % bounds after a
+calibration pass synced every doc's declared `tokens:` to its
+actual measurement. AGENTS.md still documents the values as
+rough planning estimates; the auditor now insists they stay
+within ±50 % of measurement (and warns above ±25 %) so they
+remain useful for context-budgeting.
 
 Used by `.github/workflows/token-budget.yml`.
 """
@@ -35,8 +36,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _doc_lib import estimate_tokens, parse_frontmatter  # noqa: E402
 
-WARN_RATIO = 0.40
-FAIL_RATIO = 1.00
+WARN_RATIO = 0.25
+FAIL_RATIO = 0.50
 
 SCAN_GLOBS: tuple[str, ...] = (
     "docs/spec/*.md",
