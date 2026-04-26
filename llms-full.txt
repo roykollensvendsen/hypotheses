@@ -9320,16 +9320,156 @@ lever 4 enforcing a cheap-profile floor,
 or (d) the simulator (ADR 0021) showing equilibrium dynamics
 the analytic ceiling here misses.
 
-### D.2 Equilibrium / Nash analysis (PR-E.3)
+### D.2 Participation equilibrium
 
-Whether the participation point where miners and validators
-both break even is stable. The asymmetric shape from D.1
-(validator break-even shrinks with `N_miners`, miner
-break-even *capped* by `N_miners`) suggests the fixed point
-is at the intersection of the two break-even curves. PR-E.3
-proves existence and analyses local stability under
-two-population replicator dynamics. Lands as § D.2 plus ADR
-0018.
+The asymmetric break-even shapes from § C and § D.1 imply a
+two-population dynamic: miner count grows when miner profit
+is positive (below `N_m_max` from `(*)`), validator count
+grows when validator profit is positive (below `V_max(N_m)`
+from `(**)`). The participation question — does the system
+settle into a stable steady state, and if so where? — is
+viability criterion 3 in § E.
+
+#### Replicator dynamics
+
+Under standard two-population replicator dynamics the
+populations evolve as:
+
+```text
+dN_miner/dt     = ε_m · profit_m(N_miner, t_TAO, ...)
+dN_validator/dt = ε_v · profit_v(N_miner, N_validator, ...)
+```
+
+Where `ε_m, ε_v > 0` are response rates (the speed at which
+operators enter / exit the market) and:
+
+```text
+profit_m = R_sub_USD - C_sub                     [from § C]
+profit_v = R_val_USD - C_val_epoch - c_overhead_val
+                                                  [from § D.1]
+```
+
+`profit_m` is positive iff `N_miner < N_m_max` per `(*)`;
+`profit_v` is positive iff `N_validator < V_max(N_miner)`
+per `(**)`. Both are differentiable in the populations.
+
+#### Fixed-point existence
+
+A simultaneous zero of both profit functions (equivalently,
+`profit_m = profit_v = 0`) sits at:
+
+```text
+N_miner*       = N_m_max                         [where (*) saturates]
+N_validator*   = V_max(N_m_max)                  [from (**)]
+```
+
+For each hardware-profile workload one fixed point exists.
+The trivial fixed point `(0, 0)` is unstable (any positive
+miner count below `N_m_max` has positive `profit_m`).
+
+#### Local stability
+
+The Jacobian at `(N_miner*, N_validator*)`:
+
+```text
+J = ε_m · [ ∂profit_m/∂N_miner       0                ]
+    ε_v · [ ∂profit_v/∂N_miner       ∂profit_v/∂N_val ]
+```
+
+Both diagonal entries are negative at the fixed point:
+
+- `∂profit_m/∂N_miner < 0` because `R_sub_USD ∝ 1/N_miner`.
+- `∂profit_v/∂N_validator < 0` because `R_val_USD ∝ 1/N_validator`.
+
+The off-diagonal `∂profit_v/∂N_miner < 0` (validator
+revenue independent of `N_miner`; cost grows with `N_miner`),
+but it does not affect the stability of the diagonal block
+under the lower-triangular Jacobian (`profit_m` does not
+depend on `N_validator`). Both eigenvalues are negative →
+**the fixed point is locally attracting**.
+
+#### Reachability from Phase 2.0 cold-start
+
+[`11 § Phase 2.0`](11-roadmap.md#phase-20-cold-start) names
+the cold-start position as `≥ 3` miners and `≥ 2`
+validators. From that initial condition both populations
+have positive profit at reference numbers (well below their
+respective break-even ceilings), so trajectories grow into
+the interior. The miner population approaches `N_m_max`
+monotonically; the validator population grows initially,
+then shrinks once `N_miner` exceeds the threshold where
+`V_max(N_miner) < N_validator`, eventually landing at
+`V_max(N_m_max)`.
+
+The fixed point is reachable. **Criterion 3 in § E formally
+passes.**
+
+#### What criterion 3 doesn't catch
+
+The fixed point's *location* is what criterion 2 audits. From
+§ D.1 worked example with reference numbers and an
+all-`cpu-small` workload:
+
+- `N_m_max = 410` (per § C).
+- `V_max(410) = 54 / (3 · 410 · 0.4 · 0.10 + 0.10) = 54 / 49.3 ≈ 1.1`.
+
+The system attracts toward `(N_miner*, N_validator*) ≈ (410, 1)` —
+**well below the
+[HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets)
+floor of `N ≥ 6`**. The same arithmetic for `cpu-large` lands
+at `≈ (109, 0.8)`; for `single-gpu-24gb` the validator side
+has no break-even at any `N_miner > 0` (criterion-2 fail
+from § D.1 carries through).
+
+Criterion 3 (stable equilibrium exists, reachable, attracting)
+passes formally. Criterion 2 (validator break-even at the
+D2.2 floor) fails because **the attractor lands in a regime
+where D2.2 silently degrades**.
+
+#### Implications
+
+- **The two criteria are coupled.** A fixed point that
+  exists but lands at `N_v < min_validators_d22_coverage`
+  is not a viable equilibrium, even if technically
+  attracting. The verdict ADR cannot return "viable" on
+  criteria 2 + 3 together at reference numbers.
+- **Tier-1 levers do not fix it.** Lifting `f_validator`
+  from 0.18 to 1.0 (an extreme, impossible boundary) lifts
+  `V_max(410) = 300/49.3 ≈ 6.1` — *just* meets the floor.
+  Realistic adjustments (`f_validator → 0.30`) leave the
+  attractor at `≈ 1.8 validators`. The mechanism's
+  parametric flexibility is insufficient.
+- **Tier-2 levers narrow the attractor.** Lever 4
+  (hypothesis-acceptance gate capping `N_miner ≤ 50`) leaves
+  the attractor at `(50, 8.85)` — viable. Trade-off: the
+  market becomes a constrained-supply oligopoly.
+- **Tier-3 levers redesign the dynamic.** Lever 6 introduces
+  sponsor-funded subsidy as a third population, shifting the
+  validator profit equation. The fixed-point structure
+  changes shape; PR-E.4's sensitivity tables will quantify
+  how much subsidy is needed.
+- **Cycle-time / capacity ceiling.** The validator must
+  complete reruns within the 20-minute cycle cadence per
+  [`19 § Validator SLIs`](19-operations.md#validator-slis).
+  At heavy `N_miner` the ceiling kicks in *before* the
+  break-even ceiling — adding a hard upper bound on
+  N_validator beyond what the dollar-economics imply. This
+  is a separable constraint and is folded into PR-E.4's
+  sensitivity surfaces, not modelled here.
+
+> **assumption: c4a-emission-sufficient-steady-state** — the
+> attracting fixed point lies above
+> `min_validators_d22_coverage = 6`. **If false:** the
+> mechanism's defences silently degrade at equilibrium, even
+> though the equilibrium exists. Lever 4 / 6 / 7 are required
+> to relocate the attractor.
+> See [00.5 § c4a-emission-sufficient-steady-state](00.5-foundations.md#c4a-emission-sufficient-steady-state).
+
+The reference-number verdict on criteria 2 + 3 is therefore
+**fail** — the attracting fixed point exists but lands below
+the D2.2 floor for every non-trivial workload. ADR 0018
+captures the analysis and the implication for the verdict
+ADR.
 
 ### D.3 Sensitivity tables (PR-E.4)
 

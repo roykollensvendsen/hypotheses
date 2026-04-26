@@ -120,3 +120,4 @@ What did we decide?
 - [0015 — Economic survival scope](0015-economic-survival-scope.md)
 - [0016 — Viability decision protocol](0016-viability-decision-protocol.md)
 - [0017 — Validator unit economics](0017-validator-unit-economics.md)
+- [0018 — Participation equilibrium](0018-participation-equilibrium.md)
