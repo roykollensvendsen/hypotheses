@@ -43,3 +43,9 @@ Each `ap-NNNN-<slug>.md` contains:
 | [`ap-0005`](ap-0005-synthesize-spec-field.md) | Inventing a field not in the JSON Schema | [02 § schema validation](../02-hypothesis-format.md#schema-validation) |
 | [`ap-0006`](ap-0006-cli-only-path.md) | CLI capability without matching MCP tool and SDK method | [13 § parity rule](../13-agent-integration.md) |
 | [`ap-0007`](ap-0007-floating-action-ref.md) | GitHub Action referenced by tag instead of 40-char SHA | [15 § pinning policy](../15-ci-cd.md#pinning-policy) |
+| [`ap-0008`](ap-0008-defensive-overhandling.md) | `try/except` for failures the type system rules out, or downstream re-validation | [12 § fail-fast](../12-implementation-constraints.md#fail-fast-policy), [24 § D-3](../24-design-heuristics.md) |
+| [`ap-0009`](ap-0009-premature-abstraction.md) | `Provider`/`Factory`/plugin shape introduced before three concrete callers exist | [AGENTS.md § Scope discipline](../../../AGENTS.md#non-negotiable-rules), [24 § D-4](../24-design-heuristics.md) |
+| [`ap-0010`](ap-0010-comment-restating-code.md) | Comments and docstrings that paraphrase the code instead of explaining the WHY | [12 § code style](../12-implementation-constraints.md#code-style) |
+| [`ap-0011`](ap-0011-dead-branches.md) | `else: raise NotImplementedError` and `case _:` placeholders left in production paths | [12 § per-module DoD](../12-implementation-constraints.md#per-module-definition-of-done), [24 § D-2](../24-design-heuristics.md) |
+| [`ap-0012`](ap-0012-wide-signatures.md) | `**kwargs: Any`, options-dict bags, mutually-exclusive boolean flags | [12 § code style](../12-implementation-constraints.md#code-style), [24 § D-2](../24-design-heuristics.md) |
+| [`ap-0013`](ap-0013-speculative-configurability.md) | Env-vars / config knobs / pluggable backends introduced for a value with one configured caller | [AGENTS.md § Scope discipline](../../../AGENTS.md#non-negotiable-rules), [24 § D-4](../24-design-heuristics.md) |
