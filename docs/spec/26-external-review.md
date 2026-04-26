@@ -21,9 +21,9 @@ external actors are now using them.
 
 The review's goal is to find at least one of:
 
-- A 7th threat the in-house process missed.
+- A 9th threat the in-house process missed.
 - A failure mode where two F-rows in
-  [`00.5 § A`](00.5-foundations.md#a-the-seven-threats-the-design-must-survive)
+  [`00.5 § A`](00.5-foundations.md#a-the-eight-threats-the-design-must-survive)
   interact in a way no single F-row anticipates.
 - A `00.5 § C` assumption that's stronger than admitted (a "C-row
   that's actually a wish").
@@ -43,7 +43,7 @@ weighted by the reviewer's track record.
 ### In scope
 
 - [`docs/spec/00.5-foundations.md`](00.5-foundations.md) — the
-  seven threats, the defences derived from them, the assumptions
+  eight threats, the defences derived from them, the assumptions
   the defences require, and what the mechanism gives up.
 - [`docs/spec/16-threat-model.md`](16-threat-model.md) — the
   full T-NNN catalogue and per-row mitigations.

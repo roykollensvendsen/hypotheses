@@ -1,0 +1,10 @@
+{
+  "name": "F8-ideator-spam",
+  "threat": "F8",
+  "source": "docs/spec/00.5-foundations.md § F8 — ideator-graph manipulation",
+  "status": "placeholder",
+  "notes": "Phase 2 onset fixture. F8 was introduced by ADR 0024 (informal hypothesis registry) and admits brainstorm sybil-spam, attribution coercion, ideator-formaliser collusion, and forum-as-injection (F4 extension) on the new I-NNNN registry. Defences are D8.1 (stake-to-post via ideator_min_stake), D8.2 (staleness threshold), D8.3 (cite cap + self-cite ban), D8.4 (two-tier ideator payout reusing HM-REQ-0070), and D8.5 (treat_as_data: true on I-NNNN content reusing F4 scanner gate). The fixture documenting actual residual damage requires Phase 2 calibration data: distribution of I-NNNN posting rates, citation rates, and observed attribution-coercion attempts. Until then this placeholder file exists so docs/spec/00.5-foundations.md § F8's reference resolves under the lychee link check, and the HM-REQ-0090 adversarial-simulator coverage requirement has a target. The acceptance scenario, residual-damage description, and defended-cases will be filled in during Phase 2 mid-point review.",
+  "scenario": "TBD-Phase-2",
+  "expected_residual_damage": "TBD-Phase-2",
+  "defence_status": "specified-not-yet-fixturised"
+}
