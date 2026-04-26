@@ -45,27 +45,22 @@ T-OVR fires).
 
 ## Transitions
 
-```text
-                                    +------------+
-                                    | withdrawn  |   (terminal, across all versions)
-                                    +------------+
-                                          ^
-                                          |  T-WITH
-                                          |
-                  T-PROP        T-ACC          T-RUN
-    (create PR) ─────▶  proposed ─────▶  accepted ─────▶  running
-                           │               │                │
-                  T-WDP    │               │ T-WDA          │ T-SUP / T-REF
-                           ▼               ▼                ▼
-                         withdrawn     withdrawn     settled-supported
-                                                       or settled-refuted
-                                                            │
-                                                            │  T-VER
-                                                            ▼
-                                                       (new version N+1
-                                                        lifecycle begins
-                                                        at `proposed`)
+```mermaid
+flowchart LR
+    PR([open PR]) -- T-PROP --> proposed
+    proposed -- T-ACC --> accepted
+    accepted -- T-RUN --> running
+    running -- "T-SUP / T-REF" --> settled["settled-supported<br/>or settled-refuted"]
+    settled -- T-VER --> nextver(["new version N+1<br/>lifecycle begins<br/>at proposed"])
+    proposed -- T-WDP --> withdrawn1["withdrawn<br/>(terminal)"]
+    accepted -- T-WDA --> withdrawn2["withdrawn<br/>(terminal)"]
+    settled -- T-WITH --> withdrawn3["withdrawn<br/>(terminal)"]
 ```
+
+Note: the diagram above is the simplified mining path. The full
+transition set — including `T-CON` (6-month confirmation) and
+`T-OVR` (overturn back to `running`) — appears in the table
+below.
 
 ### Transition table
 

@@ -1344,34 +1344,16 @@ kind: explanation
 
 ## Components
 
-```text
- ┌────────────────────┐         ┌────────────────────┐
- │ Hypothesis Registry│◀──PR───▶│   GitHub (this     │
- │  hypotheses/*.md   │         │   repo, mirrored   │
- └─────────┬──────────┘         │   to content-addr  │
-           │                    │   storage)         │
-           │                    └────────────────────┘
-           │
-     ┌─────▼──────┐       announces       ┌────────────┐
-     │   Miner    │──────spec/result─────▶│ Validator  │
-     │  (neuron)  │                       │  (neuron)  │
-     └─────┬──────┘                       └─────┬──────┘
-           │                                    │
-           │ runs in                             │ reruns in
-      ┌────▼─────┐                          ┌────▼─────┐
-      │ Runtime  │                          │ Runtime  │
-      │ (sandbox)│                          │ (sandbox)│
-      └────┬─────┘                          └─────┬────┘
-           │                                      │
-           │     artifacts (content-addressed)    │
-           └──────────────▶ Storage ◀─────────────┘
-                                │
-                                │   weights
-                                ▼
-                          ┌──────────┐
-                          │Bittensor │
-                          │  chain   │
-                          └──────────┘
+```mermaid
+flowchart TB
+    Registry["Hypothesis Registry<br/>hypotheses/*.md"] <-- PR --> GitHub["GitHub<br/>(repo, mirrored to<br/>content-addressed storage)"]
+    Registry --> Miner["Miner<br/>(neuron)"]
+    Miner -- "announces<br/>spec / result" --> Validator["Validator<br/>(neuron)"]
+    Miner -- runs in --> RuntimeM["Runtime<br/>(sandbox)"]
+    Validator -- reruns in --> RuntimeV["Runtime<br/>(sandbox)"]
+    RuntimeM -- "artifacts<br/>(content-addressed)" --> Storage[("Storage")]
+    RuntimeV -- "artifacts<br/>(content-addressed)" --> Storage
+    Storage -- weights --> Chain["Bittensor<br/>chain"]
 ```
 
 ### Hypothesis Registry
@@ -4719,27 +4701,22 @@ T-OVR fires).
 
 ## Transitions
 
-```text
-                                    +------------+
-                                    | withdrawn  |   (terminal, across all versions)
-                                    +------------+
-                                          ^
-                                          |  T-WITH
-                                          |
-                  T-PROP        T-ACC          T-RUN
-    (create PR) ─────▶  proposed ─────▶  accepted ─────▶  running
-                           │               │                │
-                  T-WDP    │               │ T-WDA          │ T-SUP / T-REF
-                           ▼               ▼                ▼
-                         withdrawn     withdrawn     settled-supported
-                                                       or settled-refuted
-                                                            │
-                                                            │  T-VER
-                                                            ▼
-                                                       (new version N+1
-                                                        lifecycle begins
-                                                        at `proposed`)
+```mermaid
+flowchart LR
+    PR([open PR]) -- T-PROP --> proposed
+    proposed -- T-ACC --> accepted
+    accepted -- T-RUN --> running
+    running -- "T-SUP / T-REF" --> settled["settled-supported<br/>or settled-refuted"]
+    settled -- T-VER --> nextver(["new version N+1<br/>lifecycle begins<br/>at proposed"])
+    proposed -- T-WDP --> withdrawn1["withdrawn<br/>(terminal)"]
+    accepted -- T-WDA --> withdrawn2["withdrawn<br/>(terminal)"]
+    settled -- T-WITH --> withdrawn3["withdrawn<br/>(terminal)"]
 ```
+
+Note: the diagram above is the simplified mining path. The full
+transition set — including `T-CON` (6-month confirmation) and
+`T-OVR` (overturn back to `running`) — appears in the table
+below.
 
 ### Transition table
 
