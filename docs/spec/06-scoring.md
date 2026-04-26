@@ -181,6 +181,33 @@ Wallclock cost is priced at a spot-market reference set in
 `src/hypotheses/scoring/cost.py` (MANDATORY: a single constant table,
 not per-call lookups). Storage is priced per GiB-month.
 
+### Profile tiers
+
+Each hardware profile carries a tier classification that the
+hypothesis-acceptance gate ([HM-REQ-0120](02-hypothesis-format.md#schema-validation))
+keys on:
+
+| profile | tier | rationale |
+|---------|------|-----------|
+| `cpu-small` | safe | break-even on emission alone at moderate `N_miners` |
+| `cpu-large` | safe | break-even on emission alone at moderate `N_miners` |
+| `single-gpu-24gb` | gated | validator break-even fails at the [HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets) floor without sponsor supplementation |
+| `single-gpu-80gb` | gated | same |
+| `multi-gpu-4x80gb` | gated | same |
+
+**Safe tier** hypotheses run on emission-side economics alone
+and accept submissions permissionlessly. **Gated tier**
+hypotheses MUST carry a `sponsorship` block per
+[`02 § sponsorship`](02-hypothesis-format.md#sponsorship); the
+bounty supplements validator emission so reruns at heavy
+profiles remain profitable. The classification was set by
+ADR 0019's tier-2 pivot in response to the criterion-2/3
+joint failure surfaced by ADRs 0017 + 0018.
+
+The tier of a profile is a maintainer-controlled parameter
+([20 § Parameter inventory](20-economic-model.md#parameter-inventory))
+that PR-E.5's calibration ratchet revises as Phase 2 data lands.
+
 ## External-verifiability anchor
 
 > **HM-REQ-0060** Every scored hypothesis MUST have at least one

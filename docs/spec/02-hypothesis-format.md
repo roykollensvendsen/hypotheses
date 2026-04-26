@@ -186,6 +186,35 @@ external_anchor:
   metric: top1_accuracy
 ```
 
+### `sponsorship`
+
+A counterparty-funded bounty paid on settlement. **Required**
+for hypotheses whose `hardware_profile` is in the
+[gated tier](06-scoring.md#profile-tiers); optional for safe-
+tier hypotheses (which are funded by emission alone). The
+gate exists because validator break-even at heavy profiles
+fails outside the cheap-profile regime — see
+[ADR 0017](../adr/0017-validator-unit-economics.md) and
+[ADR 0019](../adr/0019-viability-verdict-not-viable-as-designed.md).
+
+```yaml
+sponsorship:
+  sponsor_id: "researchhub:0xABC..."   # opaque identifier; counterparty-defined
+  bounty_tao: 5.0                      # paid on settlement
+  split:                                # (miner, validators, treasury); sums to 1.0
+    miner: 0.60
+    validators: 0.30
+    treasury: 0.10
+  escrow_block: 1234567                 # block height bounty was locked
+```
+
+The split defaults to `(0.60, 0.30, 0.10)` per
+[`27 § G open question 2`](27-economic-strategy.md#g-open-questions);
+declared explicitly here so per-sponsor variations remain
+auditable. The validator share of the bounty supplements
+emission-side dividends, restoring break-even at heavy
+profiles.
+
 ## Schema validation
 
 > **HM-REQ-0001** Hypothesis front matter is governed by
@@ -202,6 +231,18 @@ external_anchor:
 > the analysis plan operationalises the finding. Phase 0 hypotheses
 > grandfather without the field; Phase 1 scoring rejects submissions
 > against hypotheses that lack one.
+
+> **HM-REQ-0120** A hypothesis whose `hardware_profile` is in the
+> [gated tier](06-scoring.md#profile-tiers) (`single-gpu-*` or
+> `multi-gpu-*`) MUST declare a `sponsorship` block. A gated-tier
+> hypothesis lacking sponsorship is rejected at acceptance.
+> Safe-tier hypotheses (`cpu-small`, `cpu-large`) declare
+> sponsorship only when a counterparty wishes to fund them
+> additionally. The gate operationalises ADR 0019's
+> tier-2 pivot: validator break-even at heavy profiles fails on
+> emission alone, so heavy profiles must carry their own
+> bounty per
+> [`27 § C.1`](27-economic-strategy.md#c1-sponsored-hypotheses).
 
 - Front matter is validated against the JSON Schema at
   [`src/hypotheses/spec/schema/hypothesis.schema.json`](../../src/hypotheses/spec/schema/hypothesis.schema.json).

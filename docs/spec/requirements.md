@@ -54,6 +54,7 @@ checker enforces one-way invariants:
 | HM-REQ-0090 | [21](21-adversarial-simulator.md) | Coverage requirement | Every threat in 16 must have at least one fixture under `tests/golden/adversarial/` by end of Phase 2; simulator runs nightly and failures block release | normative |
 | HM-REQ-0100 | [22](22-security-bounty.md) | Embargo before public disclosure | A security-hypothesis whose first appearance on `main` was NOT preceded by a private SECURITY.md advisory has its `improvement` component zeroed at scoring time; rigor + reproduction still pay (the public fixture is still useful coverage) | normative |
 | HM-REQ-0110 | [12](12-implementation-constraints.md) | Documentation discipline | Every fact, contract, parameter, or list in this repository has exactly one canonical home; other docs link rather than restate; drift between a canonical statement and a restatement is a bug in the restatement | normative |
+| HM-REQ-0120 | [02](02-hypothesis-format.md) | Schema validation | A hypothesis declaring a gated-tier `hardware_profile` (any `single-gpu-*` or `multi-gpu-*` profile) MUST include a `sponsorship` block; without it the hypothesis is rejected at acceptance. Operationalises ADR 0019's tier-2 pivot | normative |
 
 ## How to add
 
