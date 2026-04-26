@@ -31,11 +31,11 @@ Register two custom pytest markers in `pyproject.toml`:
 - `system_chain` — Phase-2 chain scenarios; skipped unless the env
   var is set.
 
-Turn on `--strict-markers` so a typo in a marker name (e.g.
-`system_loca`) fails collection rather than silently selecting the
-wrong test set. `make system-test` selects `-m system_local`; the
-chain profile is opt-in via `make system-test PROFILE=chain` once
-PR-C lands the dispatcher.
+Turn on `--strict-markers` so a typo in a marker name fails
+collection rather than silently selecting the wrong test set.
+`make system-test` selects `-m system_local`; the chain profile is
+opt-in via `make system-test PROFILE=chain` once PR-C lands the
+dispatcher.
 
 ## Consequences
 
