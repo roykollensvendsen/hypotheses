@@ -43,7 +43,7 @@ from _doc_lib import parse_frontmatter  # noqa: E402
 AGENTS_PATH = Path("AGENTS.md")
 SPEC_DIR = Path("docs/spec")
 
-ARITHMETIC_TOLERANCE = 0.25
+ARITHMETIC_TOLERANCE = 0.10
 
 # Parenthetical shapes allowed after a doc reference:
 #   (~1500)                       — single value
@@ -137,7 +137,6 @@ def main() -> int:
     # rows[0] header, rows[1] separator, rows[2:] data
     data_rows = rows[2:]
     errors: list[str] = []
-    warnings: list[str] = []
 
     for row in data_rows:
         cells = [c.strip() for c in row.strip("|").split("|")]
@@ -178,7 +177,7 @@ def main() -> int:
                         if declared:
                             ratio = abs(lo - declared) / declared
                             if ratio > ARITHMETIC_TOLERANCE:
-                                warnings.append(
+                                errors.append(
                                     f"row '{task}': summand '{raw}' parenthetical "
                                     f"{lo} differs from {target.name} "
                                     f"front-matter tokens={declared} (off by {ratio:.0%})"
@@ -191,22 +190,18 @@ def main() -> int:
                 sum_min * (1 - ARITHMETIC_TOLERANCE) <= hi
                 and sum_max * (1 + ARITHMETIC_TOLERANCE) >= lo
             ):
-                warnings.append(
+                errors.append(
                     f"row '{task}': total cell '{total_cell}' does not match "
                     f"sum of summands ({sum_min}-{sum_max}) within "
                     f"±{ARITHMETIC_TOLERANCE:.0%}"
                 )
 
-    for warn in warnings:
-        print(f"warning: {warn}")
     if errors:
         for err in errors:
             print(f"error: {err}")
-        print(
-            f"\n{len(errors)} error(s), {len(warnings)} warning(s) over {len(data_rows)} rows"
-        )
+        print(f"\n{len(errors)} error(s) over {len(data_rows)} rows")
         return 1
-    print(f"agents routing OK: {len(data_rows)} rows ({len(warnings)} warning(s))")
+    print(f"agents routing OK: {len(data_rows)} rows")
     return 0
 
 
