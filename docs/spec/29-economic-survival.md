@@ -1,7 +1,7 @@
 ---
 name: economic survival
 description: scope doc for the quantitative survival-analysis work stream; first sub-section pins miner unit economics
-tokens: 2400
+tokens: 3700
 load_for: [governance, review]
 depends_on: ["00.5", "06", "11", "20", "27"]
 kind: contract
@@ -205,39 +205,198 @@ like a duopoly.
 
 ## D. Sub-PR roadmap
 
-The four follow-up PRs build on this one:
+This doc tracks four sub-sections that the original scope-doc
+PR-E.1 deferred. The first (validator unit economics) lands
+inline below; the rest carry placeholder summaries until their
+landing PR.
 
-### PR-E.2 — Validator unit economics
+### D.1 Validator unit economics
 
-Per-submission rerun cost (`rerun_fraction · c_compute_per_seed`),
-validator dividend share (`f_validator / N_validators`),
-break-even validator-set size factoring in
-`min_validators_d22_coverage = 6` (see
-[HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets)).
-Lands as § D.1 of this doc plus an ADR.
+#### Per-cycle revenue
 
-### PR-E.3 — Equilibrium / Nash analysis
+A validator's per-epoch dividend share is the validator-side
+emission scaled by the validator's stake fraction. For the
+median validator (stake `≈ 1/N_validators` of network total):
+
+```text
+R_val_TAO    = (E_epoch · f_validator) / N_validators
+R_val_USD    = R_val_TAO · t_TAO
+             = (E_epoch · f_validator · t_TAO) / N_validators
+```
+
+#### Per-cycle rerun cost
+
+Per [`05 § Pipeline`](05-validator.md#pipeline), each
+validator independently samples `rerun_fraction = 0.4` of the
+declared seeds for *every* submission they observe. Total
+reruns per validator per epoch:
+
+```text
+reruns_val_epoch = N_subs_epoch · rerun_fraction · S_seeds_avg
+```
+
+Where `N_subs_epoch = k · N_miners` (rate-limit ceiling per
+[`05 § Pipeline`](05-validator.md#pipeline) step 1) and
+`S_seeds_avg ≈ 5` (the modal value across H-0001…H-0006
+hypotheses; the
+[`06 § Rigor`](06-scoring.md#rigor) `≥ 3 seeds` floor pushes
+operators to 5 to clear the rigor checkpoint with a comfortable
+margin).
+
+Per-seed compute cost is the per-submission `c_compute` from
+[`06 § Cost penalty`](06-scoring.md#cost-penalty) divided by
+`S_seeds_avg`:
+
+```text
+c_per_seed   = c_compute / S_seeds_avg
+C_val_epoch  = reruns_val_epoch · c_per_seed
+             = N_subs_epoch · rerun_fraction · c_compute
+             = k · N_miners · rerun_fraction · c_compute
+```
+
+The `S_seeds_avg` factor cancels — validator cost is
+proportional to total miner output, not to seed count per
+submission.
+
+#### Honest break-even condition
+
+```text
+R_val_USD  ≥  C_val_epoch  +  c_overhead_validator
+
+(E_epoch · f_validator · t_TAO) / N_validators
+                          ≥  k · N_miners · rerun_fraction · c_compute + c_overhead_validator
+```
+
+Solving for the maximum `N_validators` that breaks even at a
+fixed `N_miners`:
+
+```text
+N_validators ≤ (E_epoch · f_validator · t_TAO)
+              / (k · N_miners · rerun_fraction · c_compute
+                 + c_overhead_validator)         (**)
+```
+
+The structural shape: validator break-even capacity *shrinks*
+as `N_miners` grows, because the rerun workload scales with
+miner output but the validator-side emission is fixed. This is
+the opposite of the miner side, where break-even capacity
+*grows* with TAO price and emission.
+
+`c_overhead_validator` is **assumed** at $0.10/epoch — operator
+time, hotkey rotation, dashboard hosting amortised. Calibrated
+in PR-E.5.
+
+#### Worked example (Q2 2026 reference)
+
+Reference parameters from § C plus:
+
+- `f_validator` = 0.18
+- `S_seeds_avg` = 5
+- `c_overhead_validator` = $0.10/epoch (assumed)
+
+Break-even `N_validators` per profile, at varying `N_miners`,
+from `(**)`:
+
+| `N_miners` | profile | `c_compute` | `C_val_epoch` | break-even `N_validators` (R = C) |
+|-----------:|---------|------------:|--------------:|----------------------------------:|
+| 10 | `cpu-small` | $0.10 | $1.20 | ≈ 41 |
+| 10 | `single-gpu-24gb` | $2.00 | $24.00 | ≈ 2 |
+| 50 | `cpu-small` | $0.10 | $6.00 | ≈ 9 |
+| 50 | `cpu-large` | $0.50 | $30.00 | ≈ 2 |
+| 50 | `single-gpu-24gb` | $2.00 | $120.00 | < 1 (unprofitable) |
+| 100 | `cpu-small` | $0.10 | $12.00 | ≈ 4 |
+| 100 | `cpu-large` | $0.50 | $60.00 | < 1 (unprofitable) |
+
+Read: at `N_miners = 50` and an all-`cpu-small` workload,
+the validator population can grow to `≈ 9` before validators
+stop breaking even — close to the `min_validators_d22_coverage = 6`
+floor with very little headroom. Heavier profiles compress the
+window aggressively; at `single-gpu-24gb` with 50 miners,
+**no** number of validators is profitable at reference numbers.
+
+#### Implications
+
+- **Validators can't break even at the HM-INV-0030 floor for
+  heavy-profile workloads.** This is a real failure of
+  viability criterion 2 in
+  [§ E](#e-viability-criteria) at reference numbers. The
+  decision protocol triggers a tier-1 pivot:
+  - **Lever 1** — raise `rerun_fraction` is the wrong
+    direction (raises cost). Skip.
+  - **Lever 2** — raise `f_validator` from 0.18 to ~0.30
+    would lift validator revenue ~67 %, putting heavy-profile
+    workloads back at break-even at modest `N_validators`.
+  - **Lever 3** — cost-table refresh: raise per-submission
+    budgets in [`06 § Cost penalty`](06-scoring.md#cost-penalty)
+    to reduce the cost-penalty hit and indirectly subsidise
+    heavier profiles.
+- **The cheap-profile workload survives only at thin
+  networks.** With miners on `cpu-small`, a 50-miner network
+  supports ≈ 9 validators; a 100-miner network drops to ≈ 4
+  validators — below the D2.2 floor. The *opposite* of the
+  miner side: more miners makes validators *less* viable.
+- **Asymmetric break-even surfaces.** Miner break-even
+  `N_miners` grows with `t_TAO` (§ C); validator break-even
+  `N_validators` grows with `t_TAO` too (cost scales with
+  workload, revenue scales with price). But validator
+  break-even *shrinks* with `N_miners` while miner break-even
+  is *capped* by `N_miners` — this is the fixed-point shape
+  PR-E.3 will analyse.
+- **The honest-play arithmetic in
+  [`20 § Honest-play arithmetic`](20-economic-model.md#honest-play-arithmetic)
+  doesn't address validator profitability directly.** The
+  analysis here adds the missing complement: even when miners
+  break even (§ C), validators above the D2.2 floor only break
+  even on cheap-profile workloads at moderate `N_miners`, and
+  the sub-game collapses without them.
+
+> **assumption: c4a-emission-sufficient-steady-state** —
+> validator-side break-even at the D2.2 floor requires either
+> a workload mix dominated by cheap profiles, **or** a
+> tier-1 / tier-2 pivot (lever 2 or 5) to lift validator
+> revenue / lower validator cost.
+> See [00.5 § c4a-emission-sufficient-steady-state](00.5-foundations.md#c4a-emission-sufficient-steady-state).
+
+This is the first criterion that fails the viability protocol
+in § E at reference numbers. The verdict ADR (forthcoming
+after PR-E.3 + E.4 + E.5 + ADR-0021 land) cannot return
+"viable" without one of: (a) recalibration showing
+`c_overhead_validator` is dramatically lower than assumed,
+(b) `f_validator` raised under lever 2, (c) a
+[hypothesis](02-hypothesis-format.md)-mix restriction under
+lever 4 enforcing a cheap-profile floor,
+or (d) the simulator (ADR 0021) showing equilibrium dynamics
+the analytic ceiling here misses.
+
+### D.2 Equilibrium / Nash analysis (PR-E.3)
 
 Whether the participation point where miners and validators
-both break even is stable. Identifies regimes where
-participation collapses or runs away. Probably uses the
-two-population replicator dynamics frame plus a fixed-point
-existence proof. Lands as § D.2 plus ADR.
+both break even is stable. The asymmetric shape from D.1
+(validator break-even shrinks with `N_miners`, miner
+break-even *capped* by `N_miners`) suggests the fixed point
+is at the intersection of the two break-even curves. PR-E.3
+proves existence and analyses local stability under
+two-population replicator dynamics. Lands as § D.2 plus ADR
+0018.
 
-### PR-E.4 — Sensitivity tables
+### D.3 Sensitivity tables (PR-E.4)
 
 Combined miner + validator break-even surfaces over
-`(t_TAO, E_epoch, f_miner)`, identifying the regimes where the
-mechanism is robust vs fragile. Lands as § D.3 plus ADR.
+`(t_TAO, E_epoch, f_miner, rerun_fraction)`, identifying the
+regimes where the mechanism is robust vs fragile. Critical
+for viability criterion 4 in § E. Lands as § D.3 plus ADR
+0019.
 
-### PR-E.5 — Calibration ratchet
+### D.4 Calibration ratchet (PR-E.5)
 
-Phase 2 produces real `s_miner`, `submissions_per_epoch`, and
-`c_overhead` data. PR-E.5 establishes the cadence (quarterly
-re-fit), the trigger condition (any reference number outside
-the model's predicted range by ≥ 50 % opens a recalibration ADR),
-and the link to the operating-cost catalogue in
-[`28 § C`](28-treasury.md#c-operating-cost-catalogue).
+Phase 2 produces real `s_miner`, `submissions_per_epoch`,
+`c_overhead`, and `c_overhead_validator` data. PR-E.5
+establishes the cadence (quarterly re-fit), the trigger
+condition (any reference number outside the model's predicted
+range by ≥ 50 % opens a recalibration ADR), and the link to
+the operating-cost catalogue in
+[`28 § C`](28-treasury.md#c-operating-cost-catalogue). Lands
+as § D.4 plus ADR 0020.
 
 ## E. Viability criteria
 
