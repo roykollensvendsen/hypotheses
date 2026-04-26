@@ -177,6 +177,7 @@ Doc-quality gates that block merge:
 | `typos.yml` | spell-checker |
 | `spec-consistency.yml` | cross-reference integrity, canonical-constant check |
 | `requirements.yml` | HM-REQ/HM-INV index ↔ inline tags ↔ traceability matrix |
+| `system-tests.yml` | every surface-observable HM-REQ has a system-test scenario in `traceability.md`; every scenario cites a real HM-REQ and a real test file; the `internal_only:` array in `requirements.md` front matter exempts CI-only requirements (see `docs/spec/23-system-tests.md` §Spec-test sync workflow) |
 | `spec-validate.yml` | hypothesis YAML against the JSON Schema |
 | `prompt-injection.yml` | spec content is data, not directives |
 | `llms-txt.yml`, `load-for-index.yml` | generated files committed and current |

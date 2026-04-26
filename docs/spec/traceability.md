@@ -63,12 +63,16 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-MINE-08 | HM-REQ-0030 | tests/system/mine/test_unregistered_hotkey.py::test_unregistered_hotkey | pending |
 | S-MINE-09 | HM-REQ-0001 | tests/system/mine/test_sdk_cli_parity.py::test_sdk_cli_parity | pending |
 | S-MINE-10 | HM-REQ-0001 | tests/system/mine/test_mcp_list.py::test_mcp_list | pending |
+| S-MINE-11 | HM-REQ-0060 | tests/system/mine/test_external_anchor_required.py::test_external_anchor_required | pending |
+| S-MINE-12 | HM-REQ-0080 | tests/system/mine/test_oracle_composition.py::test_oracle_composition | pending |
 | S-VAL-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_discover_score.py::test_discover_score | pending |
-| S-VAL-02 | HM-REQ-0010 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
+| S-VAL-02 | HM-REQ-0010, HM-REQ-0011 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
 | S-VAL-03 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_rerun_tolerance.py::test_rerun_tolerance | pending |
 | S-VAL-04 | HM-REQ-0012 | tests/system/validate/test_no_self_score.py::test_no_self_score | pending |
 | S-VAL-05 | HM-REQ-0021 | tests/system/validate/test_novelty_tiebreak.py::test_novelty_tiebreak | pending |
 | S-VAL-06 | HM-REQ-0010 | tests/system/validate/test_mcp_score_parity.py::test_mcp_score_parity | pending |
+| S-VAL-07 | HM-REQ-0070 | tests/system/validate/test_two_tier_settlement.py::test_two_tier_settlement | pending |
+| S-VAL-08 | HM-REQ-0100 | tests/system/validate/test_security_embargo.py::test_security_embargo | pending |
 | S-DEV-01 | HM-REQ-0001 | tests/system/develop/test_doctor_clean.py::test_doctor_clean | pending |
 | S-DEV-02 | HM-REQ-0001 | tests/system/develop/test_doctor_broken.py::test_doctor_broken | pending |
 | S-DEV-03 | HM-REQ-0001 | tests/system/develop/test_init_layout.py::test_init_layout | pending |
