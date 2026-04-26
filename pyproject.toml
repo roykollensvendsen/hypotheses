@@ -7,7 +7,7 @@
 
 [project]
 name = "hypotheses"
-version = "0.0.0-dev"
+version = "0.1.0"
 description = "Permissionless scientific hypothesis market on Bittensor."
 requires-python = ">=3.12"
 license = { text = "AGPL-3.0-or-later" }
