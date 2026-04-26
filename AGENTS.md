@@ -113,11 +113,11 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Implement a scoring component** (e.g. composite, rigor) | 06 (~2200) + 18 (~3300) + invariants (~600) + antipatterns/ap-0002 | ≈ 6500 |
 | **Implement errors.py** (T-P1-002) | 12 (~3400) + 16 (~3800) | ≈ 7200 |
 | **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~1000) | ≈ 5200 |
-| **Implement the validator pipeline** (T-P1-015) | 05 (~1400) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
+| **Implement the validator pipeline** (T-P1-015) | 05 (~2200) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
 | **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
-| **Review a validator-side PR** | 05 (~1400) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
+| **Review a validator-side PR** | 05 (~2200) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
 | **Draft a new hypothesis** | 02 (~1700) + 01 (~700) + existing H-000x (~800–2500) | ≈ 3200–4900 |
-| **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
+| **Run a validator-operator agent** | 05 (~2200) + 13 (~1800) + 19 (~3800) | ≈ 7800 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
 | **Add a normative spec claim** | 25 (~2500) + references (~1000) + 00.5 (~3500) | ≈ 6700 |

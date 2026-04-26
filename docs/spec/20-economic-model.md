@@ -96,6 +96,7 @@ who can change it, how.
 | per-profile wallclock budget (USD) | table in [06 § cost penalty](06-scoring.md#cost-penalty) | same | maintainer | spec PR + ADR |
 | per-profile storage budget (USD) | table in [06 § cost penalty](06-scoring.md#cost-penalty) | same | maintainer | spec PR + ADR |
 | rerun fraction | 0.40 | [05 § pipeline](05-validator.md#pipeline) | maintainer | spec PR + ADR |
+| min validators for D2.2 ≥95% per-seed coverage | 6 | [05 § coverage](05-validator.md#coverage-under-thin-validator-sets) | maintainer | spec PR + ADR |
 | rerun tolerance (default) | 1% accuracy-like, 5% wallclock/FLOPs | [05 § pipeline](05-validator.md#pipeline) | maintainer | spec PR + ADR |
 | announcement rate limit | 3 per hotkey per epoch | [05 § discover](05-validator.md#pipeline) | maintainer | spec PR + ADR |
 | per-hotkey storage quota | 10 GiB | [03 § failure modes](03-architecture.md#failure-modes-the-architecture-must-resist) | maintainer | spec PR + ADR |
@@ -144,12 +145,19 @@ dynamic; typically ≥ 1000 TAO to be "effective" at weight-setting).
 The subnet does not set this — the chain does — but the threshold
 shapes validator-set size and therefore YUMA consensus dynamics.
 
-**Design note.** Small validator sets (N < 5) are vulnerable to
-collusion even with the self-scoring ban. The subnet design
-anticipates a validator set growing from 3–5 in Phase 2 testnet to
-≥ 10 at mainnet launch. Economic parameters assume the larger set;
-a thin validator set is an operational concern, not a spec-level
-failure mode.
+**Design note.** Small validator sets are doubly vulnerable: to
+collusion (self-scoring ban does not prevent a coordinated bloc
+of distinct hotkeys) and to silent degradation of D2.2 reproduction
+coverage (see
+[`05 § Coverage under thin validator sets`](05-validator.md#coverage-under-thin-validator-sets)
+— at the Phase 1–2 default `rerun_fraction = 0.4`, single-seed
+cherry-picking succeeds 21.6% of the time at `N = 3` and falls
+under 5% only at `N ≥ 6`, the floor named in HM-INV-0030). The
+subnet design anticipates a validator set growing from 3–5 in
+Phase 2 testnet to ≥ 10 at mainnet launch. Economic parameters
+assume the larger set; below the `min_validators_d22_coverage`
+floor, D2.2 is no longer effective and the maintainer's response
+is documented in [`docs/adr/0011-d22-coverage-bound.md`](../adr/0011-d22-coverage-bound.md).
 
 ## Scoring weight justification
 

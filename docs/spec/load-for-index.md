@@ -22,7 +22,7 @@ load-sets — see that table for per-task curated bundles.
 
 ## `agent-operator`
 
-Total declared tokens: **35300**.
+Total declared tokens: **36100**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -31,7 +31,7 @@ Total declared tokens: **35300**.
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
-| [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
+| [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
 | [docs/spec/09-protocol.md](09-protocol.md) | protocol | 800 |
 | [docs/spec/13-agent-integration.md](13-agent-integration.md) | agent integration | 1800 |
@@ -69,7 +69,7 @@ Total declared tokens: **28100**.
 
 ## `implementation`
 
-Total declared tokens: **61200**.
+Total declared tokens: **62000**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -79,7 +79,7 @@ Total declared tokens: **61200**.
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
-| [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
+| [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
 | [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
@@ -123,7 +123,7 @@ Total declared tokens: **12200**.
 
 ## `review`
 
-Total declared tokens: **66300**.
+Total declared tokens: **67100**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -133,7 +133,7 @@ Total declared tokens: **66300**.
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
-| [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
+| [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
 | [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |

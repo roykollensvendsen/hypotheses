@@ -298,11 +298,11 @@ minimum load-set for common tasks, ordered by expected frequency.
 | **Implement a scoring component** (e.g. composite, rigor) | 06 (~2200) + 18 (~3300) + invariants (~600) + antipatterns/ap-0002 | ≈ 6500 |
 | **Implement errors.py** (T-P1-002) | 12 (~3400) + 16 (~3800) | ≈ 7200 |
 | **Implement the signing module** (T-P1-004) | 09 (~800) + 12 (~3400) + requirements (~1000) | ≈ 5200 |
-| **Implement the validator pipeline** (T-P1-015) | 05 (~1400) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
+| **Implement the validator pipeline** (T-P1-015) | 05 (~2200) + 06 (~2200) + 16 (~3800) + 18 (~3300) | ≈ 10700 |
 | **Review a miner-side PR** | 04 (~900) + 12 (~3400) + 16 (~3800) + antipatterns/ (~1500) | ≈ 9600 |
-| **Review a validator-side PR** | 05 (~1400) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
+| **Review a validator-side PR** | 05 (~2200) + 06 (~2200) + 16 (~3800) + antipatterns/ (~1500) | ≈ 8900 |
 | **Draft a new hypothesis** | 02 (~1700) + 01 (~700) + existing H-000x (~800–2500) | ≈ 3200–4900 |
-| **Run a validator-operator agent** | 05 (~1400) + 13 (~1800) + 19 (~3800) | ≈ 7000 |
+| **Run a validator-operator agent** | 05 (~2200) + 13 (~1800) + 19 (~3800) | ≈ 7800 |
 | **Write a system-test scenario** | 13 (~1800) + 14 (~900) + 23 (~3500) | ≈ 6200 |
 | **Apply design heuristics in a PR** | 12 (~3400) + 24 (~3000) + antipatterns/ (~1500) | ≈ 7900 |
 | **Add a normative spec claim** | 25 (~2500) + references (~1000) + 00.5 (~3500) | ≈ 6700 |
@@ -892,7 +892,14 @@ Honest assessment. Every claim cites the strongest source.
   prior subnet has had to defend against the 90%-in-1% reality
   while maintaining permissionless access. D1.1 (external-anchor)
   is a novel defence; its effectiveness is an open empirical
-  question.
+  question. *Partial progress:* the D2.2 reproduction-coverage
+  floor is now quantified — HM-INV-0030 in
+  [`05 § Coverage under thin validator sets`](05-validator.md#coverage-under-thin-validator-sets)
+  proves N ≥ 6 validators are required for ≥95% per-seed
+  coverage at the default `rerun_fraction = 0.4`. That bound
+  is mechanical; the broader question of whether the
+  validator-set actually reaches and stays above it remains
+  empirical.
 
 - **Long-tail research compatible with epoch-paid validators.** No
   prior Bittensor subnet has attempted research with months-to-
@@ -1762,7 +1769,7 @@ This doc is done when:
 ---
 name: validator
 description: validator pipeline, rerun policy, score commitment
-tokens: 1400
+tokens: 2200
 load_for: [implementation, agent-operator, review]
 depends_on: [02, 03, 06]
 kind: contract
@@ -1869,6 +1876,69 @@ epochs — revisit if an epoch changes length):
 9. **Score.** Compute the composite score (see [06](06-scoring.md)).
 10. **Commit weights.** Normalise scores per-miner-hotkey, set weights via
     YUMA.
+
+## Coverage under thin validator sets
+
+The `(validator_hotkey, epoch, spec_id, version)` seed makes every
+validator's rerun sample independent of every other validator's.
+For a submission with `S` declared seeds, each validator samples
+`f = rerun_fraction = 0.4` of them (subject to the minimum-1-seed
+floor for `S ≤ 2`). Under independent sampling, the probability
+that any *specific* seed is sampled by at least one of `N`
+validators is:
+
+```text
+P(seed-covered | N) = 1 − (1 − f)^N      (for S ≥ 3)
+```
+
+A miner cheating on even a single seed must evade every
+validator's sample to escape the zero-on-rerun-mismatch rule
+in [§ What kills a submission](#what-kills-a-submission). At
+`f = 0.4`:
+
+| `N` | `P(seed-covered)` |
+|----:|------------------:|
+|   1 |             0.400 |
+|   2 |             0.640 |
+|   3 |             0.784 |
+|   4 |             0.870 |
+|   5 |             0.922 |
+|   6 |             0.953 |
+|   7 |             0.972 |
+|  10 |             0.994 |
+
+> **HM-INV-0030** Under uniform-independent rerun sampling,
+> the probability that a specific seed is covered by at least
+> one of `N` validators is `1 − (1 − rerun_fraction)^N`. The
+> validator floor for ≥95% per-seed coverage at the Phase 1–2
+> default `rerun_fraction = 0.4` is therefore
+> `min_validators_d22_coverage = 6`.
+
+**Failure mode below the floor.** A validator set of `N < 6`
+silently degrades [D2.2 — Reproduction by random sample](00.5-foundations.md#defences-against-f2-miner-cheating):
+the cherry-picking miner's expected payoff scales with
+`P(seed-not-covered)^k` for `k` cheated seeds, and at `N = 3`
+single-seed cheating succeeds 21.6% of the time. The validator-
+set growth target in [`20-economic-model.md § Validator
+registration`](20-economic-model.md#validator-registration) is
+`N ≥ 10` at mainnet; this section names the *floor below which
+D2.2 is no longer effective* rather than the steady-state
+target.
+
+**Edge case: `S = 2`.** The minimum-1-seed floor in
+[§ Pipeline](#pipeline) step 4 means each validator samples
+exactly one of two seeds, so `P(seed-covered | N) = 1 − 0.5^N`.
+Coverage at the same 95% threshold requires `N ≥ 5`. Submissions
+with `S ≤ 2` are discouraged at the schema level and flagged in
+[`24-design-heuristics.md`](24-design-heuristics.md) as
+low-rigor.
+
+**Out of scope.** Adversarial validator-coverage (a coordinated
+validator bloc deliberately co-sampling the same seeds to leave
+gaps) is an F1-class threat, not addressed here. The white-hat
+programme in [`22-security-bounty.md`](22-security-bounty.md)
+covers it; a fixture demonstrating coalition-shaped seed-gap
+attacks lands as a security-hypothesis under HM-REQ-0100.
 
 ## What kills a submission
 
@@ -6289,6 +6359,7 @@ who can change it, how.
 | per-profile wallclock budget (USD) | table in [06 § cost penalty](06-scoring.md#cost-penalty) | same | maintainer | spec PR + ADR |
 | per-profile storage budget (USD) | table in [06 § cost penalty](06-scoring.md#cost-penalty) | same | maintainer | spec PR + ADR |
 | rerun fraction | 0.40 | [05 § pipeline](05-validator.md#pipeline) | maintainer | spec PR + ADR |
+| min validators for D2.2 ≥95% per-seed coverage | 6 | [05 § coverage](05-validator.md#coverage-under-thin-validator-sets) | maintainer | spec PR + ADR |
 | rerun tolerance (default) | 1% accuracy-like, 5% wallclock/FLOPs | [05 § pipeline](05-validator.md#pipeline) | maintainer | spec PR + ADR |
 | announcement rate limit | 3 per hotkey per epoch | [05 § discover](05-validator.md#pipeline) | maintainer | spec PR + ADR |
 | per-hotkey storage quota | 10 GiB | [03 § failure modes](03-architecture.md#failure-modes-the-architecture-must-resist) | maintainer | spec PR + ADR |
@@ -6337,12 +6408,19 @@ dynamic; typically ≥ 1000 TAO to be "effective" at weight-setting).
 The subnet does not set this — the chain does — but the threshold
 shapes validator-set size and therefore YUMA consensus dynamics.
 
-**Design note.** Small validator sets (N < 5) are vulnerable to
-collusion even with the self-scoring ban. The subnet design
-anticipates a validator set growing from 3–5 in Phase 2 testnet to
-≥ 10 at mainnet launch. Economic parameters assume the larger set;
-a thin validator set is an operational concern, not a spec-level
-failure mode.
+**Design note.** Small validator sets are doubly vulnerable: to
+collusion (self-scoring ban does not prevent a coordinated bloc
+of distinct hotkeys) and to silent degradation of D2.2 reproduction
+coverage (see
+[`05 § Coverage under thin validator sets`](05-validator.md#coverage-under-thin-validator-sets)
+— at the Phase 1–2 default `rerun_fraction = 0.4`, single-seed
+cherry-picking succeeds 21.6% of the time at `N = 3` and falls
+under 5% only at `N ≥ 6`, the floor named in HM-INV-0030). The
+subnet design anticipates a validator set growing from 3–5 in
+Phase 2 testnet to ≥ 10 at mainnet launch. Economic parameters
+assume the larger set; below the `min_validators_d22_coverage`
+floor, D2.2 is no longer effective and the maintainer's response
+is documented in [`docs/adr/0011-d22-coverage-bound.md`](../adr/0011-d22-coverage-bound.md).
 
 ## Scoring weight justification
 
@@ -8512,7 +8590,9 @@ the system evolves under its allowed transitions.
 Phase 1 test code uses the [Hypothesis](https://hypothesis.readthedocs.io)
 library to enforce each HM-INV as a property-based test; the tests
 live under `tests/properties/` and link back via a
-`# spec: HM-INV-NNNN` comment.
+`# spec: HM-INV-NNNN` comment. Invariants span the lifecycle,
+scoring, runtime, and [validator](05-validator.md) layers; the
+table below collects them by canonical home.
 
 ## Index
 
@@ -8528,6 +8608,7 @@ live under `tests/properties/` and link back via a
 | HM-INV-0011 | [06](06-scoring.md) | Novelty non-increase: for a fixed `(id, version)`, novelty is strictly non-increasing in settlement order (1.0 → 0.5 → 0.0) | `tests/properties/test_scoring.py::test_novelty_non_increase` |
 | HM-INV-0012 | [06](06-scoring.md) | Improvement saturation: `improvement(s, H) ∈ [0, 1]` for any spec H and submission s; 0 when the statistical test fails, 1 when observed effect ≥ target effect | `tests/properties/test_scoring.py::test_improvement_saturation` |
 | HM-INV-0020 | [08](08-experiment-runtime.md) | Determinism: for identical `(spec, seed, hardware_profile, env.lock)`, `metrics.jsonl` is byte-identical across runs | `tests/properties/test_runtime.py::test_determinism_bytes` |
+| HM-INV-0030 | [05](05-validator.md) | Coverage bound: under uniform-independent rerun sampling, P(seed covered ‖ N [validators](05-validator.md)) = 1 − (1 − rerun_fraction)^N; the floor for ≥95% per-seed coverage at f = 0.4 is N ≥ 6 | `tests/properties/test_validator.py::test_coverage_bound` |
 | HM-INV-0021 | [08](08-experiment-runtime.md) | Dataset pin: declared `dataset_revision` matches the fetched blob's content hash on every load | `tests/properties/test_runtime.py::test_dataset_hash_pin` |
 
 ## How to add
@@ -8576,7 +8657,7 @@ load-sets — see that table for per-task curated bundles.
 
 ## `agent-operator`
 
-Total declared tokens: **35300**.
+Total declared tokens: **36100**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -8585,7 +8666,7 @@ Total declared tokens: **35300**.
 | [docs/spec/01-glossary.md](01-glossary.md) | glossary | 700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
-| [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
+| [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
 | [docs/spec/09-protocol.md](09-protocol.md) | protocol | 800 |
 | [docs/spec/13-agent-integration.md](13-agent-integration.md) | agent integration | 1800 |
@@ -8623,7 +8704,7 @@ Total declared tokens: **28100**.
 
 ## `implementation`
 
-Total declared tokens: **61200**.
+Total declared tokens: **62000**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -8633,7 +8714,7 @@ Total declared tokens: **61200**.
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
-| [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
+| [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
 | [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
@@ -8677,7 +8758,7 @@ Total declared tokens: **12200**.
 
 ## `review`
 
-Total declared tokens: **66300**.
+Total declared tokens: **67100**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -8687,7 +8768,7 @@ Total declared tokens: **66300**.
 | [docs/spec/02-hypothesis-format.md](02-hypothesis-format.md) | hypothesis format | 1700 |
 | [docs/spec/03-architecture.md](03-architecture.md) | architecture | 1200 |
 | [docs/spec/04-miner.md](04-miner.md) | miner | 900 |
-| [docs/spec/05-validator.md](05-validator.md) | validator | 1400 |
+| [docs/spec/05-validator.md](05-validator.md) | validator | 2200 |
 | [docs/spec/06-scoring.md](06-scoring.md) | scoring | 2200 |
 | [docs/spec/07-incentive.md](07-incentive.md) | incentive | 800 |
 | [docs/spec/08-experiment-runtime.md](08-experiment-runtime.md) | experiment runtime | 900 |
