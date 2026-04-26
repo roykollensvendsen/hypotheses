@@ -208,16 +208,33 @@ local round-trip. Investment thesis: pure infrastructure bet.
 Evidence generated: whether the mechanism is mechanically
 sound. No commercial signal.
 
-**Phase 2 — Testnet.** C.1 (sponsored hypotheses) goes live
-as a concierge integration with one or two external sponsors,
-manually onboarded; C.3 (reproducibility-as-a-service) starts
-as a single case study with one external counterparty and one
-audit, lessons captured in an ADR; C.2 and C.4 remain
-aspirational. Investment thesis: pre-revenue plus first
-earnings signal — concierge sponsorship demonstrates whether
-c8 survives contact with a real counterparty. A null result
-(no sponsor materialises) is itself information that triggers
-an ADR per
+**Phase 2.0 (Cold-start).** A bounded sub-phase from netuid
+registration to the first Phase-2.0-exit milestone defined in
+[`11 § Phase 2`](11-roadmap.md#phase-20-cold-start). During
+cold-start the participation counts named in Phase 2's goal are
+*targets, not preconditions*; the
+[c4b-emission-sufficient-cold-start](00.5-foundations.md#c4b-emission-sufficient-cold-start)
+assumption is load-bearing and honestly weaker than c4a
+steady-state. Investment thesis: pre-revenue, pre-validation;
+allocators who hold dTAO during cold-start are absorbing the
+participation-recruitment risk in exchange for early emission
+share. Evidence generated: whether thin-network economics hold
+unaided, or whether the abort-and-revise trigger fires. A null
+cold-start (60 days, no exit-criterion satisfied) opens an ADR
+revising defaults in
+[`20 § Parameter inventory`](20-economic-model.md#parameter-inventory)
+or the strategy in this doc.
+
+**Phase 2 — Testnet.** Once cold-start exits, C.1 (sponsored
+hypotheses) goes live as a concierge integration with one or
+two external sponsors, manually onboarded; C.3
+(reproducibility-as-a-service) starts as a single case study
+with one external counterparty and one audit, lessons captured
+in an ADR; C.2 and C.4 remain aspirational. Investment thesis:
+pre-revenue plus first earnings signal — concierge sponsorship
+demonstrates whether c8 survives contact with a real
+counterparty. A null result (no sponsor materialises) is itself
+information that triggers an ADR per
 [`00.5 § How this document evolves`](00.5-foundations.md#how-this-document-evolves).
 Evidence generated: first commercial datapoint; the two-week
 stable-operation criterion (per

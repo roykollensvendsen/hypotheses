@@ -753,15 +753,42 @@ metric) exists for every interesting research question.
 **If false.** The most interesting open questions cannot be hosted
 on this subnet.
 
-### c4-emission-sufficient
+### c4a-emission-sufficient-steady-state
 
-**Assumption (C4).** Token emissions are sufficient to attract
-honest miners despite the marginal cost of running experiments.
+**Assumption (C4a).** At Phase 3 mainnet steady state, with a
+network composite spread across the
+[`11-roadmap.md § Phase 3`](11-roadmap.md#phase-3--mainnet)
+participation targets (`N ≥ 10` validators per
+[HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets)
+and an order-of-magnitude larger miner set), token emissions
+are sufficient to attract honest miners despite the marginal
+cost of running experiments.
 
 **Defences supported.** DS.3.
 
 **If false.** The market has zero suppliers; mechanism becomes a
 curio.
+
+### c4b-emission-sufficient-cold-start
+
+**Assumption (C4b).** During Phase 2 onset, with thin
+participation (< `min_validators_d22_coverage = 6` validators
+per [HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets),
+fewer than the steady-state miner count, no
+`27-economic-strategy.md`-named revenue paths yet active), the
+miner-side break-even economics either hold unaided **or** the
+cold-start contingency in
+[`27 § D — Phase 2.0`](27-economic-strategy.md#d-phase-by-phase-trajectory)
+keeps the supply side viable. C4b is honestly weaker than C4a:
+no calibration data exists for the thin regime.
+
+**Defences supported.** DS.3 (Phase 2 only).
+
+**If false.** Phase 2 onset stalls — no miners arrive, the SLI
+data needed to validate c4a never accumulates, and the abort-
+and-revise trigger in
+[`11 § Phase 2`](11-roadmap.md#phase-2--testnet-subnet) fires.
+ADR 0013 documents the contingency.
 
 ### c5-stake-external
 
@@ -3195,6 +3222,47 @@ runtime, scoring, local IPC stubs for synapses.
 **Goal:** the subnet runs on Bittensor testnet with ≥3 external miners
 and ≥2 external validators participating.
 
+### Phase 2.0 (Cold-start)
+
+A bounded sub-phase from netuid registration to the first
+"steady-enough" milestone. The participant counts in the Phase
+2 goal are *targets, not preconditions* — Phase 2.0 covers the
+period during which validator and miner counts are below those
+targets and the
+[c4b-emission-sufficient-cold-start](00.5-foundations.md#c4b-emission-sufficient-cold-start)
+assumption is load-bearing.
+
+**Cold-start exit criteria** (any *one* satisfies, all measured
+across a trailing 14-day window):
+
+- `≥ 5` external miners and `≥ 3` external validators
+  registered, with at least one of each producing
+  `validator.cycle.end` events daily.
+- `≥ 1` settled hypothesis end-to-end on testnet.
+- `≥ 1` concierge-sponsorship transaction per
+  [`27 § C.1`](27-economic-strategy.md#c1-sponsored-hypotheses)
+  (Phase 2 cold-start exit can be earnings-side rather than
+  participation-side).
+
+**Cold-start abort-and-revise trigger.** If 60 days after
+netuid registration none of the three exit criteria is
+satisfied, the maintainer opens an ADR documenting the failure
+mode and revises Phase 2's exit criteria, the cost-side defaults
+in [`20 § Parameter inventory`](20-economic-model.md#parameter-inventory),
+or the strategy in [`27`](27-economic-strategy.md). Continuing
+beyond 60 days without an ADR breaches the foundation review
+cadence in
+[`00.5 § Review cadence`](00.5-foundations.md#review-cadence).
+
+**Validator-set floor below the D2.2 bound.** During Phase 2.0,
+the validator count is expected to be below
+`min_validators_d22_coverage = 6` (see
+[HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets)).
+The maintainer's response — raising `rerun_fraction`
+proportionally to preserve coverage (e.g., at `N = 4`,
+`f = 0.55` keeps coverage ≥ 95%) — is documented in
+[`docs/adr/0011-d22-coverage-bound.md`](../adr/0011-d22-coverage-bound.md).
+
 **Exit criteria:**
 
 - Testnet subnet registered (netuid assigned at registration; record
@@ -3211,6 +3279,8 @@ and ≥2 external validators participating.
   incident.
 - Economic sim confirms composite score weights produce the intended
   emission distribution under plausible miner strategies.
+- Cold-start sub-phase has exited (one of the three Phase 2.0 exit
+  criteria above).
 
 **What lands:** chain integration, IPFS integration, oracle integration,
 public onboarding docs.
@@ -8481,16 +8551,33 @@ local round-trip. Investment thesis: pure infrastructure bet.
 Evidence generated: whether the mechanism is mechanically
 sound. No commercial signal.
 
-**Phase 2 — Testnet.** C.1 (sponsored hypotheses) goes live
-as a concierge integration with one or two external sponsors,
-manually onboarded; C.3 (reproducibility-as-a-service) starts
-as a single case study with one external counterparty and one
-audit, lessons captured in an ADR; C.2 and C.4 remain
-aspirational. Investment thesis: pre-revenue plus first
-earnings signal — concierge sponsorship demonstrates whether
-c8 survives contact with a real counterparty. A null result
-(no sponsor materialises) is itself information that triggers
-an ADR per
+**Phase 2.0 (Cold-start).** A bounded sub-phase from netuid
+registration to the first Phase-2.0-exit milestone defined in
+[`11 § Phase 2`](11-roadmap.md#phase-20-cold-start). During
+cold-start the participation counts named in Phase 2's goal are
+*targets, not preconditions*; the
+[c4b-emission-sufficient-cold-start](00.5-foundations.md#c4b-emission-sufficient-cold-start)
+assumption is load-bearing and honestly weaker than c4a
+steady-state. Investment thesis: pre-revenue, pre-validation;
+allocators who hold dTAO during cold-start are absorbing the
+participation-recruitment risk in exchange for early emission
+share. Evidence generated: whether thin-network economics hold
+unaided, or whether the abort-and-revise trigger fires. A null
+cold-start (60 days, no exit-criterion satisfied) opens an ADR
+revising defaults in
+[`20 § Parameter inventory`](20-economic-model.md#parameter-inventory)
+or the strategy in this doc.
+
+**Phase 2 — Testnet.** Once cold-start exits, C.1 (sponsored
+hypotheses) goes live as a concierge integration with one or
+two external sponsors, manually onboarded; C.3
+(reproducibility-as-a-service) starts as a single case study
+with one external counterparty and one audit, lessons captured
+in an ADR; C.2 and C.4 remain aspirational. Investment thesis:
+pre-revenue plus first earnings signal — concierge sponsorship
+demonstrates whether c8 survives contact with a real
+counterparty. A null result (no sponsor materialises) is itself
+information that triggers an ADR per
 [`00.5 § How this document evolves`](00.5-foundations.md#how-this-document-evolves).
 Evidence generated: first commercial datapoint; the two-week
 stable-operation criterion (per
