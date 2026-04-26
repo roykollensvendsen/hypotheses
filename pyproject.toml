@@ -34,7 +34,11 @@ packages = ["src/hypotheses"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-ra"
+addopts = "-ra --strict-markers"
+markers = [
+    "system_local: black-box system test runnable on a developer laptop with no external services (default profile)",
+    "system_chain: black-box system test that requires Bittensor testnet ($BITTENSOR_TESTNET=1); skipped by default",
+]
 
 [tool.coverage.run]
 source = ["src/hypotheses"]
