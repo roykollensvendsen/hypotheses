@@ -556,8 +556,12 @@ forged manifests. The standard catalogue.
 
 When a hypothesis declares an external oracle, the oracle becomes a
 high-value target. Polymarket has been exploited at least twice via
-oracle manipulation in 2025–2026 (Ukraine mineral-deal market;
-Paris weather-sensor exploit, ~$37k). The same class of attack
+oracle manipulation in 2025–2026: a UMA governance-token whale
+forced premature "Yes" resolution on a $7M Ukraine-mineral-deal
+market in March 2025 ({ref:polymarket-uma-ukraine-2025}); a
+hairdryer applied to a Paris-CDG weather sensor netted ~$37k from
+two temperature-spike markets in April 2026
+({ref:polymarket-paris-weather-2026}). The same class of attack
 applies to any subnet that defers to a single oracle.
 
 **Maps to threat-model rows.** [T-060 / T-061 / T-062](16-threat-model.md#g-oracle-attacks).
@@ -710,17 +714,83 @@ New requirements introduced by this foundation are marked **NEW**.
 
 For the design above to work, the world must look approximately like
 this. If any assumption breaks, the corresponding defences weaken or
-fail.
+fail. Each assumption has a stable kebab-case slug for cross-linking
+from other docs (per [`25-rigor-framework.md`](25-rigor-framework.md)
+§ "Assumption-marker conventions"). Reference an assumption from
+elsewhere as
+`> **assumption: c1-compute-cost** — ...`
+with a link back to the row anchor here.
 
-| # | Assumption | Defences it supports | If false |
-|---|------------|---------------------|----------|
-| C1 | Compute is cheap enough that random-sample reproduction is economically viable for validators. | D2.2 | Validators stop reproducing; cheating is uncaught. |
-| C2 | LLMs cannot reliably break preregistered analysis plans at scale. The gap between "structurally valid" and "scientifically valid" cannot be closed by an LLM-driven adversary. | D2.1 | Spam attacks succeed; registry fills with structurally-valid garbage. |
-| C3 | At least one external verification anchor (oracle, public benchmark, or mechanically-computable artifact metric) exists for every interesting research question. | D1.1 | The most interesting open questions cannot be hosted on this subnet. |
-| C4 | Token emissions are sufficient to attract honest miners despite the marginal cost of running experiments. | DS.3 | The market has zero suppliers; mechanism becomes a curio. |
-| C5 | The Bittensor substrate's stake distribution is *external*: the subnet cannot fix Gini-0.98 from inside. | D1.1, D1.2 — both designed *around* this constraint. | (Already true; no failure mode.) |
-| C6 | The maintainer (Phase 0–2) is honest and competent. Post-Phase-3 governance transition is required. | D4.x, all PR-gated defences. | Need governance handoff per [GOVERNANCE.md](../../GOVERNANCE.md). |
-| C7 | Research ground-truth that takes >12 months to settle is rare; most hypotheses settle in weeks-to-months. | D6.1 | The 6-month deferred-settlement window is wrong; need a longer or per-hypothesis window. |
+### c1-compute-cost
+
+**Assumption (C1).** Compute is cheap enough that random-sample
+reproduction is economically viable for validators.
+
+**Defences supported.** D2.2.
+
+**If false.** Validators stop reproducing; cheating is uncaught.
+
+### c2-llm-paps
+
+**Assumption (C2).** LLMs cannot reliably break preregistered
+analysis plans at scale. The gap between "structurally valid" and
+"scientifically valid" cannot be closed by an LLM-driven adversary.
+
+**Defences supported.** D2.1.
+
+**If false.** Spam attacks succeed; registry fills with structurally-
+valid garbage.
+
+### c3-external-anchor
+
+**Assumption (C3).** At least one external verification anchor
+(oracle, public benchmark, or mechanically-computable artifact
+metric) exists for every interesting research question.
+
+**Defences supported.** D1.1.
+
+**If false.** The most interesting open questions cannot be hosted
+on this subnet.
+
+### c4-emission-sufficient
+
+**Assumption (C4).** Token emissions are sufficient to attract
+honest miners despite the marginal cost of running experiments.
+
+**Defences supported.** DS.3.
+
+**If false.** The market has zero suppliers; mechanism becomes a
+curio.
+
+### c5-stake-external
+
+**Assumption (C5).** The Bittensor substrate's stake distribution
+is *external*: the subnet cannot fix Gini-0.98 from inside.
+
+**Defences supported.** D1.1, D1.2 — both designed *around* this
+constraint.
+
+**If false.** (Already true; no failure mode.)
+
+### c6-maintainer-honest
+
+**Assumption (C6).** The maintainer (Phase 0–2) is honest and
+competent. Post-Phase-3 governance transition is required.
+
+**Defences supported.** D4.x, all PR-gated defences.
+
+**If false.** Need governance handoff per
+[GOVERNANCE.md](../../GOVERNANCE.md).
+
+### c7-ground-truth-latency
+
+**Assumption (C7).** Research ground-truth that takes >12 months to
+settle is rare; most hypotheses settle in weeks-to-months.
+
+**Defences supported.** D6.1.
+
+**If false.** The 6-month deferred-settlement window is wrong; need
+a longer or per-hypothesis window.
 
 ## D. What we explicitly give up
 
@@ -7749,13 +7819,15 @@ assumption, mark it inline with this admonition:
 
 ```markdown
 > **assumption: name** — claim. **If false:** consequence.
-> See [00.5 § C — name](00.5-foundations.md#c-assumptions-the-defences-require).
+> See [00.5 § c7-ground-truth-latency](00.5-foundations.md#c7-ground-truth-latency).
 ```
 
-`name` is a short kebab-case identifier matching the row in
-`00.5 § C` (e.g., `c7-ground-truth-latency`). The CI gate
-verifies every assumption admonition resolves to a `00.5 § C`
-row.
+`name` is a short kebab-case identifier matching an H3 subsection
+in [`00.5 § C`](00.5-foundations.md#c-assumptions-the-defences-require)
+(e.g., `c7-ground-truth-latency`, `c1-compute-cost`). Each C-row
+is its own H3 subsection so the per-row anchor resolves cleanly.
+The CI gate verifies every assumption admonition resolves to a
+`00.5 § C` row.
 
 If the assumption does not yet appear in `00.5 § C`, the rigor
 pass that introduces it MUST add the row there in the same PR.
@@ -8109,6 +8181,8 @@ resolvable.
 | `[ref:behavior-research-2024]` | Anonymous, *Preregistration and analysis-plan rigor*, Behavior Research Methods, 2024 (Springer) | [00.5](00.5-foundations.md) |
 | `[ref:rfc-8785]` | Rundgren, Jordan, & Erdtman, *JSON Canonicalization Scheme (JCS)*, RFC 8785, IETF, June 2020 | [09](09-protocol.md), [00.5](00.5-foundations.md) |
 | `[ref:inference-labs-weight-copy-2025]` | Inference Labs, *Mitigating weight-copy attacks on Bittensor subnets*, blog post, 2025 (archived) | [00.5](00.5-foundations.md) |
+| `[ref:polymarket-uma-ukraine-2025]` | Knight, *Polymarket says governance attack by UMA whale to hijack a bet's resolution is 'unprecedented'*, The Block, 2025-03-26 | [00.5](00.5-foundations.md) |
+| `[ref:polymarket-paris-weather-2026]` | Le Monde / Euronews, *Hair dryer trick behind ~€25,000 win? France probes potential weather data scam linked to Polymarket*, 2026-04-23 | [00.5](00.5-foundations.md) |
 | `[ref:ousterhout-posd-2021]` | John Ousterhout, *A Philosophy of Software Design*, 2nd edition, Yaknyam Press, 2021 (ISBN 978-1732102217) | [adr/0004](../adr/0004-design-heuristics.md), [24](24-design-heuristics.md) |
 | `[ref:mast-taxonomy-2025]` | Anonymous, *MAST: a taxonomy of failure modes in agentic AI systems* (primary source link in the entry text); used in this repo as shorthand for the agent-failure-mode catalogue | [adr/0004](../adr/0004-design-heuristics.md) |
 | `[ref:stackoverflow-shared-coding-2026]` | Stack Overflow Blog, *Building shared coding guidelines for AI (and people too)*, 2026-03-26 (archived) | [adr/0004](../adr/0004-design-heuristics.md) |
