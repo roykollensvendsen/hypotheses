@@ -170,6 +170,7 @@ Doc-quality gates that block merge:
 | `agent-prompts.yml` | role prompts ≤200 lines and model-neutral |
 | `glossary-links.yml` | first-mention of glossary terms is linked (per-doc per-term ratchet against `.vale/glossary-baseline.json`) |
 | `staleness.yml` | optional `last_updated:` matches git within ±1 day; weekly schedule surfaces relational staleness signal in the job summary |
+| `docs-impact.yml` | per-PR impact report: HM-REQ/HM-INV adds/removes, reverse `depends_on`, role-prompt references, `load_for` budget shifts — posted to the job summary |
 | `vale.yml` | prose-style ratchet against `.vale/baseline.json` |
 | `markdownlint.yml` | markdown syntax (per `.markdownlint.jsonc`) |
 | `link-check.yml` | lychee link validation |
@@ -200,9 +201,6 @@ is missing.
 
 Open improvements that are spec'd but not yet implemented:
 
-- **Docs-impact PR comment bot** — `scripts/docs_impact_comment.py`
-  needs git-diff context that is awkward to test outside a real
-  PR runtime. Lands in a follow-up.
 - **Test-docstring → `HM-REQ` reverse scanner** — activates when
   `tests/test_*.py` first ships in Phase 1.
 - **Static documentation site (mkdocs-material)** — explicitly
