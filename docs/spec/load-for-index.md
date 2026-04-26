@@ -47,7 +47,7 @@ Total declared tokens: **35300**.
 
 ## `governance`
 
-Total declared tokens: **23700**.
+Total declared tokens: **25400**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -61,6 +61,7 @@ Total declared tokens: **23700**.
 | [docs/spec/21-adversarial-simulator.md](21-adversarial-simulator.md) | adversarial simulator | 1300 |
 | [docs/spec/22-security-bounty.md](22-security-bounty.md) | security bounty | 2500 |
 | [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
+| [docs/spec/26-external-review.md](26-external-review.md) | external review | 1700 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/references.md](references.md) | references | 700 |
@@ -121,7 +122,7 @@ Total declared tokens: **12200**.
 
 ## `review`
 
-Total declared tokens: **61900**.
+Total declared tokens: **63600**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -152,6 +153,7 @@ Total declared tokens: **61900**.
 | [docs/spec/23-system-tests.md](23-system-tests.md) | system tests | 3500 |
 | [docs/spec/24-design-heuristics.md](24-design-heuristics.md) | design heuristics | 3000 |
 | [docs/spec/25-rigor-framework.md](25-rigor-framework.md) | rigor framework | 2500 |
+| [docs/spec/26-external-review.md](26-external-review.md) | external review | 1700 |
 | [docs/spec/README.md](README.md) | spec index | 700 |
 | [docs/spec/formal/README.md](formal/README.md) | formal specs | 300 |
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |

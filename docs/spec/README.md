@@ -75,6 +75,9 @@ Read in order:
 27. [25 — Rigor framework](25-rigor-framework.md) — citation,
     assumption, and evidence-taxonomy conventions; how to ground
     a normative claim
+28. [26 — External review](26-external-review.md) — scope and
+    criteria for a one-shot adversarial review of the foundation
+    before Phase 2
 
 Cross-cutting references:
 

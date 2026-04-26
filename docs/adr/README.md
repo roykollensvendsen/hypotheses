@@ -111,3 +111,4 @@ What did we decide?
 - [0006 — Rigor pass: foundations](0006-rigor-pass-foundations.md)
 - [0007 — Foundations gap fix](0007-foundations-gap-fix.md)
 - [0008 — Rigor pass: scoring](0008-rigor-pass-scoring.md)
+- [0009 — External review plan](0009-external-review-plan.md)
