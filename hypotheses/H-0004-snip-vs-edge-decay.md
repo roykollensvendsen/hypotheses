@@ -1,5 +1,6 @@
 ---
 id: H-0004
+kind: hypothesis
 title: "SNIP-pruned init beats gradient-magnitude edge decay at matched final density on a 2-layer MLP"
 authors:
   - name: "repo-maintainer"

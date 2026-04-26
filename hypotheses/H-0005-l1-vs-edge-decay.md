@@ -1,5 +1,6 @@
 ---
 id: H-0005
+kind: hypothesis
 title: "L1-induced sparsification matches gradient-magnitude edge decay at matched final density on a 2-layer MLP"
 authors:
   - name: "repo-maintainer"

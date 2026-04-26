@@ -1,5 +1,6 @@
 ---
 id: H-0001
+kind: hypothesis
 title: "Connectivity-first training: pruning beats sparse init on a 2-layer MLP"
 authors:
   - name: "repo-maintainer"

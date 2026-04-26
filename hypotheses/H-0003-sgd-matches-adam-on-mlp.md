@@ -1,5 +1,6 @@
 ---
 id: H-0003
+kind: hypothesis
 title: "Plain SGD matches AdamW's FLOPs-to-target on a 2-layer MLP"
 authors:
   - name: "repo-maintainer"

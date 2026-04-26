@@ -1,5 +1,6 @@
 ---
 id: H-0006
+kind: hypothesis
 title: "RigL-style coupled grow/drop edge dynamics beat gradient-magnitude edge decay at matched final density on a 2-layer MLP"
 authors:
   - name: "repo-maintainer"
