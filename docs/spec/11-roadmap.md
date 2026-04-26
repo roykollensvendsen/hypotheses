@@ -70,6 +70,47 @@ runtime, scoring, local IPC stubs for synapses.
 **Goal:** the subnet runs on Bittensor testnet with ≥3 external miners
 and ≥2 external validators participating.
 
+### Phase 2.0 (Cold-start)
+
+A bounded sub-phase from netuid registration to the first
+"steady-enough" milestone. The participant counts in the Phase
+2 goal are *targets, not preconditions* — Phase 2.0 covers the
+period during which validator and miner counts are below those
+targets and the
+[c4b-emission-sufficient-cold-start](00.5-foundations.md#c4b-emission-sufficient-cold-start)
+assumption is load-bearing.
+
+**Cold-start exit criteria** (any *one* satisfies, all measured
+across a trailing 14-day window):
+
+- `≥ 5` external miners and `≥ 3` external validators
+  registered, with at least one of each producing
+  `validator.cycle.end` events daily.
+- `≥ 1` settled hypothesis end-to-end on testnet.
+- `≥ 1` concierge-sponsorship transaction per
+  [`27 § C.1`](27-economic-strategy.md#c1-sponsored-hypotheses)
+  (Phase 2 cold-start exit can be earnings-side rather than
+  participation-side).
+
+**Cold-start abort-and-revise trigger.** If 60 days after
+netuid registration none of the three exit criteria is
+satisfied, the maintainer opens an ADR documenting the failure
+mode and revises Phase 2's exit criteria, the cost-side defaults
+in [`20 § Parameter inventory`](20-economic-model.md#parameter-inventory),
+or the strategy in [`27`](27-economic-strategy.md). Continuing
+beyond 60 days without an ADR breaches the foundation review
+cadence in
+[`00.5 § Review cadence`](00.5-foundations.md#review-cadence).
+
+**Validator-set floor below the D2.2 bound.** During Phase 2.0,
+the validator count is expected to be below
+`min_validators_d22_coverage = 6` (see
+[HM-INV-0030](05-validator.md#coverage-under-thin-validator-sets)).
+The maintainer's response — raising `rerun_fraction`
+proportionally to preserve coverage (e.g., at `N = 4`,
+`f = 0.55` keeps coverage ≥ 95%) — is documented in
+[`docs/adr/0011-d22-coverage-bound.md`](../adr/0011-d22-coverage-bound.md).
+
 **Exit criteria:**
 
 - Testnet subnet registered (netuid assigned at registration; record
@@ -86,6 +127,8 @@ and ≥2 external validators participating.
   incident.
 - Economic sim confirms composite score weights produce the intended
   emission distribution under plausible miner strategies.
+- Cold-start sub-phase has exited (one of the three Phase 2.0 exit
+  criteria above).
 
 **What lands:** chain integration, IPFS integration, oracle integration,
 public onboarding docs.
