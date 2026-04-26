@@ -36,6 +36,8 @@ resolvable.
 | `[ref:behavior-research-2024]` | Anonymous, *Preregistration and analysis-plan rigor*, Behavior Research Methods, 2024 (Springer) | [00.5](00.5-foundations.md) |
 | `[ref:rfc-8785]` | Rundgren, Jordan, & Erdtman, *JSON Canonicalization Scheme (JCS)*, RFC 8785, IETF, June 2020 | [09](09-protocol.md), [00.5](00.5-foundations.md) |
 | `[ref:inference-labs-weight-copy-2025]` | Inference Labs, *Mitigating weight-copy attacks on Bittensor subnets*, blog post, 2025 (archived) | [00.5](00.5-foundations.md) |
+| `[ref:polymarket-uma-ukraine-2025]` | Knight, *Polymarket says governance attack by UMA whale to hijack a bet's resolution is 'unprecedented'*, The Block, 2025-03-26 | [00.5](00.5-foundations.md) |
+| `[ref:polymarket-paris-weather-2026]` | Le Monde / Euronews, *Hair dryer trick behind ~€25,000 win? France probes potential weather data scam linked to Polymarket*, 2026-04-23 | [00.5](00.5-foundations.md) |
 | `[ref:ousterhout-posd-2021]` | John Ousterhout, *A Philosophy of Software Design*, 2nd edition, Yaknyam Press, 2021 (ISBN 978-1732102217) | [adr/0004](../adr/0004-design-heuristics.md), [24](24-design-heuristics.md) |
 | `[ref:mast-taxonomy-2025]` | Anonymous, *MAST: a taxonomy of failure modes in agentic AI systems* (primary source link in the entry text); used in this repo as shorthand for the agent-failure-mode catalogue | [adr/0004](../adr/0004-design-heuristics.md) |
 | `[ref:stackoverflow-shared-coding-2026]` | Stack Overflow Blog, *Building shared coding guidelines for AI (and people too)*, 2026-03-26 (archived) | [adr/0004](../adr/0004-design-heuristics.md) |

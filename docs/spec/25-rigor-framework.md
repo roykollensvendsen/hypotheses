@@ -110,13 +110,15 @@ assumption, mark it inline with this admonition:
 
 ```markdown
 > **assumption: name** — claim. **If false:** consequence.
-> See [00.5 § C — name](00.5-foundations.md#c-assumptions-the-defences-require).
+> See [00.5 § c7-ground-truth-latency](00.5-foundations.md#c7-ground-truth-latency).
 ```
 
-`name` is a short kebab-case identifier matching the row in
-`00.5 § C` (e.g., `c7-ground-truth-latency`). The CI gate
-verifies every assumption admonition resolves to a `00.5 § C`
-row.
+`name` is a short kebab-case identifier matching an H3 subsection
+in [`00.5 § C`](00.5-foundations.md#c-assumptions-the-defences-require)
+(e.g., `c7-ground-truth-latency`, `c1-compute-cost`). Each C-row
+is its own H3 subsection so the per-row anchor resolves cleanly.
+The CI gate verifies every assumption admonition resolves to a
+`00.5 § C` row.
 
 If the assumption does not yet appear in `00.5 § C`, the rigor
 pass that introduces it MUST add the row there in the same PR.

@@ -109,3 +109,4 @@ What did we decide?
 - [0004 — Design heuristics](0004-design-heuristics.md)
 - [0005 — Rigor framework](0005-rigor-framework.md)
 - [0006 — Rigor pass: foundations](0006-rigor-pass-foundations.md)
+- [0007 — Foundations gap fix](0007-foundations-gap-fix.md)
