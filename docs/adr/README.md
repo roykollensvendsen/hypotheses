@@ -105,3 +105,4 @@ What did we decide?
 
 - [0001 — Phase zero foundation](0001-phase-zero-foundation.md)
 - [0002 — Test toolchain](0002-test-toolchain.md)
+- [0003 — System-test markers](0003-system-test-markers.md)
