@@ -114,3 +114,4 @@ What did we decide?
 - [0009 — External review plan](0009-external-review-plan.md)
 - [0010 — Economic strategy](0010-economic-strategy.md)
 - [0011 — D2.2 coverage bound](0011-d22-coverage-bound.md)
+- [0012 — C7 measurement](0012-c7-measurement.md)
