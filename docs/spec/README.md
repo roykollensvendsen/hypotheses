@@ -83,6 +83,10 @@ Read in order:
     commercial complement to doc 20
 30. [28 — Treasury](28-treasury.md) — pre-DAO custody contract,
     operating-cost catalogue, Phase 3 DAO transition
+31. [29 — Economic survival](29-economic-survival.md) — scope
+    and miner unit economics (first sub-section); follow-up PRs
+    add validator economics, equilibrium, sensitivity tables,
+    calibration ratchet
 
 Cross-cutting references:
 
