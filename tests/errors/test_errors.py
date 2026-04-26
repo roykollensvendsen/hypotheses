@@ -10,6 +10,9 @@ spec: HM-REQ-0042 (SPDX headers)
 
 from __future__ import annotations
 
+# spec: HM-REQ-0040
+# spec: HM-REQ-0042
+
 import pytest
 
 from hypotheses.errors import (
