@@ -8,4 +8,4 @@ Phase 0 ships only this package marker; Phase 1 fills in
 ``validator``, and ``cli`` per ``docs/spec/10-repo-layout.md``.
 """
 
-__version__ = "0.0.0-dev"
+__version__ = "0.1.0"
