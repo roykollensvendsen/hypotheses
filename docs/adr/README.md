@@ -127,3 +127,4 @@ What did we decide?
 - [0022 — Community bounty pool](0022-community-bounty-pool.md)
 - [0023 — Multi-miner consensus](0023-multi-miner-consensus.md)
 - [0024 — Informal hypothesis registry](0024-informal-hypothesis-registry.md)
+- [0025 — Threshold-gated execution](0025-threshold-gated-execution.md)

@@ -1,7 +1,7 @@
 ---
 name: traceability matrix
 description: HM-REQ-NNNN to test-id mapping; populated as Phase 1 ships tests
-tokens: 700
+tokens: 1100
 load_for: [implementation, review]
 depends_on: []
 kind: reference
@@ -51,6 +51,9 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0152 | [00.5](00.5-foundations.md) Stake-to-post for I-NNNN | tests/system/mine/test_brainstorming_foundations.py::test_informal_stake | pending |
 | HM-REQ-0153 | [00.5](00.5-foundations.md) Staleness threshold for `inspired_by` | tests/system/mine/test_brainstorming_foundations.py::test_inspired_by_staleness | pending |
 | HM-REQ-0154 | [00.5](00.5-foundations.md) Treat-as-data for I-NNNN | tests/system/mine/test_brainstorming_foundations.py::test_informal_treat_as_data | pending |
+| HM-REQ-0160 | [00.5](00.5-foundations.md) Threshold-gated execution | tests/system/mine/test_threshold_gating.py::test_pending_funding_rejects_submissions | pending |
+| HM-REQ-0161 | [00.5](00.5-foundations.md) Funding window expiry and refund | tests/system/mine/test_threshold_gating.py::test_funding_window_expiry_refund | pending |
+| HM-REQ-0162 | [00.5](00.5-foundations.md) min_pool_tao formula or audited override | tests/system/mine/test_threshold_gating.py::test_min_pool_tao_formula | pending |
 
 ## System-test scenarios
 
@@ -80,6 +83,9 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-MINE-17 | HM-REQ-0152 | tests/system/mine/test_brainstorming_foundations.py::test_informal_stake | pending |
 | S-MINE-18 | HM-REQ-0153 | tests/system/mine/test_brainstorming_foundations.py::test_inspired_by_staleness | pending |
 | S-MINE-19 | HM-REQ-0154 | tests/system/mine/test_brainstorming_foundations.py::test_informal_treat_as_data | pending |
+| S-MINE-20 | HM-REQ-0160 | tests/system/mine/test_threshold_gating.py::test_pending_funding_rejects_submissions | pending |
+| S-MINE-21 | HM-REQ-0161 | tests/system/mine/test_threshold_gating.py::test_funding_window_expiry_refund | pending |
+| S-MINE-22 | HM-REQ-0162 | tests/system/mine/test_threshold_gating.py::test_min_pool_tao_formula | pending |
 | S-VAL-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_discover_score.py::test_discover_score | pending |
 | S-VAL-02 | HM-REQ-0010, HM-REQ-0011 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
 | S-VAL-03 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_rerun_tolerance.py::test_rerun_tolerance | pending |

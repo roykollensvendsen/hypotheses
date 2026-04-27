@@ -29,12 +29,14 @@ A `status` field is always exactly one of:
 | state | meaning |
 |-------|---------|
 | `proposed` | draft is under PR review; not yet merged or merged with `proposed` status. Not yet eligible for mining. |
-| `accepted` | merged on `main`; miners may run it; validators score submissions against it. |
+| `pending-funding` | merged on `main`, `id` allocated, but `sponsorship.sum < min_pool_tao` per HM-REQ-0160. Sponsors can contribute; miners cannot submit. Per ADR 0025. |
+| `accepted` | merged on `main` and (if `min_pool_tao > 0`) `sponsorship.sum ≥ min_pool_tao`; miners can run it; validators score submissions against it. |
 | `running` | at least one miner has a live `ResultsAnnouncement` for the current version that hasn't settled. Informational. |
 | `settled-supported` | the hypothesis's `success_criteria` have been met by at least one miner whose submission passed rerun and oracle checks. **Tentative** for the current `version`; pays 70% of novelty + improvement at this transition. |
 | `settled-refuted` | the hypothesis's `falsification_criteria` have been met by at least one miner whose submission passed rerun and oracle checks. **Tentative** for the current `version`; pays 70% of novelty (improvement is zero by definition) at this transition. |
 | `confirmed` | 6 months have elapsed since the first `settled-*` transition for this `(id, version)` and no `T-OVR` overturn event has fired. The remaining 30% of novelty + improvement is released to the original settling miner. Terminal. |
 | `withdrawn` | the author or maintainer has decided this hypothesis is dead. No further mining against it. Terminal across all versions. |
+| `expired-funding` | `funding_window_blocks` elapsed without `sponsorship.sum` clearing `min_pool_tao` per HM-REQ-0161. Pool refunded to sponsors at `bounty_tao` exactly. Terminal across all versions of this `id`; the `id` MUST NOT be reused. Per ADR 0025. |
 
 Terminal-ness is per-version for `confirmed` and `settled-*`-without-confirmation
 (a new version reopens the hypothesis); permanent for `withdrawn`
@@ -49,6 +51,9 @@ T-OVR fires).
 flowchart LR
     PR([open PR]) -- T-PROP --> proposed
     proposed -- T-ACC --> accepted
+    proposed -- T-PFUND --> pending["pending-funding"]
+    pending -- T-FUND --> accepted
+    pending -- T-FEXP --> expfund["expired-funding<br/>(terminal)"]
     accepted -- T-RUN --> running
     running -- "T-SUP / T-REF" --> settled["settled-supported<br/>or settled-refuted"]
     settled -- T-VER --> nextver(["new version N+1<br/>lifecycle begins<br/>at proposed"])
@@ -60,14 +65,20 @@ flowchart LR
 Note: the diagram above is the simplified mining path. The full
 transition set — including `T-CON` (6-month confirmation) and
 `T-OVR` (overturn back to `running`) — appears in the table
-below.
+below. T-ACC fires when `min_pool_tao = 0` (default for
+non-gated hypotheses) or when a non-zero pool is already full
+at PR merge; T-PFUND fires when `min_pool_tao > 0` and the pool
+is not yet full at merge.
 
 ### Transition table
 
 | id | from | to | trigger | who | side effects |
 |----|------|----|---------|-----|--------------|
 | **T-PROP** | (none) | `proposed` | author opens a PR creating `hypotheses/H-NNNN-<slug>.md` | any contributor | `id` placeholder `H-XXXX` allowed; CI schema-validates |
-| **T-ACC** | `proposed` | `accepted` | maintainer merges the PR to `main` after review | maintainer | `id` assigned; spec CID fixed; registry entry live; mining permitted |
+| **T-ACC** | `proposed` | `accepted` | maintainer merges the PR to `main`, AND either `sponsorship.min_pool_tao = 0` or `sponsorship.sum ≥ min_pool_tao` at merge | maintainer | `id` assigned; spec CID fixed; registry entry live; mining permitted |
+| **T-PFUND** | `proposed` | `pending-funding` | maintainer merges the PR to `main` AND `sponsorship.min_pool_tao > 0` AND `sponsorship.sum < min_pool_tao` at merge | maintainer | `id` assigned; spec CID fixed; registry entry live; sponsor contributions accepted; mining NOT permitted; funding window starts ticking from merge block |
+| **T-FUND** | `pending-funding` | `accepted` | first block where `sponsorship.sum ≥ min_pool_tao` within the funding window | system (block-triggered) | mining permitted; standard T-RUN / T-SUP / T-REF flow follows; the cleared pool is committed and follows the existing two-tier 70/30 settlement schedule (HM-REQ-0070) |
+| **T-FEXP** | `pending-funding` | `expired-funding` | `funding_window_blocks` blocks elapsed since T-PFUND with `sponsorship.sum < min_pool_tao` | system (time-triggered) | each sponsor refunded their `bounty_tao` exactly per HM-REQ-0161; `id` enters terminal state and MUST NOT be reused; author opens a new PR with a new `id` to retry |
 | **T-RUN** | `accepted` | `running` | first valid `ResultsAnnouncement` for current `version` observed by validators | validators (consensus) | informational only; registry `status` update is eventual-consistent via a spec PR **or** can be inferred at read time from on-chain announcements |
 | **T-SUP** | `running` or `accepted` | `settled-supported` | `min_settling_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `success_criterion` under validator consensus | validators (consensus) | novelty bonus attributed per [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements); the 70 % first-settlement payout from HM-REQ-0070 splits equally among qualifying miners (per HM-REQ-0150); further submissions allowed at this version but score novelty = 0 |
 | **T-REF** | `running` or `accepted` | `settled-refuted` | `min_refuting_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `falsification_criterion` under validator consensus | validators (consensus) | same as T-SUP; an honest null is a settlement |
@@ -176,6 +187,43 @@ two-tier defence (D8.4 in
 The I-NNNN's `status` does NOT regress on H-side T-OVR — it
 remains `child-settled` (since the 70 % was paid honestly).
 Phase 2 retro revisits this if observed overturn rates make it lossy.
+
+## Threshold-gated execution
+
+Per ADR 0025, a formal hypothesis can declare a
+`sponsorship.min_pool_tao` floor and a
+`sponsorship.funding_window_blocks` window. Between merge
+(T-PFUND) and pool clearing (T-FUND), the hypothesis sits in
+`pending-funding` — its `id` is allocated and visible, but
+miner submissions are rejected at the validator pipeline per
+HM-REQ-0160. Sponsors contribute over the funding window
+under the existing community-pool rules (HM-REQ-0140 caps
+apply); contributions are LOCKED on commit and cannot be
+withdrawn before either T-FUND (at which point the pool is
+committed and follows the standard settlement schedule) or
+T-FEXP (at which point the pool refunds each sponsor exactly).
+
+The default `min_pool_tao` follows the profile-formula
+`2 × budget_wallclock_usd(profile) × seeds_required ×
+usd_per_tao` with `usd_per_tao` pinned at PR-merge block
+(per HM-REQ-0162). Authors override with PR-description
+justification accepted at maintainer review. The default
+`funding_window_blocks` is 216 000 (~30 days at 12 s blocks);
+maximum is 540 000 (~90 days). The 30-day default mirrors the
+empirical modal duration on Kickstarter and `Experiment.com`,
+where shorter windows correlate with higher T-FUND rates per
+{ref:sauermann-crowdfunding-2018}.
+
+`expired-funding` is **terminal across all versions of the
+`id`**. Author retries open a new PR with a new `id`. This
+matches the all-or-nothing discipline of every comparable
+threshold-funded platform and makes T-FEXP a hard signal
+rather than a soft retry loop.
+
+Composition with HM-REQ-0150 (multi-miner consensus): T-FUND
+must fire before any submission counts toward
+`min_settling_miners` / `min_refuting_miners` thresholds. The
+two gates compose without modification.
 
 ## Security-hypothesis variant
 
