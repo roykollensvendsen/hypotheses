@@ -201,6 +201,9 @@ The numbering is per-role, monotonic.
 | S-MINE-17 | Stake-to-post for I-NNNN: posting an [informal hypothesis](01-glossary.md#informal-hypothesis) without `stake_tao ≥ ideator_min_stake` is rejected at PR open per HM-REQ-0152 | CLI | HM-REQ-0152 | `tests/system/mine/test_brainstorming_foundations.py` |
 | S-MINE-18 | Staleness threshold for `inspired_by`: `propose` rejects a hypothesis whose `inspired_by` references an I-NNNN created less than `ideator_staleness_blocks` before the H-NNNN's PR-open block, or whose status is not `accepted`, per HM-REQ-0153 | CLI | HM-REQ-0153 | `tests/system/mine/test_brainstorming_foundations.py` |
 | S-MINE-19 | Treat-as-data for I-NNNN: an informal hypothesis without `treat_as_data: true` in front matter is rejected at PR open; the prompt-injection scanner covers `/informal/` and rejects directive-shaped content per HM-REQ-0154 | CLI | HM-REQ-0154 | `tests/system/mine/test_brainstorming_foundations.py` |
+| S-MINE-20 | Pending-funding rejects submissions: a hypothesis in `pending-funding` state rejects every miner submission at the validator pipeline until T-FUND fires per HM-REQ-0160 | CLI | HM-REQ-0160 | `tests/system/mine/test_threshold_gating.py` |
+| S-MINE-21 | Funding window expiry and exact-bounty refund: a `pending-funding` hypothesis whose `funding_window_blocks` elapses without `min_pool_tao` clearing transitions to `expired-funding` (terminal); each sponsor is refunded `bounty_tao` exactly; `id` cannot be reused per HM-REQ-0161 | CLI | HM-REQ-0161 | `tests/system/mine/test_threshold_gating.py` |
+| S-MINE-22 | min_pool_tao formula compliance: `propose` rejects a hypothesis whose `min_pool_tao` deviates from the profile-formula default without an explicit override accepted by maintainer review per HM-REQ-0162 | CLI | HM-REQ-0162 | `tests/system/mine/test_threshold_gating.py` |
 
 ### Validate
 

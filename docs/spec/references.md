@@ -51,6 +51,9 @@ resolvable.
 | `[ref:vitadao-pfizer-gero-2025]` | Blockworks, *Pfizer-backed VitaDAO spins out biotech company; Gero secures $1B+ partnership with Chugai Pharmaceutical*, blockworks.co, 2025 (archived) | [27](27-economic-strategy.md) |
 | `[ref:desci-berkeley-cmr-2025]` | Berkeley *California Management Review*, *Can Decentralized Science Be the Next Frontier of Scientific Research?*, cmr.berkeley.edu, 2025-11 (archived) | [27](27-economic-strategy.md) |
 | `[ref:bio-protocol-desci-2026]` | KuCoin Research, *BIO Surges 96 %: Is DeSci the Next Big Narrative in Crypto?*, kucoin.com/research, 2026 (archived; DeSci ecosystem cap reaching $329M) | [27](27-economic-strategy.md) |
+| `[ref:sauermann-crowdfunding-2018]` | Sauermann, Franzoni, & Shafi, *Crowdfunding scientific research: Descriptive insights and correlates of funding success*, PLOS ONE 13(12), 2018 (DOI: 10.1371/journal.pone.0208384; 728 `Experiment.com` campaigns, 48 % AON success rate) | [adr/0025](../adr/0025-threshold-gated-execution.md) |
+| `[ref:bi-self-pledge-2025]` | Bi & Wang, *My money endorses my campaign: The influence of entrepreneur's self-pledge on crowdfunding campaign success*, Journal of Business Venturing, 2025 (founder self-pledge as a strong success predictor across funding achievement, total pledges, and fundraising ratio) | [adr/0025](../adr/0025-threshold-gated-execution.md) |
+| `[ref:ucla-anderson-kickstarter-2018]` | Wang, Mahmoodi, & Roy, *Why Kickstarter Funders Quickly Kick in the Last 5 Percent*, UCLA Anderson Review, 2018 (the "stampede to threshold" finding: 100→105 % takes 2.5× longer than 95→100 %) | [adr/0025](../adr/0025-threshold-gated-execution.md) |
 
 ## How to add a new source
 

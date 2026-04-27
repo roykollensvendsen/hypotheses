@@ -631,6 +631,28 @@ fixtures demonstrating attacks that bypass the cap (sybil
 sponsor-IDs, off-pool side payments, sponsor coordination)
 earn the standard scoring components.
 
+**Sub-threats added by ADR 0025 (threshold-gated execution).**
+Once miner execution is gated on a per-hypothesis pool clearing
+`min_pool_tao` (HM-REQ-0160), two attack surfaces open. Both
+extend F7 rather than constituting a new F-row because the
+threat shape (steering miner attention via the funding mechanism)
+is the same.
+
+- **F7.4 Funding-stall DoS.** Adversary creates a coordinated
+  cluster (≥ 10) of high-threshold hypotheses, never funds
+  them, ties up sponsor mindshare or maintainer review
+  attention. The fixture documenting residual damage is
+  [`tests/golden/adversarial/F7-funding-stall.json`](../../tests/golden/adversarial/F7-funding-stall.json)
+  (placeholder; populated at Phase 2 mid-point per HM-REQ-0090).
+- **F7.5 Threshold gaming via lowball.** Author sets
+  implausibly low `min_pool_tao` (e.g., < 10 % of the profile-
+  formula default) to bootstrap immediate execution at zero
+  economic signal. The audit reference is the profile-formula
+  default in HM-REQ-0162.
+
+T-rows [T-081 / T-082](16-threat-model.md#i-curation-attacks)
+land alongside ADR 0025.
+
 ### F8 — Ideator-graph manipulation
 
 Once the design admits a parallel `I-NNNN` registry per ADR 0024
@@ -773,6 +795,52 @@ New requirements introduced by this foundation are marked **NEW**.
   must declare a preregistered analysis plan, success /
   falsification criteria, and external anchor. F7 attacks
   steer attention but cannot rewrite the rigor checks.
+- **D7.4 Threshold-gated execution + automatic refund
+  (HM-REQ-0160 + HM-REQ-0161, NEW).** Hypotheses gate miner
+  execution on a per-pool `min_pool_tao` threshold; pools that
+  fail to clear within `funding_window_blocks` transition to
+  terminal `expired-funding` and refund each sponsor exactly.
+  Adversaries who create high-threshold hypotheses to tie up
+  sponsor mindshare see automatic abandonment; honest sponsors
+  recover their bonds without loss. Defends F7.4 funding-stall
+  DoS; introduced by ADR 0025.
+
+  > **HM-REQ-0160** A hypothesis whose
+  > `sponsorship.min_pool_tao > 0` MUST satisfy
+  > `sponsorship.sum ≥ min_pool_tao` before any miner
+  > submission against it is accepted by validators.
+  > Submissions to a hypothesis in `pending-funding` state
+  > are rejected at the validator pipeline. Defends F7.4 /
+  > F7.5 per ADR 0025.
+
+  > **HM-REQ-0161** A `pending-funding` hypothesis whose
+  > `funding_window_blocks` elapses without
+  > `sponsorship.sum` clearing `min_pool_tao` MUST transition
+  > to `expired-funding` (terminal); its sponsor pool MUST
+  > refund each sponsor their committed `bounty_tao`
+  > exactly; the `id` MUST NOT be reused. Defends F7.4 stall-
+  > as-permanent-DoS per ADR 0025.
+
+- **D7.5 Profile-formula default + maintainer-audited override
+  (HM-REQ-0162, NEW).** `min_pool_tao` defaults to the
+  profile-formula
+  `2 × budget_wallclock_usd × seeds_required × usd_per_tao`
+  (with `usd_per_tao` pinned at PR-merge block); author
+  overrides require explicit justification at PR review.
+  Lowball attempts to bootstrap immediate execution at zero
+  economic signal fail the audit. Defends F7.5 threshold
+  gaming.
+
+  > **HM-REQ-0162** A `sponsorship` block declaring
+  > `min_pool_tao` MUST set the value at one of: (a) the
+  > profile-formula default
+  > `2 × budget_wallclock_usd(profile) × seeds_required ×
+  > usd_per_tao` (with `usd_per_tao` pinned at PR-merge
+  > block), or (b) an explicit override justified in the PR
+  > description and accepted by the maintainer at review. The
+  > `min_pool_tao` value is fixed at T-PFUND and cannot be
+  > amended after merge. Defends F7.5 threshold gaming per
+  > ADR 0025.
 
 ### Defences against F8 (ideator-graph manipulation)
 
@@ -1005,12 +1073,13 @@ Pre-Phase-2 the SLI is unmeasurable (no settled hypotheses); the
 trigger arms once Phase 2 produces the first 10 settlements. ADR
 0012 documents the rationale.
 
-C-rows c8–c14 are *commercial* assumptions underpinning the
+C-rows c8–c15 are *commercial* assumptions underpinning the
 revenue paths in
 [`27-economic-strategy.md`](27-economic-strategy.md), the
 custody contract in `28-treasury.md`, the community-pool
-mechanism (ADR 0022), and the brainstorming-incentive layer
-(ADR 0024); they support no defence directly. Each row's
+mechanism (ADR 0022), the brainstorming-incentive layer
+(ADR 0024), and the threshold-gated execution mechanism
+(ADR 0025); they support no defence directly. Each row's
 "if false" collapses the corresponding mechanism or path.
 
 ### c8-sponsorship-demand
@@ -1109,6 +1178,44 @@ with non-empty `inspired_by` against those with empty
 `inspired_by`, controlling for domain. Trigger for ADR revision:
 no measurable improvement after ≥ 20 settled formal hypotheses
 with non-empty `inspired_by`.
+
+### c15-funding-velocity
+
+**Assumption (C15).** The funding-window outcome distribution
+under ADR 0025's threshold gate is bimodal: hypotheses that
+reach T-FUND do so front-loaded (>50 % of pool in the first
+24–48 hours, day-1 × 3 ≈ final total per the Kickstarter
+pattern); hypotheses that do not reach T-FUND show exponential
+decay rather than late rally. Comparable evidence:
+`Experiment.com` all-or-nothing science crowdfunding at 48 %
+success across 728 campaigns
+({ref:sauermann-crowdfunding-2018}); UCLA Anderson "stampede
+to threshold" finding that 100→105 % takes 2.5× longer than
+95→100 % ({ref:ucla-anderson-kickstarter-2018}); founder
+self-pledge as the strongest single predictor of campaign
+success ({ref:bi-self-pledge-2025}), validating the ideator-
+as-sponsor composition with ADR 0024.
+
+**Defences supported.** None directly — *commercial* assumption
+underpinning the threshold-gated execution mechanism introduced
+by ADR 0025. The assumption justifies treating T-FUND outcome
+as a clean per-hypothesis c8 signal rather than a noisy
+long-tail proxy.
+
+**If false.** The funding mechanism still works mechanically
+(refund on T-FEXP), but its diagnostic value collapses:
+drip-funded campaigns dominate, T-FUND becomes a noisy proxy,
+and the per-hypothesis c8 signal is lost. Measurement: at
+Phase 2 mid-point review, classify funding curves as
+front-loaded (≥ 50 % of clearing pool reached in first 25 % of
+window), late-rally (≥ 50 % in last 25 %), or drip (uniform
+distribution). Trigger for ADR revision: drip > 40 % of T-FUND
+events across ≥ 20 cleared pools. Note: this is a *shape*
+claim, not a *rate* claim — Polymarket cold-start (63 % of
+short-term markets fail to find any liquidity) is the
+cautionary anchor for thin-audience subnets, and a 30–50 %
+T-FUND rate at Phase 2 onset is the realistic range, not a
+spec commitment.
 
 ## D. What we explicitly give up
 
@@ -1209,6 +1316,18 @@ Honest assessment. Every claim cites the strongest source.
   value, but no prior subnet has paid for it inside a token
   economy. Phase 2 retro evaluates whether composite scores of
   cited formal hypotheses systematically beat uncited ones.
+
+- **Funding-window outcomes are bimodal, not drip-decay**
+  (c15-funding-velocity). The ADR 0025 threshold gate bets
+  that T-FUND vs T-FEXP outcomes separate cleanly into
+  front-loaded fills and exponential decays, mirroring the
+  Kickstarter / `Experiment.com` pattern across all-or-nothing
+  systems. The shape claim is well-supported empirically; the
+  rate claim is *not* — Polymarket cold-start (63 % of
+  short-term markets fail to find liquidity) is the
+  cautionary anchor for thin-audience Phase 2 onset. Phase 2
+  retro classifies cleared pools by curve shape and triggers
+  ADR revision if drip-funded campaigns exceed 40 %.
 
 ## How this document evolves
 
@@ -5700,6 +5819,8 @@ PR that ships the simulator.
 | ID | description | mitigation | references | residual risk |
 |----|-------------|------------|------------|---------------|
 | T-080 | Whale or sybil cluster dominates a community sponsorship pool to steer miner attention toward a chosen hypothesis (curation manipulation) | per-sponsor cap (HM-REQ-0140) limits any single `sponsor_id` to ≤ 50 % of pool total; minimum-2-distinct-sponsors requirement; the rigor floor (HM-REQ-0001 + HM-REQ-0050) means funded hypotheses still must declare preregistered analysis plans, success / falsification criteria, external anchor — curation buys attention, not score control | [00.5 § F7](00.5-foundations.md#f7--curation-manipulation), [02 § sponsorship](02-hypothesis-format.md#sponsorship), ADR 0022 | partial — sybil sponsor-IDs and off-pool side payments are residual; F7 fixture under HM-REQ-0090 lands at Phase 2 |
+| T-081 | Funding-stall DoS — adversary creates a coordinated cluster (≥ 10) of high-threshold hypotheses, never funds them, ties up sponsor mindshare or maintainer review attention while denying miner activation | T-FEXP automation per HM-REQ-0161 returns each sponsor's `bounty_tao` exactly when `funding_window_blocks` elapses without `min_pool_tao` clearing; per-author rate limits inherited from registration economics; `expired-funding` is terminal so a stall cannot be reused as cover | [00.5 § F7.4](00.5-foundations.md#f7--curation-manipulation), [17 § threshold-gated execution](17-hypothesis-lifecycle.md#threshold-gated-execution), ADR 0025 | partial — coordinated funding-stall as curation-by-omission is residual; F7 fixture under HM-REQ-0090 covers F7.4 / F7.5 by Phase 2 mid-point |
+| T-082 | Threshold gaming via lowball — author sets implausibly low `min_pool_tao` (e.g., < 10 % of profile-formula default) to bootstrap immediate execution at zero economic signal, undermining the per-hypothesis c8 measurement | profile-formula default per HM-REQ-0162 is the maintainer's audit reference; explicit override requires PR-description justification accepted at review; `min_pool_tao` is fixed at T-PFUND with no post-acceptance adjustment | [00.5 § F7.5](00.5-foundations.md#f7--curation-manipulation), ADR 0025 | partial — single-maintainer review surface is the bus-factor risk; multi-maintainer governance at Phase 3+ tightens the audit |
 
 ### J. Ideator-graph attacks
 
@@ -5808,12 +5929,14 @@ A `status` field is always exactly one of:
 | state | meaning |
 |-------|---------|
 | `proposed` | draft is under PR review; not yet merged or merged with `proposed` status. Not yet eligible for mining. |
-| `accepted` | merged on `main`; miners may run it; validators score submissions against it. |
+| `pending-funding` | merged on `main`, `id` allocated, but `sponsorship.sum < min_pool_tao` per HM-REQ-0160. Sponsors can contribute; miners cannot submit. Per ADR 0025. |
+| `accepted` | merged on `main` and (if `min_pool_tao > 0`) `sponsorship.sum ≥ min_pool_tao`; miners can run it; validators score submissions against it. |
 | `running` | at least one miner has a live `ResultsAnnouncement` for the current version that hasn't settled. Informational. |
 | `settled-supported` | the hypothesis's `success_criteria` have been met by at least one miner whose submission passed rerun and oracle checks. **Tentative** for the current `version`; pays 70% of novelty + improvement at this transition. |
 | `settled-refuted` | the hypothesis's `falsification_criteria` have been met by at least one miner whose submission passed rerun and oracle checks. **Tentative** for the current `version`; pays 70% of novelty (improvement is zero by definition) at this transition. |
 | `confirmed` | 6 months have elapsed since the first `settled-*` transition for this `(id, version)` and no `T-OVR` overturn event has fired. The remaining 30% of novelty + improvement is released to the original settling miner. Terminal. |
 | `withdrawn` | the author or maintainer has decided this hypothesis is dead. No further mining against it. Terminal across all versions. |
+| `expired-funding` | `funding_window_blocks` elapsed without `sponsorship.sum` clearing `min_pool_tao` per HM-REQ-0161. Pool refunded to sponsors at `bounty_tao` exactly. Terminal across all versions of this `id`; the `id` MUST NOT be reused. Per ADR 0025. |
 
 Terminal-ness is per-version for `confirmed` and `settled-*`-without-confirmation
 (a new version reopens the hypothesis); permanent for `withdrawn`
@@ -5828,6 +5951,9 @@ T-OVR fires).
 flowchart LR
     PR([open PR]) -- T-PROP --> proposed
     proposed -- T-ACC --> accepted
+    proposed -- T-PFUND --> pending["pending-funding"]
+    pending -- T-FUND --> accepted
+    pending -- T-FEXP --> expfund["expired-funding<br/>(terminal)"]
     accepted -- T-RUN --> running
     running -- "T-SUP / T-REF" --> settled["settled-supported<br/>or settled-refuted"]
     settled -- T-VER --> nextver(["new version N+1<br/>lifecycle begins<br/>at proposed"])
@@ -5839,14 +5965,20 @@ flowchart LR
 Note: the diagram above is the simplified mining path. The full
 transition set — including `T-CON` (6-month confirmation) and
 `T-OVR` (overturn back to `running`) — appears in the table
-below.
+below. T-ACC fires when `min_pool_tao = 0` (default for
+non-gated hypotheses) or when a non-zero pool is already full
+at PR merge; T-PFUND fires when `min_pool_tao > 0` and the pool
+is not yet full at merge.
 
 ### Transition table
 
 | id | from | to | trigger | who | side effects |
 |----|------|----|---------|-----|--------------|
 | **T-PROP** | (none) | `proposed` | author opens a PR creating `hypotheses/H-NNNN-<slug>.md` | any contributor | `id` placeholder `H-XXXX` allowed; CI schema-validates |
-| **T-ACC** | `proposed` | `accepted` | maintainer merges the PR to `main` after review | maintainer | `id` assigned; spec CID fixed; registry entry live; mining permitted |
+| **T-ACC** | `proposed` | `accepted` | maintainer merges the PR to `main`, AND either `sponsorship.min_pool_tao = 0` or `sponsorship.sum ≥ min_pool_tao` at merge | maintainer | `id` assigned; spec CID fixed; registry entry live; mining permitted |
+| **T-PFUND** | `proposed` | `pending-funding` | maintainer merges the PR to `main` AND `sponsorship.min_pool_tao > 0` AND `sponsorship.sum < min_pool_tao` at merge | maintainer | `id` assigned; spec CID fixed; registry entry live; sponsor contributions accepted; mining NOT permitted; funding window starts ticking from merge block |
+| **T-FUND** | `pending-funding` | `accepted` | first block where `sponsorship.sum ≥ min_pool_tao` within the funding window | system (block-triggered) | mining permitted; standard T-RUN / T-SUP / T-REF flow follows; the cleared pool is committed and follows the existing two-tier 70/30 settlement schedule (HM-REQ-0070) |
+| **T-FEXP** | `pending-funding` | `expired-funding` | `funding_window_blocks` blocks elapsed since T-PFUND with `sponsorship.sum < min_pool_tao` | system (time-triggered) | each sponsor refunded their `bounty_tao` exactly per HM-REQ-0161; `id` enters terminal state and MUST NOT be reused; author opens a new PR with a new `id` to retry |
 | **T-RUN** | `accepted` | `running` | first valid `ResultsAnnouncement` for current `version` observed by validators | validators (consensus) | informational only; registry `status` update is eventual-consistent via a spec PR **or** can be inferred at read time from on-chain announcements |
 | **T-SUP** | `running` or `accepted` | `settled-supported` | `min_settling_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `success_criterion` under validator consensus | validators (consensus) | novelty bonus attributed per [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements); the 70 % first-settlement payout from HM-REQ-0070 splits equally among qualifying miners (per HM-REQ-0150); further submissions allowed at this version but score novelty = 0 |
 | **T-REF** | `running` or `accepted` | `settled-refuted` | `min_refuting_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `falsification_criterion` under validator consensus | validators (consensus) | same as T-SUP; an honest null is a settlement |
@@ -5955,6 +6087,43 @@ two-tier defence (D8.4 in
 The I-NNNN's `status` does NOT regress on H-side T-OVR — it
 remains `child-settled` (since the 70 % was paid honestly).
 Phase 2 retro revisits this if observed overturn rates make it lossy.
+
+## Threshold-gated execution
+
+Per ADR 0025, a formal hypothesis can declare a
+`sponsorship.min_pool_tao` floor and a
+`sponsorship.funding_window_blocks` window. Between merge
+(T-PFUND) and pool clearing (T-FUND), the hypothesis sits in
+`pending-funding` — its `id` is allocated and visible, but
+miner submissions are rejected at the validator pipeline per
+HM-REQ-0160. Sponsors contribute over the funding window
+under the existing community-pool rules (HM-REQ-0140 caps
+apply); contributions are LOCKED on commit and cannot be
+withdrawn before either T-FUND (at which point the pool is
+committed and follows the standard settlement schedule) or
+T-FEXP (at which point the pool refunds each sponsor exactly).
+
+The default `min_pool_tao` follows the profile-formula
+`2 × budget_wallclock_usd(profile) × seeds_required ×
+usd_per_tao` with `usd_per_tao` pinned at PR-merge block
+(per HM-REQ-0162). Authors override with PR-description
+justification accepted at maintainer review. The default
+`funding_window_blocks` is 216 000 (~30 days at 12 s blocks);
+maximum is 540 000 (~90 days). The 30-day default mirrors the
+empirical modal duration on Kickstarter and `Experiment.com`,
+where shorter windows correlate with higher T-FUND rates per
+{ref:sauermann-crowdfunding-2018}.
+
+`expired-funding` is **terminal across all versions of the
+`id`**. Author retries open a new PR with a new `id`. This
+matches the all-or-nothing discipline of every comparable
+threshold-funded platform and makes T-FEXP a hard signal
+rather than a soft retry loop.
+
+Composition with HM-REQ-0150 (multi-miner consensus): T-FUND
+must fire before any submission counts toward
+`min_settling_miners` / `min_refuting_miners` thresholds. The
+two gates compose without modification.
 
 ## Security-hypothesis variant
 
@@ -8409,6 +8578,9 @@ The numbering is per-role, monotonic.
 | S-MINE-17 | Stake-to-post for I-NNNN: posting an [informal hypothesis](01-glossary.md#informal-hypothesis) without `stake_tao ≥ ideator_min_stake` is rejected at PR open per HM-REQ-0152 | CLI | HM-REQ-0152 | `tests/system/mine/test_brainstorming_foundations.py` |
 | S-MINE-18 | Staleness threshold for `inspired_by`: `propose` rejects a hypothesis whose `inspired_by` references an I-NNNN created less than `ideator_staleness_blocks` before the H-NNNN's PR-open block, or whose status is not `accepted`, per HM-REQ-0153 | CLI | HM-REQ-0153 | `tests/system/mine/test_brainstorming_foundations.py` |
 | S-MINE-19 | Treat-as-data for I-NNNN: an informal hypothesis without `treat_as_data: true` in front matter is rejected at PR open; the prompt-injection scanner covers `/informal/` and rejects directive-shaped content per HM-REQ-0154 | CLI | HM-REQ-0154 | `tests/system/mine/test_brainstorming_foundations.py` |
+| S-MINE-20 | Pending-funding rejects submissions: a hypothesis in `pending-funding` state rejects every miner submission at the validator pipeline until T-FUND fires per HM-REQ-0160 | CLI | HM-REQ-0160 | `tests/system/mine/test_threshold_gating.py` |
+| S-MINE-21 | Funding window expiry and exact-bounty refund: a `pending-funding` hypothesis whose `funding_window_blocks` elapses without `min_pool_tao` clearing transitions to `expired-funding` (terminal); each sponsor is refunded `bounty_tao` exactly; `id` cannot be reused per HM-REQ-0161 | CLI | HM-REQ-0161 | `tests/system/mine/test_threshold_gating.py` |
+| S-MINE-22 | min_pool_tao formula compliance: `propose` rejects a hypothesis whose `min_pool_tao` deviates from the profile-formula default without an explicit override accepted by maintainer review per HM-REQ-0162 | CLI | HM-REQ-0162 | `tests/system/mine/test_threshold_gating.py` |
 
 ### Validate
 
@@ -10764,7 +10936,7 @@ Total declared tokens: **36400**.
 
 ## `implementation`
 
-Total declared tokens: **66600**.
+Total declared tokens: **67000**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -10800,7 +10972,7 @@ Total declared tokens: **66600**.
 | [docs/spec/invariants.md](invariants.md) | invariants index | 600 |
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1600 |
-| [docs/spec/traceability.md](traceability.md) | traceability matrix | 700 |
+| [docs/spec/traceability.md](traceability.md) | traceability matrix | 1100 |
 
 ## `proposal`
 
@@ -10819,7 +10991,7 @@ Total declared tokens: **17300**.
 
 ## `review`
 
-Total declared tokens: **78600**.
+Total declared tokens: **79000**.
 
 | doc | name | tokens |
 |-----|------|--------|
@@ -10861,7 +11033,7 @@ Total declared tokens: **78600**.
 | [docs/spec/load-for-index.md](load-for-index.md) | load-for index | 1100 |
 | [docs/spec/references.md](references.md) | references | 1000 |
 | [docs/spec/requirements.md](requirements.md) | requirements index | 1600 |
-| [docs/spec/traceability.md](traceability.md) | traceability matrix | 700 |
+| [docs/spec/traceability.md](traceability.md) | traceability matrix | 1100 |
 
 ========== END docs/spec/load-for-index.md ==========
 
@@ -10921,6 +11093,9 @@ resolvable.
 | `[ref:vitadao-pfizer-gero-2025]` | Blockworks, *Pfizer-backed VitaDAO spins out biotech company; Gero secures $1B+ partnership with Chugai Pharmaceutical*, blockworks.co, 2025 (archived) | [27](27-economic-strategy.md) |
 | `[ref:desci-berkeley-cmr-2025]` | Berkeley *California Management Review*, *Can Decentralized Science Be the Next Frontier of Scientific Research?*, cmr.berkeley.edu, 2025-11 (archived) | [27](27-economic-strategy.md) |
 | `[ref:bio-protocol-desci-2026]` | KuCoin Research, *BIO Surges 96 %: Is DeSci the Next Big Narrative in Crypto?*, kucoin.com/research, 2026 (archived; DeSci ecosystem cap reaching $329M) | [27](27-economic-strategy.md) |
+| `[ref:sauermann-crowdfunding-2018]` | Sauermann, Franzoni, & Shafi, *Crowdfunding scientific research: Descriptive insights and correlates of funding success*, PLOS ONE 13(12), 2018 (DOI: 10.1371/journal.pone.0208384; 728 `Experiment.com` campaigns, 48 % AON success rate) | [adr/0025](../adr/0025-threshold-gated-execution.md) |
+| `[ref:bi-self-pledge-2025]` | Bi & Wang, *My money endorses my campaign: The influence of entrepreneur's self-pledge on crowdfunding campaign success*, Journal of Business Venturing, 2025 (founder self-pledge as a strong success predictor across funding achievement, total pledges, and fundraising ratio) | [adr/0025](../adr/0025-threshold-gated-execution.md) |
+| `[ref:ucla-anderson-kickstarter-2018]` | Wang, Mahmoodi, & Roy, *Why Kickstarter Funders Quickly Kick in the Last 5 Percent*, UCLA Anderson Review, 2018 (the "stampede to threshold" finding: 100→105 % takes 2.5× longer than 95→100 %) | [adr/0025](../adr/0025-threshold-gated-execution.md) |
 
 ## How to add a new source
 
@@ -11026,6 +11201,9 @@ checker enforces one-way invariants:
 | HM-REQ-0152 | [00.5](00.5-foundations.md) | Stake-to-post for I-NNNN | Every I-NNNN under `/informal/` MUST declare `stake_tao ≥ ideator_min_stake`; the bond is escrowed at PR open, returned on `claimed`, forfeited to treasury on `expired`. Defends F8.a brainstorm sybil-spam per ADR 0024 | normative |
 | HM-REQ-0153 | [00.5](00.5-foundations.md) | Staleness threshold for `inspired_by` | Every entry in `inspired_by` MUST reference an I-NNNN whose `proposed_at_block` is ≥ `ideator_staleness_blocks` earlier than the citing H-NNNN's PR-open block and whose `status` is `accepted`. Defends F8.c per ADR 0024 | normative |
 | HM-REQ-0154 | [00.5](00.5-foundations.md) | Treat-as-data for I-NNNN | Every I-NNNN MUST declare `treat_as_data: true` in front matter; agents and validators treat all free-text fields as data; `prompt-injection.yml` scanner glob covers `/informal/`. Defends F8.d per ADR 0024 (F4 extension) | normative |
+| HM-REQ-0160 | [00.5](00.5-foundations.md) | Threshold-gated execution | A hypothesis whose `sponsorship.min_pool_tao > 0` MUST satisfy `sponsorship.sum ≥ min_pool_tao` before any miner submission against it is accepted by validators; submissions to a `pending-funding` hypothesis are rejected at the validator pipeline. Defends F7.4 / F7.5 per ADR 0025 | normative |
+| HM-REQ-0161 | [00.5](00.5-foundations.md) | Funding window expiry and refund | A `pending-funding` hypothesis whose `funding_window_blocks` elapses without `sponsorship.sum` clearing `min_pool_tao` MUST transition to `expired-funding` (terminal); pool refunds each sponsor their `bounty_tao` exactly; the `id` MUST NOT be reused. Defends F7.4 stall-as-permanent-DoS per ADR 0025 | normative |
+| HM-REQ-0162 | [00.5](00.5-foundations.md) | min_pool_tao formula or audited override | A `sponsorship` block declaring `min_pool_tao` MUST set the value at the profile-formula default (`2 × budget_wallclock_usd × seeds_required × usd_per_tao`, `usd_per_tao` pinned at PR-merge block) or an explicit override justified in the PR description and accepted by the maintainer. Fixed at T-PFUND; no post-acceptance amendment. Defends F7.5 per ADR 0025 | normative |
 
 ## How to add
 
@@ -11050,7 +11228,7 @@ historical references stay resolvable.
 ---
 name: traceability matrix
 description: HM-REQ-NNNN to test-id mapping; populated as Phase 1 ships tests
-tokens: 700
+tokens: 1100
 load_for: [implementation, review]
 depends_on: []
 kind: reference
@@ -11100,6 +11278,9 @@ of each ID; the table below adds only the test-id mapping column.
 | HM-REQ-0152 | [00.5](00.5-foundations.md) Stake-to-post for I-NNNN | tests/system/mine/test_brainstorming_foundations.py::test_informal_stake | pending |
 | HM-REQ-0153 | [00.5](00.5-foundations.md) Staleness threshold for `inspired_by` | tests/system/mine/test_brainstorming_foundations.py::test_inspired_by_staleness | pending |
 | HM-REQ-0154 | [00.5](00.5-foundations.md) Treat-as-data for I-NNNN | tests/system/mine/test_brainstorming_foundations.py::test_informal_treat_as_data | pending |
+| HM-REQ-0160 | [00.5](00.5-foundations.md) Threshold-gated execution | tests/system/mine/test_threshold_gating.py::test_pending_funding_rejects_submissions | pending |
+| HM-REQ-0161 | [00.5](00.5-foundations.md) Funding window expiry and refund | tests/system/mine/test_threshold_gating.py::test_funding_window_expiry_refund | pending |
+| HM-REQ-0162 | [00.5](00.5-foundations.md) min_pool_tao formula or audited override | tests/system/mine/test_threshold_gating.py::test_min_pool_tao_formula | pending |
 
 ## System-test scenarios
 
@@ -11129,6 +11310,9 @@ HM-REQ IDs; once assigned they are never renamed or recycled.
 | S-MINE-17 | HM-REQ-0152 | tests/system/mine/test_brainstorming_foundations.py::test_informal_stake | pending |
 | S-MINE-18 | HM-REQ-0153 | tests/system/mine/test_brainstorming_foundations.py::test_inspired_by_staleness | pending |
 | S-MINE-19 | HM-REQ-0154 | tests/system/mine/test_brainstorming_foundations.py::test_informal_treat_as_data | pending |
+| S-MINE-20 | HM-REQ-0160 | tests/system/mine/test_threshold_gating.py::test_pending_funding_rejects_submissions | pending |
+| S-MINE-21 | HM-REQ-0161 | tests/system/mine/test_threshold_gating.py::test_funding_window_expiry_refund | pending |
+| S-MINE-22 | HM-REQ-0162 | tests/system/mine/test_threshold_gating.py::test_min_pool_tao_formula | pending |
 | S-VAL-01 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_discover_score.py::test_discover_score | pending |
 | S-VAL-02 | HM-REQ-0010, HM-REQ-0011 | tests/system/validate/test_deterministic_score.py::test_deterministic_score | pending |
 | S-VAL-03 | HM-REQ-0010, HM-REQ-0020 | tests/system/validate/test_rerun_tolerance.py::test_rerun_tolerance | pending |

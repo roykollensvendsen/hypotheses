@@ -1,0 +1,10 @@
+{
+  "name": "F7-funding-stall",
+  "threat": "F7",
+  "source": "docs/spec/00.5-foundations.md § F7 — curation manipulation (sub-threats F7.4 / F7.5)",
+  "status": "placeholder",
+  "notes": "Phase 2 onset fixture. F7 was extended by ADR 0025 (threshold-gated execution) to cover two new sub-threats: F7.4 funding-stall DoS (adversary creates many high-threshold hypotheses, never funds them, ties up sponsor mindshare) and F7.5 threshold gaming via lowball (author sets implausibly low min_pool_tao to bootstrap fast execution at zero economic signal). Defences are D7.4 (T-FEXP automation + exact-bounty refund per HM-REQ-0161; profile-formula default for min_pool_tao per HM-REQ-0162; per-author rate limits inherited from registration economics) and D7.5 (HM-REQ-0162 audit at PR review; min_pool_tao fixed at PR merge time with no post-acceptance adjustment). The fixture documenting actual residual damage requires Phase 2 calibration data: funding-window outcome distribution shape (bimodal vs long-tail), T-FUND vs T-FEXP rate, and observed lowball-attempt rate at maintainer review. Until then this placeholder file exists so docs/spec/00.5-foundations.md § F7's reference resolves under the lychee link check, and the HM-REQ-0090 adversarial-simulator coverage requirement has a target. The acceptance scenario, residual-damage description, and defended-cases will be filled in during Phase 2 mid-point review.",
+  "scenario": "TBD-Phase-2",
+  "expected_residual_damage": "TBD-Phase-2",
+  "defence_status": "specified-not-yet-fixturised"
+}
