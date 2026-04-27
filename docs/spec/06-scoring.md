@@ -260,6 +260,26 @@ formal author's choice to cite or not. Scoring stays a
 deterministic pure function over artifacts — D1.2 holds — and
 attribution is a payment-routing concern, not a quality signal.
 
+## Pending-funding submissions are rejected
+
+Per HM-REQ-0160 (introduced by ADR 0025), a hypothesis whose
+`sponsorship.min_pool_tao > 0` and `sponsorship.sum < min_pool_tao`
+sits in
+[pending-funding](17-hypothesis-lifecycle.md#threshold-gated-execution).
+Validators reject every miner submission against a
+`pending-funding` hypothesis at the structural-validate stage
+of [`05 § pipeline`](05-validator.md#pipeline) — before
+reproduction, before scoring, before any rerun. The
+`ResultsAnnouncement` is logged for audit but produces no
+score vector, no novelty attribution, and no emission impact.
+
+Once T-FUND fires (pool clears the threshold), submissions
+arriving in subsequent blocks score normally under the standard
+pipeline. T-RUN, T-SUP / T-REF, and the two-tier settlement
+schedule (HM-REQ-0070) all proceed as today; the threshold gate
+is a precondition for the existing flow, not a modification of
+it.
+
 ## Oracles
 
 When a hypothesis declares `oracle.subnet`, the scoring pipeline adds a

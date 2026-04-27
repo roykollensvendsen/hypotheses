@@ -76,8 +76,8 @@ is not yet full at merge.
 |----|------|----|---------|-----|--------------|
 | **T-PROP** | (none) | `proposed` | author opens a PR creating `hypotheses/H-NNNN-<slug>.md` | any contributor | `id` placeholder `H-XXXX` allowed; CI schema-validates |
 | **T-ACC** | `proposed` | `accepted` | maintainer merges the PR to `main`, AND either `sponsorship.min_pool_tao = 0` or `sponsorship.sum ≥ min_pool_tao` at merge | maintainer | `id` assigned; spec CID fixed; registry entry live; mining permitted |
-| **T-PFUND** | `proposed` | `pending-funding` | maintainer merges the PR to `main` AND `sponsorship.min_pool_tao > 0` AND `sponsorship.sum < min_pool_tao` at merge | maintainer | `id` assigned; spec CID fixed; registry entry live; sponsor contributions accepted; mining NOT permitted; funding window starts ticking from merge block |
-| **T-FUND** | `pending-funding` | `accepted` | first block where `sponsorship.sum ≥ min_pool_tao` within the funding window | system (block-triggered) | mining permitted; standard T-RUN / T-SUP / T-REF flow follows; the cleared pool is committed and follows the existing two-tier 70/30 settlement schedule (HM-REQ-0070) |
+| **T-PFUND** | `proposed` | `pending-funding` | maintainer merges the PR to `main` AND `sponsorship.min_pool_tao > 0` AND `sponsorship.sum < min_pool_tao` at merge | maintainer | `id` assigned; spec CID fixed; registry entry live; sponsor contributions accepted; mining NOT permitted; `funding_window_blocks` starts ticking from merge block |
+| **T-FUND** | `pending-funding` | `accepted` | first block where `sponsorship.sum ≥ min_pool_tao` within `funding_window_blocks` of T-PFUND | system (block-triggered) | mining permitted; standard T-RUN / T-SUP / T-REF flow follows; the cleared pool is committed and follows the existing two-tier 70/30 settlement schedule (HM-REQ-0070) |
 | **T-FEXP** | `pending-funding` | `expired-funding` | `funding_window_blocks` blocks elapsed since T-PFUND with `sponsorship.sum < min_pool_tao` | system (time-triggered) | each sponsor refunded their `bounty_tao` exactly per HM-REQ-0161; `id` enters terminal state and MUST NOT be reused; author opens a new PR with a new `id` to retry |
 | **T-RUN** | `accepted` | `running` | first valid `ResultsAnnouncement` for current `version` observed by validators | validators (consensus) | informational only; registry `status` update is eventual-consistent via a spec PR **or** can be inferred at read time from on-chain announcements |
 | **T-SUP** | `running` or `accepted` | `settled-supported` | `min_settling_miners` (default 1) — that count of distinct miner submissions have each passed all gates and met every `success_criterion` under validator consensus | validators (consensus) | novelty bonus attributed per [06 § ordering](06-scoring.md#ordering-tiebreak-for-simultaneous-settlements); the 70 % first-settlement payout from HM-REQ-0070 splits equally among qualifying miners (per HM-REQ-0150); further submissions allowed at this version but score novelty = 0 |
@@ -196,8 +196,9 @@ Per ADR 0025, a formal hypothesis can declare a
 (T-PFUND) and pool clearing (T-FUND), the hypothesis sits in
 `pending-funding` — its `id` is allocated and visible, but
 miner submissions are rejected at the validator pipeline per
-HM-REQ-0160. Sponsors contribute over the funding window
-under the existing community-pool rules (HM-REQ-0140 caps
+HM-REQ-0160. Sponsors contribute over the
+[funding window](01-glossary.md#funding-window) under the
+existing community-pool rules (HM-REQ-0140 caps
 apply); contributions are LOCKED on commit and cannot be
 withdrawn before either T-FUND (at which point the pool is
 committed and follows the standard settlement schedule) or

@@ -108,6 +108,10 @@ who can change it, how.
 | ideator staleness threshold (`ideator_staleness_blocks`) | 7 200 blocks (~1 day) | [00.5 § D8.2](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | maintainer | spec PR + ADR |
 | ideator max cites per H-NNNN (`ideator_max_cites`) | 3 | [00.5 § D8.3](00.5-foundations.md#defences-against-f8-ideator-graph-manipulation) | maintainer | spec PR + ADR |
 | ideator expiry (`ideator_expiry_blocks`) | 3 153 600 blocks (~12 months) | [02b](02b-informal-hypothesis-format.md) | maintainer | spec PR + ADR |
+| `min_pool_tao` formula multiplier (per HM-REQ-0162) | 2 × `budget_wallclock_usd × seeds_required × usd_per_tao` | [00.5 § D7.5](00.5-foundations.md#defences-against-f7-curation-manipulation), [02 § sponsorship](02-hypothesis-format.md#threshold-gated-execution-min_pool_tao--funding_window_blocks) | maintainer | spec PR + ADR |
+| `funding_window_blocks` default | 216 000 (~30 days at 12 s/block) | [00.5 § D7.4](00.5-foundations.md#defences-against-f7-curation-manipulation), [17 § threshold-gated execution](17-hypothesis-lifecycle.md#threshold-gated-execution) | maintainer | spec PR + ADR |
+| `funding_window_blocks` maximum | 540 000 (~90 days at 12 s/block) | same | maintainer | spec PR + ADR |
+| `usd_per_tao` pinning rule | 30-day-trailing rate at PR-merge block, frozen for the hypothesis lifetime | [02 § sponsorship](02-hypothesis-format.md#threshold-gated-execution-min_pool_tao--funding_window_blocks) | maintainer | spec PR + ADR |
 
 Every parameter has an ADR requirement on change (enforced by
 [`adr-required.yml`](../../.github/workflows/adr-required.yml) for
@@ -406,6 +410,20 @@ expected to resolve:
    formal hypotheses with non-empty `inspired_by` show no
    measurable improvement over those without after ≥ 20 settled
    formal hypotheses with citations.
+8. **`min_pool_tao` formula multiplier is a guess (ADR 0025).**
+   The `2 ×` coefficient on `budget_wallclock_usd × seeds_required`
+   is a placeholder. Sensitivity bracket for Phase 2: 1× – 4×.
+   Below 1×, the threshold doesn't cover the work; above 4×,
+   T-FUND rate at thin-audience cold start collapses (Polymarket
+   comparable: 63 % of short-term markets fail to find any
+   liquidity). Trigger for ADR revision: T-FEXP rate exceeds
+   60 % across ≥ 20 hypotheses with `min_pool_tao > 0` AND the
+   funding-curve shape is dominated by drip rather than
+   front-loaded fills (per c15-funding-velocity SLI). The
+   `usd_per_tao` pinning rule (PR-merge-block 30-day-trailing)
+   is also revisited if intra-window TAO volatility makes the
+   gate materially mispriced — Phase 2 measurement against
+   actual TAO/USD movement during open funding windows.
 
 Each open question will land as an ADR when it resolves — positive
 or negative. If Phase 2 simulation shows the weights are wrong in a
