@@ -51,6 +51,25 @@ informal hypotheses inspired it. Locked at acceptance (T-ACC); ≤ 3
 entries; weights sum to 1.0. See
 [02 § inspired_by](02-hypothesis-format.md#inspired_by).
 
+### Pending-funding
+
+A lifecycle state for a formal hypothesis whose `sponsorship.sum`
+has not yet cleared `sponsorship.min_pool_tao` per HM-REQ-0160.
+Sponsors can contribute; miners cannot submit. Transitions to
+`accepted` on T-FUND or to terminal `expired-funding` on T-FEXP
+per HM-REQ-0161. See
+[17 § threshold-gated execution](17-hypothesis-lifecycle.md#threshold-gated-execution)
+and ADR 0025.
+
+### Funding window
+
+The block-count window after T-PFUND during which sponsors
+contribute to a `pending-funding` hypothesis. Default 216 000
+blocks (~30 days at 12 s/block); maximum 540 000 (~90 days).
+Set via `sponsorship.funding_window_blocks`. On expiry without
+threshold clearing, T-FEXP fires and refunds sponsors per
+HM-REQ-0161.
+
 ### Spec
 
 The machine-readable front matter of a hypothesis (YAML).

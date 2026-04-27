@@ -379,6 +379,8 @@ sponsorship:
     validators: 0.30
     treasury: 0.10
   escrow_block: 1234567                 # cutoff after which contributions close
+  min_pool_tao: 5.0                     # threshold for execution (HM-REQ-0160)
+  funding_window_blocks: 216000         # ~30 days at 12 s/block (HM-REQ-0161)
 ```
 
 `bounty_tao` (single form) or the sum of
@@ -387,6 +389,54 @@ pool. Splits and the `escrow_block` cutoff apply identically.
 After settlement, the miner / validators / treasury shares
 are computed from the total and distributed; sponsors do not
 directly track per-sponsor recipients.
+
+#### Threshold-gated execution (`min_pool_tao` + `funding_window_blocks`)
+
+Per ADR 0025, a hypothesis declaring
+`sponsorship.min_pool_tao > 0` gates miner execution on the
+pool clearing the threshold. Between merge and pool clearing,
+the hypothesis sits in
+[pending-funding](17-hypothesis-lifecycle.md#threshold-gated-execution);
+miner submissions are rejected at the validator pipeline per
+HM-REQ-0160. On the first block where
+`sponsorship.sum ≥ min_pool_tao`, T-FUND fires and the
+hypothesis transitions to `accepted`. If
+`funding_window_blocks` elapses without clearing, T-FEXP fires;
+the pool refunds each sponsor exactly per HM-REQ-0161 and the
+hypothesis enters terminal `expired-funding` (the `id` cannot
+be reused).
+
+Default `min_pool_tao` follows the profile-formula
+`2 × budget_wallclock_usd(profile) × seeds_required ×
+usd_per_tao` with `usd_per_tao` pinned at PR-merge block.
+Author overrides require an explicit justification accepted at
+maintainer review per HM-REQ-0162. Default
+`funding_window_blocks` is 216 000 (~30 days at 12 s/block);
+maximum is 540 000 (~90 days). Defaults live in
+[`20-economic-model.md`](20-economic-model.md#parameter-inventory).
+
+Setting `min_pool_tao = 0` (the default for non-gated
+hypotheses) skips the gate entirely — T-ACC fires at merge as
+before. The threshold-gated path is opt-in for safe-tier and
+the default for gated-tier hypotheses (HM-REQ-0120 still
+requires the `sponsorship` block; ADR 0025 adds the threshold
+on top).
+
+#### Ideator-as-sponsor (composition with ADR 0024)
+
+`sponsor_id` accepts any SS58 hotkey, including the
+[proposer.hotkey](02b-informal-hypothesis-format.md) of an
+[informal hypothesis](01-glossary.md#informal-hypothesis) cited
+by this formal hypothesis's
+[`inspired_by`](#inspired_by). An ideator who genuinely
+believes in their seed can contribute to the formal
+hypothesis's pool — the "I'll put 0.5 TAO behind my own idea"
+dynamic. This is the single strongest empirical predictor of
+crowdfunding success ({ref:bi-self-pledge-2025}) and is fully
+supported by the existing schema; no new field is needed. The
+HM-REQ-0151 self-cite ban is unaffected — that constraint is
+about the formal hypothesis's primary author hotkey, not about
+who is allowed to fund the pool.
 
 **F7 anti-manipulation cap.** No single `sponsor_id`
 contributes more than 50 % of the total `bounty_tao` after
